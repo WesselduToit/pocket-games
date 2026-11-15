@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#191b1a">
+<title>Deep Pockets</title>
+<style>:root{color-scheme:dark;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#eee9dd;background:#191b1a;font-synthesis:none}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none}button,textarea{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}button:focus-visible,textarea:focus-visible,canvas:focus-visible{outline:2px solid #efbd68;outline-offset:3px}button:disabled{cursor:default;opacity:.4}button{color:inherit}button,textarea{border-radius:12px}button svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}#app{width:100%;max-width:520px;height:100%;height:100dvh;margin:auto;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);background:#202320}.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 16px 9px;flex:none}h1{margin:0;font-family:Georgia,serif;font-size:23px;letter-spacing:-.7px;font-weight:600}.title-dot{display:inline-block;width:5px;height:5px;background:#e5af5b;border-radius:50%;margin:0 0 3px 5px}.topbar p{font-size:10px;letter-spacing:.7px;color:#a8aca0;margin:4px 0 0;text-transform:uppercase}.top-actions{display:flex;align-items:center;gap:5px}.wallet{font-size:14px;display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums}.wallet i{width:11px;height:11px;background:#e9b761;border-radius:50%;border:2px solid #a47634;box-shadow:0 0 0 1px #d1a454}.icon-button{width:40px;height:40px;display:grid;place-items:center;border:0;background:transparent;color:#d2d3c4;font-size:29px;flex:none}#status{padding:0 16px 10px;flex:none}.status-line{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:#c8cbbd;line-height:19px}.status-line.small{font-size:10px;color:#939d8c}.oil-track{height:6px;margin:4px 0;position:relative;border-radius:5px;background:#383d34;overflow:visible}#oil-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,#b87c38,#f1c779);width:100%;transition:width .15s}#oil-marker{position:absolute;top:-3px;height:12px;width:2px;background:#fff3d8;left:0;box-shadow:0 0 0 1px #272b25}#field{position:relative;flex:1;min-height:0;overflow:hidden;background:#141815}#mine{display:block;width:100%;height:100%;touch-action:none}#field-caption{position:absolute;left:25px;top:20px;pointer-events:none}#field-caption span{display:block;letter-spacing:2.1px;color:#a8b49c;font-size:9px}#field-caption strong{display:block;font-family:Georgia,serif;font-size:32px;font-weight:400;letter-spacing:-1px;margin-top:5px;color:#efeadb}#depth-tag{position:absolute;top:11px;right:11px;padding:6px 9px;background:#111a15d9;border:1px solid #61735e;border-radius:20px;font-size:11px;color:#e2dbc5;font-variant-numeric:tabular-nums;pointer-events:none}#trip-hint{position:absolute;bottom:8px;left:0;width:100%;text-align:center;color:#b5bea8;text-shadow:0 1px 3px #000;font-size:10px;pointer-events:none}#dock{padding:6px 12px calc(12px + env(safe-area-inset-bottom));flex:none;background:#242922;border-top:1px solid #46503d}.camp-line{height:40px;display:flex;align-items:center;justify-content:space-between;gap:5px;font-size:10px;color:#aeb7a2}.text-button{border:0;background:transparent;padding:0 4px;min-height:40px;font-size:10px;color:#e2bd7a;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}.dock-actions{display:flex;gap:8px}.button{border:1px solid transparent;min-height:46px;padding:10px 14px;font-size:12px;font-weight:650;display:flex;align-items:center;justify-content:center;gap:10px}.primary{flex:1;background:#e2b363;color:#27291e;box-shadow:inset 0 1px #ffe1a2}.primary span{font-weight:400;font-size:11px}.secondary{background:#333c2f;border-color:#546047;color:#dce1ce}.full{width:100%}.sheet-wrap{position:fixed;inset:0;z-index:20;display:flex;align-items:flex-end;justify-content:center;padding-top:24px;background:#090e0bba;backdrop-filter:blur(5px)}.sheet-wrap[hidden],[hidden]{display:none!important}.sheet{width:100%;max-width:520px;max-height:calc(100% - 24px);overflow:auto;overscroll-behavior:contain;border:1px solid #536045;border-bottom:0;border-radius:23px 23px 0 0;background:#252c23;padding:10px 18px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -8px 80px #0005}.sheet-handle{width:32px;height:4px;background:#6b745e;border-radius:5px;margin:0 auto 10px}.sheet-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.sheet h2{font:400 26px Georgia,serif;letter-spacing:-.5px;margin:0}.sheet p{font-size:13px;line-height:1.6;color:#c3cbb6;margin:10px 0 16px}.sheet .eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:1.6px;color:#ddb369;margin:0 0 6px}.intro-art{height:62px;display:flex;align-items:center;justify-content:center;margin:0 0 4px}.intro-art span{display:block;width:36px;height:44px;background:#d6aa62;border:5px solid #5e6b48;border-radius:15px 15px 10px 10px;box-shadow:0 0 32px #e4b66544;position:relative}.intro-art span:before{content:"";position:absolute;top:6px;left:8px;width:10px;height:16px;background:#ffe5a3;border-radius:50%}.intro-art span:after{content:"";position:absolute;left:5px;top:-12px;width:16px;height:10px;border:3px solid #9eab82;border-bottom:0;border-radius:9px 9px 0 0}.welcome-list{padding:0;margin:14px 0 20px;list-style:none}.welcome-list li{padding:8px 0 8px 22px;border-bottom:1px solid #3c4536;font-size:12px;line-height:1.4;color:#d3d9c6;position:relative}.welcome-list li:before{content:"·";position:absolute;left:5px;color:#e0b361;font-size:20px;line-height:15px}.sheet-actions{display:flex;gap:8px;margin-top:14px}.sheet-actions>*{flex:1}.muted{color:#9faa92!important;font-size:11px!important}.gold{color:#efc980}.upgrade-head{position:sticky;top:-11px;background:#252c23;z-index:1;padding:8px 0 10px;border-bottom:1px solid #49543f;font-size:12px;color:#aab59c}.upgrade-head b{color:#e8bd70;font-size:17px;margin-right:5px}.upgrade-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #414b38}.upgrade-icon{width:35px;height:40px;display:grid;place-items:center;background:#35412e;border:1px solid #4b5b3c;border-radius:10px;color:#ddbb7a;font-size:21px;flex:none}.upgrade-copy{flex:1;min-width:0}.upgrade-copy strong{font-size:13px;display:block;font-weight:600}.upgrade-copy p{font-size:10px;line-height:1.4;margin:4px 0 5px;color:#a9b69a}.level-pips{display:flex;gap:3px}.level-pips i{display:block;width:10px;height:3px;background:#45503b;border-radius:2px}.level-pips i.on{background:#e7ba69}.buy-button{min-width:63px;min-height:42px;padding:8px 10px;border:1px solid #69774f;background:#3b4b30;color:#eac684;font-size:12px;font-weight:600}.buy-button:disabled{opacity:.43}.tool-row{padding:12px 0;border-bottom:1px solid #414b38;display:flex;gap:12px;align-items:center}.tool-depth{width:51px;height:43px;border:1px solid #5d6a48;border-radius:10px;display:grid;place-items:center;color:#e4bc76;font-size:12px;flex:none}.tool-row strong{font-size:13px}.tool-row p{font-size:11px;margin:4px 0;line-height:1.4}.tool-row.locked{opacity:.5}.relic-choice{display:block;width:100%;text-align:left;padding:15px;margin:9px 0;background:#34422c;border:1px solid #64774d;min-height:73px}.relic-choice strong{display:block;color:#e5c182;font-size:14px}.relic-choice span{display:block;color:#c0cbb2;font-size:11px;line-height:1.45;margin-top:5px}.bag-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:12px 0}.ore-row{display:flex;align-items:center;gap:8px;padding:9px;border:1px solid #47523b;background:#2b3526;border-radius:9px;font-size:11px}.ore-gem{width:11px;height:11px;display:block;transform:rotate(45deg);border:1px solid #fff6}.ore-row span:nth-child(2){flex:1}.haul-value{font:400 52px Georgia,serif;color:#ecc579;letter-spacing:-2px;margin:8px 0 0;line-height:1.15}.haul-value small{font:12px system-ui,sans-serif;letter-spacing:0;color:#aabb95;margin-left:6px}.haul-meta{display:flex;justify-content:space-between;font-size:11px;color:#b9c4a7;border-bottom:1px solid #47513c;padding:12px 0;margin-bottom:12px}.settings-row{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:56px;border-bottom:1px solid #43503a;font-size:13px}.switch{min-width:61px;min-height:40px;border:1px solid #6e7a53;background:#3e5030;color:#e4d4aa;font-size:12px}.settings-action{width:100%;margin-top:10px;min-height:44px;background:#34422c;border:1px solid #566547;font-size:12px}.danger{color:#e8a88a;background:#493329;border-color:#735140}textarea{width:100%;min-height:72px;resize:vertical;border:1px solid #58664b;background:#192117;color:#d6dfc6;padding:12px;font-size:11px;line-height:1.5;margin:10px 0 0;overflow-wrap:anywhere}.warnbox{background:#4d3d24;border:1px solid #8a6c3b;border-radius:10px;padding:10px;color:#f0ce88!important;font-size:11px!important}.ending{background:radial-gradient(ellipse at center,#2f634f,#252c23 68%);border:1px solid #567959;border-radius:14px;text-align:center;padding:24px 16px}.ending-spark{color:#c6f4b0;font-size:48px;line-height:1}.ending h3{font:29px Georgia,serif;margin:14px 0 0;color:#e8f2cd}.ending p{font-size:12px;color:#c5d8b7}#toast{position:fixed;z-index:40;bottom:calc(105px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);max-width:calc(100% - 28px);padding:11px 16px;border-radius:12px;background:#f0d29a;color:#2e3325;box-shadow:0 4px 20px #0005;text-align:center;font-size:12px;pointer-events:none}@media(max-height:600px){.topbar{padding-top:9px;padding-bottom:6px}h1{font-size:21px}.topbar p{font-size:9px;margin-top:3px}#status{padding-bottom:7px}.status-line{line-height:16px}#dock{padding-top:3px;padding-bottom:calc(8px + env(safe-area-inset-bottom))}.camp-line{height:40px}.button{min-height:43px;padding:9px 11px}#field-caption{top:13px;left:21px}#field-caption strong{font-size:28px}.sheet{padding-left:15px;padding-right:15px}.sheet h2{font-size:24px}}@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main id="app">
+  <header class="topbar"><div><h1>Deep Pockets<span class="title-dot"></span></h1><p id="record">Depth record · 0 m</p></div><div class="top-actions"><span class="wallet"><i></i><b id="money">0</b></span><button id="settings" class="icon-button" aria-label="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16M8 4v6M16 14v6"/></svg></button></div></header>
+  <section id="status" aria-label="Trip supplies"><div class="status-line"><span id="place">Surface camp</span><span id="supply">Lamp ready</span></div><div class="oil-track"><div id="oil-fill"></div><div id="oil-marker" title="Oil needed to climb out"></div></div><div class="status-line small"><span id="oil-label">60 oil</span><span id="bag-label">Bag · 0 / 8</span></div></section>
+  <div id="field"><canvas id="mine" aria-label="Mine. Tap a tile next to the miner or swipe to dig." tabindex="0"></canvas><div id="field-caption"><span>The next good find</span><strong>A little deeper.</strong></div><div id="depth-tag" hidden>0 m</div><div id="trip-hint" hidden>Tap beside you to dig · Swipe to move</div></div>
+  <footer id="dock"><div id="surface-controls"><div class="camp-line"><span id="camp-note">A full lamp. An empty bag.</span><button id="tools" class="text-button">Depth rewards</button></div><div class="dock-actions"><button id="start" class="button primary">Head underground <span>↓</span></button><button id="upgrades" class="button secondary">Upgrades</button></div></div><div id="mine-controls" hidden><div class="camp-line"><span id="climb-note">Keep enough oil to get home.</span><button id="bag" class="text-button">Look in bag</button></div><div class="dock-actions"><button id="climb" class="button primary">Climb out <span id="climb-price">0 oil</span></button><button id="relics" class="button secondary">Relics</button></div></div></footer>
+</main>
+<div id="sheet-wrap" class="sheet-wrap" hidden><section id="sheet" class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title"><div class="sheet-handle"></div><div class="sheet-heading"><h2 id="sheet-title"></h2><button id="sheet-close" class="icon-button" aria-label="Close">×</button></div><div id="sheet-body"></div></section></div>
+<div id="toast" role="status" hidden></div>
+<script>/* Deep Pockets content and TUNE values. */
+const DP={width:9,chunk:20,maxDepth:250,oil:60,bag:8,climb:0.5,
+  lampOil:90,bagSlots:3,oilFlask:15,gasLoss:15,headlampOil:15,
+  oreChance:0.026,oilChance:0.012,gasChance:0.022,openChance:0.13};
+const ROCKS=[
+  {id:'dirt',name:'Dirt',hits:1,tier:1,color:'#74523b'},
+  {id:'clay',name:'Clay',hits:2,tier:1,color:'#a26749'},
+  {id:'stone',name:'Stone',hits:3,tier:1,color:'#68717b'},
+  {id:'granite',name:'Granite',hits:5,tier:2,color:'#655e72'},
+  {id:'crystal',name:'Crystal rock',hits:8,tier:3,color:'#49677e'},
+  {id:'magma',name:'Magma rock',hits:10,tier:4,color:'#71413d'}
+];
+const ORES=[
+  {id:'copper',name:'Copper',value:25,color:'#e99557'},
+  {id:'tin',name:'Tin',value:30,color:'#c7d4d8'},
+  {id:'silver',name:'Silver',value:40,color:'#e4edf5'},
+  {id:'gold',name:'Gold',value:60,color:'#ffd35b'},
+  {id:'ruby',name:'Ruby',value:85,color:'#ff5777'},
+  {id:'sapphire',name:'Sapphire',value:120,color:'#668cff'},
+  {id:'emerald',name:'Emerald',value:170,color:'#50dfa0'},
+  {id:'diamond',name:'Diamond',value:230,color:'#bcfbff'},
+  {id:'starstone',name:'Starstone',value:330,color:'#d5b0ff'}
+];
+const LAYERS=[
+  {id:'topsoil',name:'Topsoil',from:0,to:20,bg:'#291e18',color:'#b88658',rock:'dirt',ores:['copper','tin']},
+  {id:'clay',name:'Clay',from:20,to:50,bg:'#321e1d',color:'#d3956a',rock:'clay',ores:['tin','silver']},
+  {id:'granite',name:'Granite',from:50,to:90,bg:'#20212c',color:'#aaa0bf',rock:'granite',ores:['silver','gold']},
+  {id:'crystal',name:'Crystal caves',from:90,to:140,bg:'#142c36',color:'#79cce6',rock:'crystal',ores:['ruby','sapphire']},
+  {id:'magma',name:'Magma',from:140,to:200,bg:'#341b20',color:'#ff9376',rock:'magma',ores:['emerald','diamond']},
+  {id:'core',name:'The core',from:200,to:251,bg:'#241936',color:'#cea1ff',rock:'magma',ores:['diamond','starstone']}
+];
+const RELICS=[
+  {id:'lucky',name:'Lucky',desc:'Ore gives two lumps while there is room.'},
+  {id:'mole',name:'Mole',desc:'Dig dirt and clay without using oil.'},
+  {id:'canary',name:'Canary',desc:'See gas pockets before opening them.'},
+  {id:'ladder',name:'Rope ladder',desc:'Climbing out costs half as much oil.'},
+  {id:'deepBag',name:'Deep bag',desc:'Carry four more lumps this trip.'},
+  {id:'lantern',name:'Lantern',desc:'Add thirty oil right now.'},
+  {id:'dowser',name:'Dowser',desc:'Ore within three tiles glows.'},
+  {id:'blast',name:'Blasting cap',desc:'The next three digs clear a three by three area.'}
+];
+const UPGRADES=[
+  {id:'pick',name:'Pick',desc:'Fewer hits. New pick tiers at levels 2, 4 and 6. Level 8 halves magma rock hits.',max:8,base:35,growth:2.58},
+  {id:'lamp',name:'Lamp',desc:'Hold 90 more oil.',max:12,base:150,growth:3.2},
+  {id:'bag',name:'Bag',desc:'Carry three more ore lumps.',max:8,base:24,growth:1.65},
+  {id:'rope',name:'Rope',desc:'Climbing out costs 15% less per level.',max:8,base:22,growth:1.72},
+  {id:'boots',name:'Boots',desc:'Every third step is free.',max:6,base:38,growth:1.7},
+  {id:'scanner',name:'Scanner',desc:'Reveal ore one tile farther away per level.',max:6,base:40,growth:1.75}
+];
+
+/* Rules only: this file also runs in plain Node. */
+function newSave(){
+  const up={}; for(const u of UPGRADES) up[u.id]=0;
+  return {v:1,rev:Date.now(),money:0,record:0,trips:0,faints:0,up,sound:true,ended:false,active:null};
+}
+function dpInt(n,lo,hi,fallback){return Number.isFinite(n)?Math.max(lo,Math.min(hi,Math.floor(n))):fallback;}
+function dpFind(table,id){return table.find(v=>v.id===id);}
+function migrate(raw){
+  const s=newSave(); if(!raw||typeof raw!=='object'||Array.isArray(raw)) return s;
+  s.rev=dpInt(raw.rev,0,Number.MAX_SAFE_INTEGER,0);
+  s.money=dpInt(raw.money,0,Number.MAX_SAFE_INTEGER,0);
+  s.record=dpInt(raw.record,0,DP.maxDepth,0);
+  s.trips=dpInt(raw.trips,0,Number.MAX_SAFE_INTEGER,0);
+  s.faints=dpInt(raw.faints,0,s.trips,0); s.sound=raw.sound!==false; s.ended=raw.ended===true;
+  for(const u of UPGRADES) s.up[u.id]=dpInt(raw.up&&raw.up[u.id],0,u.max,0);
+  const a=raw.active;
+  if(a&&typeof a==='object'&&!a.over&&Number.isInteger(a.seed)&&Array.isArray(a.rows)&&a.rows.length<=260&&a.rows.length>=20){
+    const oreIds=ORES.map(o=>o.id), rockIds=ROCKS.map(r=>r.id), kinds=['rock','ore','oil','gas','open','chest'];
+    const good=a.rows.every((row,y)=>Array.isArray(row)&&row.length===DP.width&&row.every(t=>t&&kinds.includes(t.kind)&&rockIds.includes(t.rock)&&Number.isInteger(t.hits)&&t.hits>=0&&t.hits<=10&&(t.kind!=='ore'||oreIds.includes(t.ore))));
+    if(good&&Number.isInteger(a.x)&&a.x>=0&&a.x<DP.width&&Number.isInteger(a.y)&&a.y>=0&&a.y<=DP.maxDepth&&a.y<a.rows.length&&Number.isFinite(a.oil)&&a.oil>=0&&(a.oil>0||a.y===0)&&a.oil<=10000&&Array.isArray(a.bag)&&a.bag.length<=100&&a.bag.every(id=>oreIds.includes(id))){
+      const t=JSON.parse(JSON.stringify(a)); t.rng=dpInt(t.rng,0,4294967295,t.seed>>>0);
+      t.terrainRng=dpInt(t.terrainRng,0,4294967295,t.seed>>>0);
+      t.rel={}; for(const r of RELICS) if(a.rel&&a.rel[r.id]) t.rel[r.id]=true;
+      t.offer=Array.isArray(a.offer)&&a.offer.length===2&&a.offer.every(id=>dpFind(RELICS,id))&&a.offer[0]!==a.offer[1]?a.offer.slice():null;
+      t.steps=dpInt(t.steps,0,Number.MAX_SAFE_INTEGER,0); t.blast=dpInt(t.blast,0,3,0);
+      t.depth=dpInt(t.depth,t.y,DP.maxDepth,t.y); t.ending=t.ending===true; t.over=null;
+      delete t.haul; s.active=t;
+    }
+  }
+  return s;
+}
+function layerAt(y){return LAYERS.find(l=>y>=l.from&&y<l.to)||LAYERS[LAYERS.length-1];}
+function maxOil(save){return DP.oil+save.up.lamp*DP.lampOil+(save.record>=50?DP.headlampOil:0);}
+function bagSize(save,trip){return DP.bag+save.up.bag*DP.bagSlots+(trip&&trip.rel.deepBag?4:0);}
+function pickTier(save){return 1+Math.floor(Math.min(6,save.up.pick)/2);}
+function upgradeCost(save,id){const u=dpFind(UPGRADES,id); return !u||save.up[id]>=u.max?Infinity:Math.round(u.base*Math.pow(u.growth,save.up[id]));}
+function buyUpgrade(save,id){
+  if(save.active) return false;
+  const cost=upgradeCost(save,id); if(save.money<cost||!Number.isFinite(cost)) return false;
+  save.money-=cost; save.up[id]++; save.rev=Date.now(); return true;
+}
+function dpRandState(trip,key){
+  trip[key]=(trip[key]+0x6D2B79F5)>>>0; let n=trip[key];
+  n=Math.imul(n^(n>>>15),n|1); n^=n+Math.imul(n^(n>>>7),n|61); return ((n^(n>>>14))>>>0)/4294967296;
+}
+function dpRandom(trip){return dpRandState(trip,'rng');}
+function dpTerrain(trip){return dpRandState(trip,'terrainRng');}
+function dpTile(kind,rock,ore){const r=dpFind(ROCKS,rock); return {kind,rock,ore:ore||null,hits:kind==='open'?0:r.hits,seen:kind==='open'};}
+function ensureRows(trip,y){
+  const end=Math.min(260,Math.ceil((Math.min(DP.maxDepth,y)+1)/DP.chunk)*DP.chunk);
+  while(trip.rows.length<end){
+    const rowY=trip.rows.length,layer=layerAt(rowY),row=[];
+    for(let x=0;x<DP.width;x++){
+      let rock=layer.rock;
+      if(layer.id==='granite'&&dpTerrain(trip)<0.35) rock='stone';
+      const r=dpTerrain(trip); let kind='rock',ore=null;
+      if(rowY===0) kind='open';
+      else if(r<DP.oreChance){kind='ore';ore=layer.ores[Math.floor(dpTerrain(trip)*layer.ores.length)];}
+      else if(r<DP.oreChance+DP.oilChance) kind='oil';
+      else if(r<DP.oreChance+DP.oilChance+DP.gasChance) kind='gas';
+      else if(r<DP.oreChance+DP.oilChance+DP.gasChance+DP.openChance) kind='open';
+      row.push(dpTile(kind,rock,ore));
+    }
+    // Small chambers have a seeded position, independent of the miner's route.
+    if(rowY>0&&rowY%30===0){
+      const cx=1+Math.floor(dpTerrain(trip)*(DP.width-2));
+      row[cx]=dpTile('chest',layer.rock); row[cx].hits=1;
+      row[cx-1]=dpTile('open',layer.rock);row[cx+1]=dpTile('open',layer.rock);
+    }
+    if(rowY===DP.maxDepth) for(let x=0;x<DP.width;x++) row[x]=dpTile('open',layer.rock);
+    trip.rows.push(row);
+  }
+}
+function tileAt(trip,x,y){
+  if(!Number.isInteger(x)||!Number.isInteger(y)||x<0||x>=DP.width||y<0||y>DP.maxDepth) return null;
+  ensureRows(trip,y); return trip.rows[y][x];
+}
+function scanMine(save,trip){
+  ensureRows(trip,trip.y+14); const radius=Math.max(save.up.scanner,trip.rel.dowser?3:0);
+  for(let y=0;y<trip.rows.length;y++) for(let x=0;x<DP.width;x++){
+    const t=trip.rows[y][x],d=Math.abs(x-trip.x)+Math.abs(y-trip.y);
+    if((t.kind==='ore'&&d<=radius)||(t.kind==='gas'&&trip.rel.canary)||(t.kind==='chest'&&save.record>=150)) t.seen=true;
+    // A touching wall's ore is visible without a scanner.
+    if(d<=1&&['ore','oil','chest'].includes(t.kind)) t.seen=true;
+  }
+}
+function newTrip(save,seed){
+  if(save.active) return save.active;
+  seed=Number.isInteger(seed)?seed:(Math.random()*4294967296)>>>0;
+  const trip={seed:seed>>>0,rng:(seed^0x9e3779b9)>>>0,terrainRng:seed>>>0,x:4,y:0,depth:0,oil:maxOil(save),bag:[],rows:[],rel:{},offer:null,over:null,ending:false,steps:0,blast:0};
+  save.active=trip; ensureRows(trip,0); scanMine(save,trip);save.rev=Date.now();return trip;
+}
+function climbCost(save,trip){return Math.ceil(trip.y*DP.climb*Math.pow(0.85,save.up.rope)*(trip.rel.ladder?0.5:1));}
+function dpSettle(save,trip,fainted){
+  if(trip.over) return trip.haul;
+  const bag=trip.bag.slice(),lost=[];
+  if(fainted){const n=Math.ceil(bag.length/2);for(let i=0;i<n;i++) lost.push(bag.splice(Math.floor(dpRandom(trip)*bag.length),1)[0]);}
+  const earned=bag.reduce((n,id)=>n+dpFind(ORES,id).value,0);
+  trip.haul={earned,sold:bag,lost,depth:trip.depth,fainted};trip.bag=[];
+  trip.over=fainted?'fainted':'climbed'; save.money+=earned;save.trips++;if(fainted) save.faints++;
+  save.record=Math.max(save.record,trip.depth);save.active=null;save.rev=Date.now();return trip.haul;
+}
+function climbOut(save,trip){
+  if(trip.over||trip.offer) return false;
+  const cost=climbCost(save,trip);if(trip.oil<cost) return false;
+  trip.oil-=cost;dpSettle(save,trip,false);return true;
+}
+function chooseRelic(save,trip,id){
+  if(trip.over||!trip.offer||!trip.offer.includes(id)) return false;
+  trip.rel[id]=true;trip.offer=null;
+  if(id==='lantern') trip.oil+=30;
+  if(id==='blast') trip.blast=3;
+  scanMine(save,trip);save.rev=Date.now();return true;
+}
+function dpOffer(trip){
+  const pool=RELICS.filter(r=>!trip.rel[r.id]||r.id==='lantern'||r.id==='blast').map(r=>r.id);
+  const a=pool.splice(Math.floor(dpRandom(trip)*pool.length),1)[0];
+  const b=pool[Math.floor(dpRandom(trip)*pool.length)];trip.offer=[a,b];
+}
+function dpClear(save,trip,t){
+  const kind=t.kind;
+  if(kind==='ore'){
+    const n=Math.min(trip.rel.lucky?2:1,bagSize(save,trip)-trip.bag.length);
+    if(n<=0) return 'full'; for(let i=0;i<n;i++) trip.bag.push(t.ore);
+  }
+  if(kind==='oil') trip.oil+=DP.oilFlask;
+  if(kind==='gas') trip.oil=Math.max(0,trip.oil-DP.gasLoss);
+  if(kind==='chest'&&!trip.offer) dpOffer(trip);
+  t.kind='open';t.hits=0;t.seen=true;return kind;
+}
+function act(save,trip,dx,dy){
+  if(trip.over||trip.offer||!Number.isInteger(dx)||!Number.isInteger(dy)||Math.abs(dx)+Math.abs(dy)!==1) return {type:'blocked'};
+  if(trip.oil<=0){if(trip.y>0) dpSettle(save,trip,true);return {type:trip.over||'blocked'};}
+  const x=trip.x+dx,y=trip.y+dy,t=tileAt(trip,x,y);if(!t) return {type:'blocked'};
+  let type='step',cost=1,gas=0;
+  if(t.kind==='open'){
+    trip.steps++;if(save.up.boots>0&&trip.steps%3===0) cost=0;
+    trip.x=x;trip.y=y;trip.depth=Math.max(trip.depth,y);
+    if(y>save.record){const old=save.record;save.record=y;if(old<50&&y>=50) trip.oil+=DP.headlampOil;}
+    if(y===DP.maxDepth&&!save.ended){save.ended=true;trip.ending=true;}
+  } else {
+    const rock=dpFind(ROCKS,t.rock);
+    if(rock.tier>pickTier(save)) return {type:'blocked',tier:rock.tier};
+    if(t.kind==='ore'&&trip.bag.length>=bagSize(save,trip)) return {type:'full'};
+    if(trip.rel.mole&&(t.rock==='dirt'||t.rock==='clay')) cost=0;
+    let power=1+save.up.pick;
+    if(save.up.pick>=8&&t.rock==='magma') power=rock.hits;
+    if(save.record>=100&&(t.rock==='clay'||t.rock==='stone')) power=rock.hits;
+    t.hits=Math.max(0,t.hits-power);type='dig';
+    if(t.hits===0){type=dpClear(save,trip,t);if(type==='gas') gas++;}
+    if(trip.blast>0){
+      trip.blast--;
+      for(let by=Math.max(1,y-1);by<=Math.min(DP.maxDepth,y+1);by++) for(let bx=Math.max(0,x-1);bx<=Math.min(DP.width-1,x+1);bx++){
+        const other=tileAt(trip,bx,by);
+        if(other.kind!=='open'&&dpFind(ROCKS,other.rock).tier<=pickTier(save)&&dpClear(save,trip,other)==='gas') gas++;
+      }
+    }
+  }
+  trip.oil=Math.max(0,trip.oil-cost);scanMine(save,trip);save.rev=Date.now();
+  if(trip.oil===0&&trip.y>0){dpSettle(save,trip,true);return {type:'fainted',event:type,gas};}
+  return {type,cost,gas};
+}
+
+/* Canvas art: the whole mine is drawn here, without downloaded assets. */
+const V={cv:null,ctx:null,w:360,h:460,dpr:1,cell:40,row:40,left:0,top:0,rows:14,dirty:true,hitX:-1,hitY:-1,hitUntil:0,gasUntil:0};
+const DRAW_ROCKS={},DRAW_ORES={};for(const r of ROCKS)DRAW_ROCKS[r.id]=r;for(const o of ORES)DRAW_ORES[o.id]=o;
+function initCanvas(){ V.cv=$('mine'); V.ctx=V.cv.getContext('2d'); resizeCanvas(); }
+function resizeCanvas(){
+  if (!V.cv) return;
+  const r=$('field').getBoundingClientRect();
+  V.w=Math.max(1,r.width); V.h=Math.max(1,r.height); V.dpr=Math.min(window.devicePixelRatio||1,3);
+  V.cv.width=Math.round(V.w*V.dpr); V.cv.height=Math.round(V.h*V.dpr);
+  V.ctx.setTransform(V.dpr,0,0,V.dpr,0,0); V.cell=V.w/DP.width; V.row=Math.min(V.cell,V.h/14); V.rows=Math.ceil(V.h/V.row); V.dirty=true;
+  drawScene(performance.now());
+}
+function roundBox(g,x,y,w,h,r){g.beginPath();g.roundRect(x,y,w,h,r);}
+function sceneNoise(x,y){let n=Math.imul(x+317,374761393)^Math.imul(y+71,668265263);n=(n^(n>>>13))>>>0;return n/4294967296;}
+function drawGem(g,x,y,s,color){
+  g.fillStyle=color;g.beginPath();g.moveTo(x,y-s);g.lineTo(x+s*.77,y-s*.3);g.lineTo(x+s*.55,y+s*.65);g.lineTo(x-s*.44,y+s*.6);g.lineTo(x-s*.76,y-s*.2);g.closePath();g.fill();
+  g.fillStyle='#ffffff50';g.beginPath();g.moveTo(x,y-s);g.lineTo(x+s*.77,y-s*.3);g.lineTo(x,y);g.closePath();g.fill();
+  g.strokeStyle='#17241c80';g.lineWidth=1;g.beginPath();g.moveTo(x,y);g.lineTo(x+s*.55,y+s*.65);g.moveTo(x,y);g.lineTo(x-s*.76,y-s*.2);g.stroke();
+}
+function drawMiner(g,x,y,s){
+  g.save();g.translate(x,y);g.scale(s/40,s/40);
+  g.fillStyle='#08100c88';g.beginPath();g.ellipse(0,13,12,4,0,0,Math.PI*2);g.fill();
+  g.strokeStyle='#283529';g.lineWidth=5;g.lineCap='round';g.beginPath();g.moveTo(-4,7);g.lineTo(-6,12);g.moveTo(4,7);g.lineTo(6,12);g.stroke();
+  g.fillStyle='#ac7954';roundBox(g,-9,-1,18,12,4);g.fill();g.fillStyle='#cf976a';roundBox(g,-7,-11,14,14,5);g.fill();
+  g.fillStyle='#dfb454';g.beginPath();g.ellipse(0,-11,10,6,0,Math.PI,Math.PI*2);g.fill();g.fillRect(-11,-12,22,4);
+  g.fillStyle='#6d7349';g.fillRect(-4,-17,8,8);g.fillStyle='#ffedb0';g.fillRect(-2,-15,4,4);
+  g.strokeStyle='#c8be9e';g.lineWidth=2;g.beginPath();g.moveTo(9,-1);g.lineTo(16,-9);g.moveTo(12,-12);g.quadraticCurveTo(18,-11,19,-5);g.stroke();
+  g.fillStyle='#3c4632';g.fillRect(-9,0,5,8);g.fillRect(3,0,4,8);g.restore();
+}
+function drawSurface(){
+  const g=V.ctx,w=V.w,h=V.h;
+  const sky=g.createLinearGradient(0,0,0,h);sky.addColorStop(0,'#1b2924');sky.addColorStop(1,'#35422e');g.fillStyle=sky;g.fillRect(0,0,w,h);
+  g.fillStyle='#8b9a6920';g.beginPath();g.arc(w*.81,h*.18,29,0,Math.PI*2);g.fill();g.fillStyle='#bcc49022';g.beginPath();g.arc(w*.81,h*.18,18,0,Math.PI*2);g.fill();
+  g.fillStyle='#2b3b2d';g.beginPath();g.moveTo(0,h*.62);g.lineTo(w*.14,h*.37);g.lineTo(w*.31,h*.55);g.lineTo(w*.54,h*.28);g.lineTo(w*.72,h*.53);g.lineTo(w,h*.39);g.lineTo(w,h);g.lineTo(0,h);g.fill();
+  g.fillStyle='#3b4a33';g.beginPath();g.moveTo(0,h*.68);g.lineTo(w*.21,h*.48);g.lineTo(w*.42,h*.73);g.lineTo(w*.7,h*.42);g.lineTo(w,h*.64);g.lineTo(w,h);g.lineTo(0,h);g.fill();
+  const floor=h*.79,cx=w*.55,shaft=72;
+  g.fillStyle='#4b5035';g.beginPath();g.moveTo(0,floor-8);g.quadraticCurveTo(w*.3,floor-24,w*.5,floor);g.quadraticCurveTo(w*.8,floor-20,w,floor-7);g.lineTo(w,h);g.lineTo(0,h);g.fill();
+  g.fillStyle='#323b2a';g.fillRect(0,floor+10,w,h-floor);g.fillStyle='#171f18';g.fillRect(cx-shaft/2,floor,shaft,h-floor);
+  g.strokeStyle='#696b42';g.lineWidth=5;g.beginPath();g.moveTo(cx-23,floor+10);g.lineTo(cx-23,h);g.moveTo(cx+23,floor+10);g.lineTo(cx+23,h);g.stroke();
+  g.strokeStyle='#858054';g.lineWidth=3;for(let y=floor+23;y<h;y+=20){g.beginPath();g.moveTo(cx-23,y);g.lineTo(cx+23,y);g.stroke();}
+  g.fillStyle='#4b3b2a';g.fillRect(cx-49,floor-104,10,110);g.fillRect(cx+39,floor-104,10,110);g.fillStyle='#9b7e4d';g.fillRect(cx-53,floor-108,106,12);g.fillStyle='#6d5839';g.fillRect(cx-57,floor-93,114,6);
+  g.strokeStyle='#99865b';g.lineWidth=2;g.beginPath();g.moveTo(cx,floor-96);g.lineTo(cx,floor-46);g.stroke();g.fillStyle='#a3a073';roundBox(g,cx-8,floor-46,16,22,5);g.fill();g.fillStyle='#f7d27b';g.fillRect(cx-4,floor-41,8,12);
+  const glow=g.createRadialGradient(cx,floor-35,2,cx,floor-35,53);glow.addColorStop(0,'#f4c36132');glow.addColorStop(1,'#f4c36100');g.fillStyle=glow;g.fillRect(cx-55,floor-90,110,110);
+  drawMiner(g,cx-77,floor-15,42);
+  g.fillStyle='#8f8053';roundBox(g,cx+59,floor-18,25,19,3);g.fill();g.strokeStyle='#b29a62';g.lineWidth=2;g.strokeRect(cx+62,floor-14,19,12);g.beginPath();g.moveTo(cx+71,floor-14);g.lineTo(cx+71,floor-2);g.stroke();
+  g.fillStyle='#758054';for(let i=0;i<25;i++){const x=sceneNoise(i,8)*w,y=floor+15+sceneNoise(i,2)*(h-floor-15);if(Math.abs(x-cx)>45)g.fillRect(x,y,2+sceneNoise(i,1)*6,2);}
+  g.fillStyle='#b4b992';g.font='9px system-ui,sans-serif';g.textAlign='center';g.fillText('Surface camp',cx,floor-121);
+}
+function drawTile(g,t,x,y,s,gx,gy,now){
+  const rock=DRAW_ROCKS[t.rock]||ROCKS[0];
+  const px=x+1,py=y+1,size=s-2,n=sceneNoise(gx,gy);
+  g.fillStyle=t.kind==='open'?'#172019':rock.color;g.fillRect(px,py,size,size);
+  if(t.kind==='open'){
+    g.fillStyle='#8a93621c';g.fillRect(x+5+n*9,y+s*.72,4+n*5,2);
+    if(gy===0){g.fillStyle='#7c8052';g.fillRect(x,y,s,3);}
+    return;
+  }
+  g.fillStyle='#ffffff0b';g.fillRect(px,py,size,2);g.fillStyle='#00000026';g.fillRect(px,py+size-3,size,3);g.fillRect(px+size-2,py,2,size);
+  g.strokeStyle='#11190f32';g.lineWidth=1;g.beginPath();g.moveTo(x+s*.17,y+s*.3);g.lineTo(x+s*(.4+n*.2),y+s*.39);g.lineTo(x+s*.7,y+s*.15);g.moveTo(x+s*.5,y+s*.75);g.lineTo(x+s*.8,y+s*.68);g.stroke();
+  if(t.kind==='ore'&&t.seen){
+    const ore=DRAW_ORES[t.ore];if(ore){
+      if(G.rel.dowser&&Math.abs(gx-G.x)+Math.abs(gy-G.y)<=3){g.fillStyle=ore.color+'30';g.fillRect(px,py,size,size);}
+      drawGem(g,x+s*.52,y+s*.47,s*.18,ore.color);drawGem(g,x+s*.27,y+s*.7,s*.1,ore.color);drawGem(g,x+s*.75,y+s*.73,s*.085,ore.color);
+    }
+  } else if(t.kind==='oil'&&t.seen){
+    g.fillStyle='#d9ba66';roundBox(g,x+s*.33,y+s*.31,s*.34,s*.46,3);g.fill();g.fillStyle='#536541';g.fillRect(x+s*.43,y+s*.23,s*.14,s*.12);g.fillStyle='#f9e8ad';g.fillRect(x+s*.4,y+s*.4,s*.1,s*.2);
+  } else if(t.kind==='gas'&&G.rel.canary){
+    g.fillStyle='#d4d76c80';for(let i=0;i<3;i++){g.beginPath();g.arc(x+s*(.3+i*.18),y+s*(.6-i%2*.18),s*.16,0,Math.PI*2);g.fill();}
+  } else if(t.kind==='chest'&&t.seen){
+    g.fillStyle='#a77c3d';roundBox(g,x+s*.21,y+s*.31,s*.58,s*.44,3);g.fill();g.fillStyle='#d1ae61';g.fillRect(x+s*.22,y+s*.47,s*.56,s*.07);g.fillRect(x+s*.46,y+s*.43,s*.09,s*.2);g.strokeStyle='#d1ae6188';g.strokeRect(x+s*.27,y+s*.36,s*.46,s*.32);
+  }
+  if(rock.tier>pickTier(SV)){
+    g.fillStyle='#00000028';g.fillRect(px,py,size,size);
+    if(Math.abs(gx-G.x)+Math.abs(gy-G.y)===1){g.fillStyle='#c8bca0';g.font=Math.max(9,s*.25)+'px system-ui';g.textAlign='right';g.fillText('P'+rock.tier,x+s-4,y+s-4);}
+  }
+  if(t.hits<rock.hits&&t.hits>0){g.fillStyle='#10190bc0';g.fillRect(x+5,y+s-7,s-10,3);g.fillStyle='#e4c994';g.fillRect(x+5,y+s-7,(s-10)*(1-t.hits/rock.hits),3);}
+  if(gx===V.hitX&&gy===V.hitY&&now<V.hitUntil){g.fillStyle='#ffdc9744';g.fillRect(px,py,size,size);}
+}
+function drawMine(now){
+  const g=V.ctx,w=V.w,s=V.cell,ys=V.row/s,h=V.h/ys;
+  g.save();g.scale(1,ys);
+  V.top=Math.max(0,Math.min(G.y-4,DP.maxDepth-V.rows+2));V.left=0;
+  g.fillStyle='#111912';g.fillRect(0,0,w,h);
+  for(let row=0;row<V.rows+1;row++){
+    const gy=V.top+row;if(gy>DP.maxDepth)continue;
+    for(let x=0;x<DP.width;x++){const t=tileAt(G,x,gy);if(t)drawTile(g,t,x*s,row*s,s,x,gy,now);}
+  }
+  const mx=(G.x+.5)*s,my=(G.y-V.top+.5)*s;
+  if(G.y>=250){const glow=g.createRadialGradient(mx,my,8,mx,my,w*.85);glow.addColorStop(0,'#9edc8d44');glow.addColorStop(1,'#9edc8d00');g.fillStyle=glow;g.fillRect(0,0,w,h);}
+  const lamp=g.createRadialGradient(mx,my,s*.3,mx,my,s*4.5);lamp.addColorStop(0,'#00000000');lamp.addColorStop(.45,'#060c0633');lamp.addColorStop(1,'#030903c9');g.fillStyle=lamp;g.fillRect(0,0,w,h);
+  g.strokeStyle='#e8d7a13b';g.lineWidth=1;
+  for(let d=0;d<4;d++){const dx=d===0?-1:d===1?1:0,dy=d===2?-1:d===3?1:0,x=G.x+dx,y=G.y+dy;if(x>=0&&x<DP.width&&y>=0&&y<=DP.maxDepth){roundBox(g,x*s+3,(y-V.top)*s+3,s-6,s-6,4);g.stroke();}}
+  g.fillStyle='#e9c67715';g.beginPath();g.arc(mx,my,s*.56,0,Math.PI*2);g.fill();
+  g.restore();drawMiner(g,mx,my*ys,Math.min(s,V.row*1.2));
+  if(now<V.gasUntil){g.fillStyle='#c3c65a'+Math.round(35*(V.gasUntil-now)/500).toString(16).padStart(2,'0');g.fillRect(0,0,w,V.h);}
+}
+function drawScene(now){if(!V.ctx)return;if(G&&!G.over)drawMine(now||0);else drawSurface();V.dirty=false;}
+function renderLoop(now){
+  if(!paused&&(V.dirty||now<V.hitUntil||now<V.gasUntil))drawScene(now);
+  requestAnimationFrame(renderLoop);
+}
+
+/* Screens, touch input, sound and two independent save copies. */
+const SAVE_KEY='deep-pockets.save.v1', TUTORIAL_KEY='deep-pockets.t';
+let SV=null,G=null,paused=false,saveRev=0,saveT=null,idb=null,lsOK=true,storageOK=true,modalKind='',modalSticky=false,toastT=null,AC=null;
+const $=id=>document.getElementById(id);
+function fmt(n){return Math.floor(Number(n)||0).toLocaleString('en');}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function parseSave(s){
+  try{
+    const o=JSON.parse(s);
+    if(!o||typeof o!=='object'||Array.isArray(o)||!o.up||typeof o.up!=='object'||Array.isArray(o.up)||!Number.isFinite(o.money))return null;
+    if(o.v!==undefined&&o.v!==0&&o.v!==1)return null;
+    return o;
+  }catch(e){return null;}
+}
+function writeSave(){
+  clearTimeout(saveT);saveT=null;if(!SV)return;
+  SV.rev=saveRev=Math.max(saveRev,Number(SV.rev)||0,Date.now())+1;
+  const str=JSON.stringify(SV);
+  try{localStorage.setItem(SAVE_KEY,str);lsOK=true;}catch(e){lsOK=false;}
+  if(idb){try{idb.transaction('kv','readwrite').objectStore('kv').put(str,'save');}catch(e){}}
+  storageOK=lsOK||!!idb;
+}
+function save(now){if(!SV)return;if(now)writeSave();else if(!saveT)saveT=setTimeout(writeSave,350);}
+function idbOpen(){
+  return new Promise(resolve=>{
+    let done=false;const finish=()=>{if(!done){done=true;resolve();}};
+    try{
+      const q=indexedDB.open('deep-pockets',1);
+      q.onupgradeneeded=()=>{try{q.result.createObjectStore('kv');}catch(e){}};
+      q.onsuccess=()=>{if(done){q.result.close();return;}idb=q.result;finish();};q.onerror=finish;q.onblocked=finish;
+    }catch(e){finish();}
+    setTimeout(finish,1500);
+  });
+}
+function idbGet(){
+  return new Promise(resolve=>{
+    if(!idb)return resolve(null);let done=false;const finish=v=>{if(!done){done=true;resolve(v);}};
+    try{const q=idb.transaction('kv').objectStore('kv').get('save');q.onsuccess=()=>finish(q.result||null);q.onerror=()=>finish(null);}catch(e){finish(null);}
+    setTimeout(()=>finish(null),1500);
+  });
+}
+async function loadSave(){
+  let a=null,b=null;try{a=parseSave(localStorage.getItem(SAVE_KEY));}catch(e){lsOK=false;}
+  await idbOpen();b=parseSave(await idbGet());
+  const pick=a&&b?((b.rev||0)>(a.rev||0)?b:a):a||b;
+  saveRev=Math.max(a&&a.rev||0,b&&b.rev||0);storageOK=lsOK||!!idb;
+  return pick?migrate(pick):null;
+}
+function exportCode(){return 'DP1.'+btoa(unescape(encodeURIComponent(JSON.stringify(SV))));}
+function importCode(code){
+  try{
+    code=String(code).replace(/\s+/g,'').replace(/^DP1\./,'');
+    const raw=parseSave(decodeURIComponent(escape(atob(code))));if(!raw)return false;
+    SV=migrate(raw);save(true);return true;
+  }catch(e){return false;}
+}
+function audio(){
+  if(!SV||!SV.sound)return null;
+  try{if(!AC){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;AC=new A();}if(AC.state==='suspended')AC.resume().catch(()=>{});return AC;}catch(e){return null;}
+}
+function tone(f,d,v,type){
+  const a=audio();if(!a)return;
+  try{const o=a.createOscillator(),g=a.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,a.currentTime);o.frequency.exponentialRampToValueAtTime(f*.72,a.currentTime+d);g.gain.setValueAtTime(v||.035,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+d);o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+d);}catch(e){}
+}
+function hiss(){
+  const a=audio();if(!a)return;
+  try{const b=a.createBuffer(1,Math.floor(a.sampleRate*.22),a.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*.055*(1-i/d.length);const n=a.createBufferSource();n.buffer=b;n.connect(a.destination);n.start();}catch(e){}
+}
+function toast(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{$('toast').hidden=true;},2400);}
+function sheet(title,html,kind,sticky){
+  modalKind=kind||'info';modalSticky=!!sticky;$('sheet-title').textContent=title;$('sheet-body').innerHTML=html;$('sheet-close').hidden=modalSticky;$('sheet-wrap').hidden=false;$('sheet').scrollTop=0;
+  const focus=$('sheet-body').querySelector('button,textarea');if(focus)focus.focus({preventScroll:true});
+}
+function closeSheet(){if(modalSticky)return;modalKind='';$('sheet-wrap').hidden=true;$('mine').focus({preventScroll:true});}
+function forceClose(){modalSticky=false;closeSheet();}
+function updateUI(){
+  const active=G&&!G.over,capacity=maxOil(SV),oil=active?G.oil:capacity,cost=active?climbCost(SV,G):0;
+  $('record').textContent='Depth record · '+SV.record+' m';$('money').textContent=fmt(SV.money);
+  $('place').textContent=active?layerAt(G.y).name+' · '+G.y+' m':'Surface camp';
+  $('supply').textContent=active?(G.oil<=cost+6?'Time to head home':G.bag.length>=bagSize(SV,G)?'Your bag is full':'Lamp burning'):'Lamp ready';
+  const scale=Math.max(capacity,oil,cost,1);$('oil-fill').style.width=Math.min(100,oil/scale*100)+'%';$('oil-fill').style.background=active&&oil<=cost+6?'#d2835a':'';
+  $('oil-marker').style.left=Math.min(99,cost/scale*100)+'%';$('oil-marker').hidden=!active;
+  $('oil-label').textContent=oil+' oil'+(active?' · white mark = climb':'');$('bag-label').textContent='Bag · '+(active?G.bag.length:0)+' / '+bagSize(SV,active?G:null);
+  $('surface-controls').hidden=!!active;$('mine-controls').hidden=!active;$('field-caption').hidden=!!active;$('depth-tag').hidden=!active;$('trip-hint').hidden=!active||G.depth>3;
+  $('depth-tag').textContent=active?G.y+' m':'';$('climb').disabled=!active||G.oil<cost||!!G.offer;$('climb-price').textContent=cost+' oil';
+  $('climb-note').textContent=active?(G.oil<cost?'Not enough oil to climb. Look for a flask.':G.rel.ladder?'Your rope ladder halves the climb.':'Keep enough oil to get home.'):'Keep enough oil to get home.';
+  $('camp-note').textContent=SV.trips?'Trip '+(SV.trips+1)+' · a little further?':'A full lamp. An empty bag.';V.dirty=true;drawScene(performance.now());
+}
+function showWelcome(){
+  sheet('A light in the dark','<div class="intro-art"><span></span></div><p class="eyebrow">Welcome to Deep Pockets</p><ul class="welcome-list"><li>Tap beside the miner to dig. Swipes work too.</li><li>Digging and moving both use lamp oil.</li><li>Fill your bag with ore. It sells when you return.</li><li>The white mark shows the oil needed to climb out.</li><li>Run dry underground and lose half your bag.</li></ul><button class="button primary full" data-act="welcome">Let\'s go</button>','welcome',true);
+}
+function startTrip(){forceClose();G=newTrip(SV);save(true);updateUI();tone(440,.13,.035);}
+function oreList(ids){
+  if(!ids.length)return '<p class="muted">No ore in this bag yet.</p>';
+  let html='<div class="bag-grid">';for(const o of ORES){const count=ids.filter(id=>id===o.id).length;if(count)html+='<div class="ore-row"><i class="ore-gem" style="background:'+o.color+'"></i><span>'+o.name+'</span><b>'+count+'</b></div>';}return html+'</div>';
+}
+function showBag(){if(!G||G.over)return;const value=G.bag.reduce((n,id)=>n+dpFind(ORES,id).value,0);sheet('Your bag','<p>'+G.bag.length+' of '+bagSize(SV,G)+' slots filled · <span class="gold">'+fmt(value)+' coins</span> at the surface</p>'+oreList(G.bag)+'<p class="muted">Ore stays in the wall when your bag is full. Relics last for this trip.</p>','bag');}
+function showRelics(){
+  if(!G||G.over)return;
+  if(G.offer){let html='<p>A forgotten chest. Take one find for this trip.</p>';for(const id of G.offer){const r=dpFind(RELICS,id);html+='<button class="relic-choice" data-act="relic" data-id="'+r.id+'"><strong>'+r.name+'</strong><span>'+r.desc+'</span></button>';}sheet('Something left behind',html,'choice',true);}
+  else{let html='';for(const r of RELICS)if(G.rel[r.id])html+='<div class="tool-row"><div><strong>'+r.name+'</strong><p>'+r.desc+(r.id==='blast'?' '+G.blast+' charges left.':'')+'</p></div></div>';sheet('This trip\'s relics',html||'<p>No relics yet. Look for a chamber about every 30 metres.</p>','relics');}
+}
+function showTools(){
+  const rows=[{depth:50,name:'Headlamp',desc:'Fifteen more oil on every trip.'},{depth:100,name:'Drill',desc:'Clay and stone break in one tap.'},{depth:150,name:'Map',desc:'Relic chambers are shown as the mine opens.'}];
+  let html='<p>Reach a new depth record to keep a new tool.</p>';for(const r of rows)html+='<div class="tool-row'+(SV.record<r.depth?' locked':'')+'"><div class="tool-depth">'+r.depth+' m</div><div><strong>'+r.name+(SV.record>=r.depth?' · yours':'')+'</strong><p>'+r.desc+'</p></div></div>';sheet('Depth rewards',html,'tools');
+}
+function showUpgrades(){
+  let html='<div class="upgrade-head"><b>'+fmt(SV.money)+'</b> coins to spend · pick tier '+pickTier(SV)+'</div>';
+  const icons={pick:'⌁',lamp:'◉',bag:'▣',rope:'≋',boots:'↟',scanner:'⊙'};
+  for(const u of UPGRADES){const level=SV.up[u.id],cost=upgradeCost(SV,u.id);html+='<div class="upgrade-row"><span class="upgrade-icon" aria-hidden="true">'+icons[u.id]+'</span><div class="upgrade-copy"><strong>'+u.name+' <span class="muted">'+level+' / '+u.max+'</span></strong><p>'+u.desc+'</p><div class="level-pips">';for(let i=0;i<u.max;i++)html+='<i'+(i<level?' class="on"':'')+'></i>';html+='</div></div><button class="buy-button" data-act="buy" data-id="'+u.id+'" aria-label="Buy '+u.name+' upgrade for '+cost+' coins"'+(SV.money<cost||!Number.isFinite(cost)?' disabled':'')+'>'+(Number.isFinite(cost)?fmt(cost):'Full')+'</button></div>';}
+  sheet('Better gear, deeper finds',html,'upgrades');
+}
+function showHaul(){
+  const h=G.haul;G=null;updateUI();
+  let html='<p class="eyebrow">'+(h.fainted?'The lamp went dark':'Back in the daylight')+'</p><div class="haul-value">+'+fmt(h.earned)+'<small>coins</small></div><div class="haul-meta"><span>Deepest point · '+h.depth+' m</span><span>Trip '+SV.trips+'</span></div>';
+  if(h.fainted)html+='<p>You were hauled back to camp. '+h.lost.length+' lump'+(h.lost.length===1?' was':'s were')+' lost along the way.</p>';
+  html+=oreList(h.sold)+'<div class="sheet-actions"><button class="button secondary" data-act="haul-upgrades">Upgrades</button><button class="button primary" data-act="camp">Back to camp</button></div>';
+  sheet(h.fainted?'A narrow escape':'A good day\'s digging',html,'haul',true);tone(h.fainted?140:660,.24,.045);
+}
+function showEnding(){
+  sheet('The deep pocket','<div class="ending"><div class="ending-spark" aria-hidden="true">✧</div><p class="eyebrow">250 metres below</p><h3>You found the light.</h3><p>The last wall gives way. Beyond it, a cavern glows like a sky full of buried stars.</p><p>There is more room down here than you ever imagined.</p></div><p>Your record is yours to keep. Fill your bag, climb home, and keep exploring.</p><button class="button primary full" data-act="ending">Keep exploring</button>','ending',true);tone(880,.5,.04);
+}
+function showPause(){sheet('Your lamp is waiting','<p>Your trip is saved at '+G.y+' metres. Take your time.</p><button class="button primary full" data-act="resume">Resume digging</button>','pause',true);}
+function step(dx,dy){
+  if(!G||G.over||paused||modalKind)return;const oldRecord=SV.record,tx=G.x+dx,ty=G.y+dy;
+  const r=act(SV,G,dx,dy);if(r.type==='blocked'){toast(r.tier?'You need pick tier '+r.tier+' for this rock.':'Tap a tile beside the miner.');return;}if(r.type==='full'){toast('Your bag is full. Climb out to sell your ore.');return;}
+  V.hitX=tx;V.hitY=ty;V.hitUntil=performance.now()+110;
+  if(r.gas>0||r.type==='gas'||r.event==='gas'){hiss();V.gasUntil=performance.now()+500;toast('Gas pocket · lost '+((r.gas||1)*DP.gasLoss)+' oil');}
+  else if(r.type==='ore')tone(740,.11,.035);else if(r.type==='oil'){tone(600,.2,.04);toast('Oil flask · +'+DP.oilFlask+' oil');}else tone(r.type==='step'?140:220,.055,.018,'triangle');
+  save(true);updateUI();
+  if(G.ending){showEnding();return;}
+  if(G.over){showHaul();return;}if(G.offer){showRelics();return;}
+  for(const d of [50,100,150])if(oldRecord<d&&SV.record>=d)toast('New depth reward! '+(d===50?'Headlamp: +15 oil.':d===100?'Drill: clay and stone break in one tap.':'Map: relic chambers are shown.'));
+}
+function showSettings(){
+  sheet('Settings',(storageOK?'':'<p class="warnbox">This browser is not keeping saves. Copy a backup before closing.</p>')+'<div class="settings-row"><span>Sound</span><button class="switch" data-act="sound">'+(SV.sound?'On':'Off')+'</button></div><button class="settings-action" data-act="copy">Copy backup code</button><div id="backup-area" hidden><p class="muted">Copy this code and keep it somewhere safe.</p><textarea id="backup-code" readonly aria-label="Your backup code"></textarea></div><textarea id="load-code" placeholder="Paste a backup code here" aria-label="Backup code to load"></textarea><button class="settings-action" data-act="load">Load backup code</button><button class="settings-action danger" data-act="reset">Start over</button><p class="muted">Progress is saved on this device. A backup code keeps another copy.</p>','settings');
+}
+async function copyBackup(){
+  const code=exportCode();try{await navigator.clipboard.writeText(code);toast('Backup code copied');}catch(e){$('backup-area').hidden=false;$('backup-code').value=code;$('backup-code').focus();$('backup-code').select();toast('Select and copy your backup code');}
+}
+function handleAction(action,id){
+  if(action==='welcome'){try{localStorage.setItem(TUTORIAL_KEY,'1');}catch(e){}forceClose();if(G){if(G.offer)showRelics();else if(G.ending)showEnding();else showPause();}}
+  else if(action==='resume')forceClose();
+  else if(action==='camp')forceClose();
+  else if(action==='haul-upgrades'){forceClose();showUpgrades();}
+  else if(action==='buy'){if(buyUpgrade(SV,id)){save(true);updateUI();showUpgrades();tone(540,.12,.035);}}
+  else if(action==='relic'){if(G&&chooseRelic(SV,G,id)){forceClose();save(true);updateUI();toast(dpFind(RELICS,id).name+' is yours for this trip');if(G.ending)showEnding();}}
+  else if(action==='ending'){if(G)G.ending=false;forceClose();save(true);if(G&&G.over)showHaul();else if(G&&G.offer)showRelics();}
+  else if(action==='sound'){SV.sound=!SV.sound;save(true);showSettings();if(SV.sound)tone(500,.12,.035);}
+  else if(action==='copy')copyBackup();
+  else if(action==='load'){
+    const code=$('load-code').value;if(!code.trim()){toast('Paste a backup code first');return;}
+    if(importCode(code)){G=SV.active;forceClose();updateUI();toast('Progress restored');if(G){if(G.ending)showEnding();else if(G.offer)showRelics();else showPause();}}else toast('That backup code could not be read');
+  }
+  else if(action==='reset')sheet('Start a fresh save?','<p>Your depth record, coins, gear and current trip will be removed from this device. Copy a backup first if you want to keep them.</p><div class="sheet-actions"><button class="button secondary" data-act="cancel-reset">Keep playing</button><button class="button danger" data-act="confirm-reset">Start over</button></div>','reset');
+  else if(action==='cancel-reset')showSettings();
+  else if(action==='confirm-reset'){SV=newSave();G=null;save(true);forceClose();updateUI();toast('A fresh start');}
+}
+function bindInput(){
+  $('settings').onclick=showSettings;$('start').onclick=startTrip;$('upgrades').onclick=showUpgrades;$('tools').onclick=showTools;$('bag').onclick=showBag;$('relics').onclick=showRelics;
+  $('climb').onclick=()=>{if(G&&climbOut(SV,G)){save(true);showHaul();}};
+  $('sheet-close').onclick=closeSheet;$('sheet-wrap').onclick=e=>{if(e.target===$('sheet-wrap'))closeSheet();};
+  $('sheet-body').onclick=e=>{const b=e.target.closest('[data-act]');if(b&&!b.disabled)handleAction(b.dataset.act,b.dataset.id);};
+  let pointer=null;
+  V.cv.addEventListener('pointerdown',e=>{if(!G||modalKind||paused)return;pointer={id:e.pointerId,x:e.clientX,y:e.clientY};V.cv.setPointerCapture(e.pointerId);e.preventDefault();});
+  V.cv.addEventListener('pointercancel',()=>{pointer=null;});
+  V.cv.addEventListener('pointerup',e=>{
+    if(!pointer||pointer.id!==e.pointerId)return;const p=pointer;pointer=null;const dx=e.clientX-p.x,dy=e.clientY-p.y;
+    if(Math.max(Math.abs(dx),Math.abs(dy))>=18){if(Math.abs(dx)>Math.abs(dy))step(Math.sign(dx),0);else step(0,Math.sign(dy));}
+    else if(G){const r=V.cv.getBoundingClientRect(),x=Math.floor((e.clientX-r.left)/V.cell),y=Math.floor((e.clientY-r.top)/V.row)+V.top;if(Math.abs(x-G.x)+Math.abs(y-G.y)===1)step(x-G.x,y-G.y);else toast('Tap beside the miner, or swipe to move.');}e.preventDefault();
+  });
+  document.addEventListener('pointerdown',audio,{passive:true});
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){closeSheet();return;}
+    if(modalKind){if(e.key==='Tab'){const items=$('sheet').querySelectorAll('button:not([hidden]):not(:disabled),textarea'),first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){last.focus();e.preventDefault();}else if(!e.shiftKey&&document.activeElement===last){first.focus();e.preventDefault();}}return;}
+    const dirs={ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0],ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1]};if(dirs[e.key]){e.preventDefault();audio();step(dirs[e.key][0],dirs[e.key][1]);}
+  });
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){paused=true;save(true);if(AC&&AC.state==='running')AC.suspend().catch(()=>{});}else{paused=false;V.dirty=true;if(G&&!G.over&&!modalKind)showPause();}});
+  window.addEventListener('pagehide',()=>save(true));window.addEventListener('resize',resizeCanvas);
+}
+async function boot(){
+  SV=await loadSave()||newSave();G=SV.active;initCanvas();bindInput();updateUI();save(true);requestAnimationFrame(renderLoop);
+  let seen=false;try{seen=!!localStorage.getItem(TUTORIAL_KEY);}catch(e){}
+  if(!seen)showWelcome();else if(G){if(G.ending)showEnding();else if(G.offer)showRelics();else showPause();}
+}
+boot();
+</script>
+</body>
+</html>

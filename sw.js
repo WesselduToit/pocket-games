@@ -1,6 +1,12 @@
-const CACHE_NAME = "pg-58afcec80e0a79823b75b9181ad65d5effb034e04b7d11d772160c21bedecebd";
+const CACHE_NAME = "pg-d90022c11b9c69710cf19828bd746a5c9891eb4b66ae2ee91f6572f5c9688f99";
 const FILES = [
+  "./games/bounce-house.html",
+  "./games/deep-pockets.html",
   "./games/down-the-hatch.html",
+  "./games/dust-bunnies.html",
+  "./games/emberlight.html",
+  "./games/far-flung.html",
+  "./games/matchlock.html",
   "./games/roadbound.html",
   "./icons/icon-192.png",
   "./icons/icon-512.png",

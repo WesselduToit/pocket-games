@@ -1,0 +1,907 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#e7decf">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Dust bunnies</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23e7decf'/%3E%3Ccircle cx='16' cy='18' r='11' fill='%239e9b98'/%3E%3Ccircle cx='12' cy='17' r='2' fill='%23333130'/%3E%3Ccircle cx='20' cy='17' r='2' fill='%23333130'/%3E%3C/svg%3E">
+<style>
+:root{--paper:#f6f0e5;--floor:#e7decf;--ink:#38362f;--muted:#746f61;--line:#d0c5b2;--green:#385e4c;--green-dark:#244433;--gold:#edbc61;--white:#fffaf1;--body:system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:#c6bcab;color:var(--ink);font-family:var(--body);overscroll-behavior:none}
+body{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;-webkit-text-size-adjust:100%}
+button,select,textarea{font:inherit;color:inherit}
+button{border:0;cursor:pointer;background:none}
+button:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+button:disabled{opacity:.45;cursor:default}
+.hidden{display:none!important}
+#app{position:fixed;inset:0;max-width:500px;margin:auto;background:var(--paper);overflow:hidden}
+.screen{height:100%;display:flex;flex-direction:column;min-height:0}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex:none;padding:9px 14px;padding-top:calc(9px + env(safe-area-inset-top));border-bottom:1px solid var(--line);background:var(--floor)}
+.eyebrow{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.iconbtn{min-width:44px;min-height:42px;padding:0 9px;border:1px solid var(--line);border-radius:10px;background:var(--white);font-size:12px;font-weight:700;flex:none}
+h1{font-family:Georgia,serif;font-weight:700;font-size:40px;line-height:1.07;letter-spacing:-.045em}
+h2{font-family:Georgia,serif;font-size:24px;line-height:1.1}
+h3{font-size:16px;line-height:1.2}
+p{font-size:14px;line-height:1.5;color:var(--muted)}
+small,.small{font-size:12px;color:var(--muted);line-height:1.4}
+.btn{min-height:44px;padding:10px 15px;border-radius:12px;border:1px solid var(--line);background:var(--white);font-weight:750;font-size:15px;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn.primary{background:var(--green);color:var(--white);border-color:var(--green-dark);box-shadow:0 3px 0 var(--green-dark)}
+.btn.primary:active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 var(--green-dark)}
+.btn.big{width:100%;min-height:53px;font-size:19px}
+.btn.danger{background:#984a3d;color:white;border-color:#793a30}
+.textbtn{min-height:42px;font-size:13px;color:var(--muted);text-decoration:underline}
+.home-content,.result-content{display:flex;flex-direction:column;gap:11px;padding:16px 24px 18px;padding-bottom:calc(18px + env(safe-area-inset-bottom));overflow-y:auto;min-height:0;text-align:center}
+.home-content{flex:1;justify-content:center}
+.tagline{line-height:1.45}
+.bunny-art{position:relative;width:92px;height:75px;margin:2px auto 4px;border-radius:47% 52% 44% 48%;background:#b4b0a7;box-shadow:-10px 5px 0 -5px #c3bfb6,9px 2px 0 -3px #c3bfb6,-2px -5px 0 -1px #c3bfb6;transform:rotate(-6deg)}
+.bunny-art:before,.bunny-art:after{content:"";position:absolute;width:20px;height:34px;background:#b4b0a7;top:-17px;border-radius:70% 70% 40% 40%}
+.bunny-art:before{left:16px;transform:rotate(-15deg)}.bunny-art:after{right:15px;transform:rotate(15deg)}
+.bunny-art i{position:absolute;top:29px;left:28px;width:6px;height:7px;background:#38362f;border-radius:50%;z-index:1}.bunny-art i+i{left:58px}
+.bunny-art b{position:absolute;left:44px;top:43px;width:7px;height:4px;border-radius:50%;background:#e7decf}
+#titleStar{color:#a87820;font-family:var(--body);font-size:27px;margin-left:4px;vertical-align:middle}
+.dust-total{padding:5px 0 2px}.dust-total small{display:block}.dust-total strong{display:block;font-size:37px;line-height:1.2;letter-spacing:-.03em;color:var(--green)}
+.room-label{font-size:12px;text-align:left;font-weight:700;margin-bottom:-6px}
+select{display:block;width:100%;min-height:43px;max-width:100%;border:1px solid var(--line);border-radius:9px;background:var(--white);padding:8px 30px 8px 11px;font-size:14px}
+.room-note{font-size:12px;margin-top:-7px}
+.round-hud{display:flex;gap:7px;align-items:center;justify-content:space-between;padding:6px 8px;padding-top:calc(6px + env(safe-area-inset-top));background:var(--paper);border-bottom:1px solid var(--line);flex:none}
+.round-hud>div{min-width:0;flex:1;text-align:center}.round-hud small{display:block;font-size:10px;white-space:nowrap}.round-hud strong{display:block;font-size:18px;font-variant-numeric:tabular-nums;line-height:1.25}.round-hud .iconbtn{min-width:43px;padding:0 7px}
+.room-stage{position:relative;flex:1;min-height:0;background:#bfb4a2;overflow:hidden}
+#roundCanvas{width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
+.streak-label{position:absolute;bottom:calc(10px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);pointer-events:none;white-space:nowrap;background:#fffaf1dd;padding:5px 13px;border-radius:20px;color:var(--green);font-size:12px;font-weight:700}
+.result-content{flex:1;justify-content:center;gap:18px}.result-mark{font-size:48px;color:#b78b42;line-height:1}.stat-pair{display:flex;justify-content:center;gap:26px;padding:7px 0}.stat-pair small,.stat-pair b{display:block}.stat-pair b{font-size:21px}
+#treeScroll{flex:1;overflow-y:auto;overflow-x:hidden;min-height:70px;background:var(--paper);-webkit-overflow-scrolling:touch}
+#treeCanvas{display:block;width:100%;touch-action:pan-y}
+.node-details{padding:9px 13px 10px;flex:none;border-top:1px solid var(--line);background:var(--white)}
+.node-details select{min-height:40px;font-size:12px;padding-top:6px;padding-bottom:6px;background:var(--paper);margin-bottom:7px}
+.node-heading{display:flex;justify-content:space-between;gap:8px;align-items:center}.node-heading>b{white-space:nowrap;font-size:12px;color:var(--muted)}
+.node-details p{font-size:12px;line-height:1.35;min-height:32px;margin:4px 0 6px}
+.node-buy{display:flex;align-items:center;justify-content:space-between;gap:8px}.node-buy .btn{min-width:100px;min-height:40px;padding:6px 12px}.node-buy small{max-width:65%;font-size:11px}
+.tree-footer{flex:none;padding:7px 13px 12px;padding-bottom:calc(12px + env(safe-area-inset-bottom));background:var(--floor)}
+.tree-footer .btn.big{min-height:47px;font-size:18px}
+.modal{position:fixed;z-index:10;inset:0;display:flex;align-items:center;justify-content:center;background:#292821a6;padding:16px;padding-top:calc(16px + env(safe-area-inset-top));padding-bottom:calc(16px + env(safe-area-inset-bottom))}
+.sheet{width:100%;max-width:420px;max-height:100%;overflow-y:auto;background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:0 12px 45px #0004;padding:17px}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}.sheet-head .iconbtn{min-height:40px}
+#modalBody{display:flex;flex-direction:column;gap:13px}#modalBody p{font-size:13px}#modalBody ul{margin-left:20px;color:var(--muted);font-size:14px;line-height:1.6}#modalBody li{padding-left:1px;margin:3px 0}
+.settings-row{display:flex;justify-content:space-between;align-items:center;font-size:15px;gap:10px}.settings-row .btn{min-width:90px}
+textarea{resize:vertical;width:100%;min-height:85px;border:1px solid var(--line);border-radius:9px;background:var(--white);padding:10px;font-size:12px;user-select:text;-webkit-user-select:text;word-break:break-all}
+.field-label{font-size:12px;font-weight:700}.fine-print{border-top:1px solid var(--line);padding-top:10px}.ending-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:8px 0}.ending-stats div:last-child{grid-column:1/-1}.ending-stats small,.ending-stats b{display:block}.ending-stats b{font-size:21px}
+.toast{position:fixed;z-index:20;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);max-width:calc(100% - 30px);width:max-content;border-radius:12px;background:var(--ink);color:var(--white);padding:11px 16px;font-size:13px;text-align:center;box-shadow:0 3px 14px #0003}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-height:640px){.home-content{padding:12px 24px;gap:8px}.bunny-art{width:74px;height:59px;margin-top:16px;margin-bottom:2px}.bunny-art i{top:23px;left:20px}.bunny-art i+i{left:48px}.bunny-art b{left:35px;top:35px}.bunny-art:before,.bunny-art:after{width:17px;height:29px;top:-17px}.bunny-art:before{left:12px}.bunny-art:after{right:10px}h1{font-size:35px}.tagline{font-size:12px}.dust-total strong{font-size:31px}.dust-total{padding:0}.home-content .btn.big{min-height:48px}.home-content>.btn:not(.big){min-height:40px}.room-note{margin-top:-5px}.result-content{gap:13px}.result-mark{font-size:39px}.node-details{padding-top:6px;padding-bottom:6px}.node-details p{min-height:29px;margin:3px 0 4px}.tree-footer{padding-top:6px;padding-bottom:9px}.tree-footer .btn.big{min-height:43px}.node-details select{min-height:40px;margin-bottom:5px}}
+
+</style>
+</head>
+<body>
+<div id="app">
+  <section id="titleScreen" class="screen">
+    <header class="topbar"><span class="eyebrow">A little less dust</span><button class="iconbtn" data-act="settings" aria-label="Settings">Settings</button></header>
+    <main class="home-content">
+      <div class="bunny-art" aria-hidden="true"><i></i><i></i><b></b></div>
+      <h1>Dust bunnies<span id="titleStar"></span></h1>
+      <p class="tagline">A clean sweep. A bigger broom.<br>A house full of possibilities.</p>
+      <div class="dust-total"><small>Dust to spend</small><strong id="titleDust">0</strong></div>
+      <label class="room-label" for="roomChoice">Choose a room</label>
+      <select id="roomChoice" aria-label="Choose a room"></select>
+      <p id="roomNote" class="room-note"></p>
+      <button class="btn primary big" data-act="sweep" id="titleSweep">Sweep</button>
+      <button class="btn" data-act="tree">Skill tree</button>
+      <p id="titleStats" class="small"></p>
+    </main>
+  </section>
+
+  <section id="roundScreen" class="screen hidden" aria-label="Sweep the room">
+    <header class="round-hud">
+      <div><small>Time</small><strong id="roundTime">30</strong></div>
+      <div><small>This round</small><strong id="roundDust">0</strong></div>
+      <div><small>Total dust</small><strong id="roundTotal">0</strong></div>
+      <button class="iconbtn" data-act="pause" aria-label="Pause round">Pause</button>
+    </header>
+    <div class="room-stage"><canvas id="roundCanvas" aria-label="Drag your finger to sweep dust"></canvas><p id="streakLabel" class="streak-label">Drag to sweep</p></div>
+  </section>
+
+  <section id="resultsScreen" class="screen hidden">
+    <header class="topbar"><span class="eyebrow">One room, a little cleaner</span><button class="iconbtn" data-act="home">Home</button></header>
+    <main class="result-content">
+      <div class="result-mark" aria-hidden="true">✦</div>
+      <h1>Nice sweep</h1><p id="resultRoom"></p>
+      <div class="dust-total"><small>Dust this round</small><strong id="resultDust">0</strong></div>
+      <div class="stat-pair"><div><small>Best round</small><b id="resultBest">0</b></div><div><small>Dust to spend</small><b id="resultBank">0</b></div></div>
+      <button class="btn primary big" data-act="sweep">Sweep again</button>
+      <button class="btn" data-act="tree">Skill tree</button>
+      <button class="textbtn" data-act="settings">Settings</button>
+    </main>
+  </section>
+
+  <section id="treeScreen" class="screen hidden">
+    <header class="topbar"><div><h2>Skill tree</h2><p><b id="treeDust">0</b> dust to spend</p></div><button class="iconbtn" data-act="home">Home</button></header>
+    <div id="treeScroll"><canvas id="treeCanvas" aria-label="Five branches of upgrades. Choose a node below for details."></canvas></div>
+    <div id="nodeDetails" class="node-details">
+      <label class="sr-only" for="nodeChoice">Choose an upgrade</label><select id="nodeChoice" aria-label="Choose an upgrade"></select>
+      <div class="node-heading"><h3 id="nodeName"></h3><b id="nodeLevel"></b></div><p id="nodeEffect"></p>
+      <div class="node-buy"><small id="nodeCost"></small><button class="btn primary" data-act="buy" id="nodeBuy">Buy</button></div>
+    </div>
+    <footer class="tree-footer"><button class="btn primary big" data-act="sweep" id="treeSweep">Sweep</button></footer>
+  </section>
+</div>
+
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="sheet"><div class="sheet-head"><h2 id="modalTitle"></h2><button class="iconbtn" data-act="close" id="modalClose" aria-label="Close">Close</button></div><div id="modalBody"></div></div>
+</div>
+<div id="toast" class="toast hidden" role="status"></div>
+<script>
+var DB_TUNE = {
+  width:100, height:160,
+  spawnRate:6, maxSpecks:120, startSpecks:40, bunnyEvery:25,
+  broomR:7, roundLength:30, roomValue:2,
+  streakWindow:0.6, streakStep:10, streakBonus:0.1, streakCap:2,
+  bunnyValue:10, goldenValue:50, bunnySpeed:2.5, burstSpecks:6,
+  robotSpeed:10, robotR:4, catSpeed:18, catHerdR:24, catHerdSpeed:7,
+  pullSpeed:14, popCount:48, popLife:0.65, helperThink:0.3, sweepTrailLife:0.18,
+  goldenChances:[0,1/40,1/20,1/10]
+};
+
+var DB_BRANCHES = ['Broom','Dust','Streaks','Helpers','Rooms'];
+var DB_ROOMS = [
+  {id:'hallway',name:'Hallway',color:'#d9c4a3',decor:['👟','🪴'],value:1,spawn:1},
+  {id:'kitchen',name:'Kitchen',color:'#c9dbca',decor:['🍳','🥕'],value:2,spawn:1.2},
+  {id:'attic',name:'Attic',color:'#c6ad91',decor:['📦','🧸'],value:4,spawn:1.44},
+  {id:'library',name:'Library',color:'#c5b7cc',decor:['📚','🕯️'],value:8,spawn:1.728},
+  {id:'ballroom',name:'Ballroom',color:'#dfc8b4',decor:['🎻','🌷'],value:16,spawn:2.0736},
+  {id:'observatory',name:'Observatory',color:'#b8c5d9',decor:['🔭','🌙'],value:32,spawn:2.48832}
+];
+
+// TUNE: base and growth are the only adjustable parts of each node.
+var DB_NODES = [
+  {id:'broom',name:'Wider broom',emoji:'🧹',effect:'+15% broom radius per level.',branch:0,parent:null,max:5,base:60,growth:7},
+  {id:'time',name:'Longer rounds',emoji:'⏳',effect:'+5 seconds per level.',branch:0,parent:'broom',max:4,base:140,growth:15},
+  {id:'pull',name:'Wide bristles',emoji:'🪶',effect:'Pull dust from 4 units farther away per level.',branch:0,parent:'time',max:3,base:190,growth:30},
+  {id:'double',name:'Double sweep',emoji:'✨',effect:'Each speck is worth twice as much.',branch:0,parent:'pull',max:1,base:3400000,growth:1},
+  {id:'spawn',name:'More dust',emoji:'🌫️',effect:'+20% dust spawning per level.',branch:1,parent:null,max:5,base:70,growth:12},
+  {id:'start',name:'Dusty start',emoji:'🏠',effect:'+20 starting specks per level.',branch:1,parent:'spawn',max:3,base:45,growth:80},
+  {id:'value',name:'Heavier dust',emoji:'💎',effect:'Dust value ×1.5 per level.',branch:1,parent:'start',max:5,base:160,growth:18.6},
+  {id:'burst',name:'Bunny burst',emoji:'💥',effect:'Swept bunnies leave 6 extra specks.',branch:1,parent:'value',max:1,base:26000,growth:1},
+  {id:'golden',name:'Golden bunny',emoji:'🌟',effect:'Golden bunnies: 1 in 40, then 20, then 10; worth 50 specks.',branch:1,parent:'burst',max:3,base:950,growth:120},
+  {id:'window',name:'Longer window',emoji:'⌛',effect:'+0.2 seconds to keep a streak per level.',branch:2,parent:null,max:3,base:100,growth:100},
+  {id:'cap',name:'Higher cap',emoji:'🔥',effect:'+0.5 to the streak multiplier cap per level.',branch:2,parent:'window',max:4,base:220,growth:35},
+  {id:'saver',name:'Streak saver',emoji:'🪢',effect:'A broken streak is halved instead of lost.',branch:2,parent:'cap',max:1,base:650000,growth:1},
+  {id:'robot',name:'Robot sweeper',emoji:'🤖',effect:'A little robot seeks out dense dust.',branch:3,parent:null,max:1,base:800,growth:1},
+  {id:'robots',name:'More robots',emoji:'🛠️',effect:'+1 robot per level.',branch:3,parent:'robot',max:3,base:2200,growth:86},
+  {id:'speed',name:'Faster robots',emoji:'⚡',effect:'+20% robot speed per level.',branch:3,parent:'robots',max:3,base:350,growth:100},
+  {id:'cat',name:'Cat',emoji:'🐈',effect:'A cat herds bunnies toward your broom.',branch:3,parent:'speed',max:1,base:1800000,growth:1},
+  {id:'hallway',name:'Hallway',emoji:'🚪',effect:'Your first room. Make yourself at home.',branch:4,parent:null,max:1,base:0,growth:1,room:0},
+  {id:'kitchen',name:'Kitchen',emoji:'🍳',effect:'A new floor: ×2 dust value and +20% spawn.',branch:4,parent:'hallway',max:1,base:1000,growth:1,room:1},
+  {id:'attic',name:'Attic',emoji:'📦',effect:'A new floor: ×2 dust value and +20% spawn.',branch:4,parent:'kitchen',max:1,base:24000,growth:1,room:2},
+  {id:'library',name:'Library',emoji:'📚',effect:'A new floor: ×2 dust value and +20% spawn.',branch:4,parent:'attic',max:1,base:500000,growth:1,room:3},
+  {id:'ballroom',name:'Ballroom',emoji:'🎻',effect:'A new floor: ×2 dust value and +20% spawn.',branch:4,parent:'library',max:1,base:6500000,growth:1,room:4},
+  {id:'observatory',name:'Observatory',emoji:'🔭',effect:'A new floor: ×2 dust value and +20% spawn.',branch:4,parent:'ballroom',max:1,base:26000000,growth:1,room:5},
+  {id:'spotless',name:'Spotless house',emoji:'⭐',effect:'The whole house sparkles. Celebrate, then keep playing.',branch:4,parent:'observatory',max:1,base:60000000,growth:1}
+];
+
+function dbNode(id) {
+  for(var i=0;i<DB_NODES.length;i++) if(DB_NODES[i].id===id) return DB_NODES[i];
+  return null;
+}
+function dbNodeLevel(save,id) { return save.levels[id]||0; }
+function dbNodeCost(save,id) {
+  var node=dbNode(id);
+  return node?Math.ceil(node.base*Math.pow(node.growth,dbNodeLevel(save,id))):Infinity;
+}
+function dbCanBuy(save,id) {
+  var node=dbNode(id);
+  return !!node && dbNodeLevel(save,id)<node.max && (!node.parent||dbNodeLevel(save,node.parent)>0) && save.dust>=dbNodeCost(save,id);
+}
+function dbBuy(save,id) {
+  if(!dbCanBuy(save,id)) return false;
+  var node=dbNode(id);
+  save.dust-=dbNodeCost(save,id);
+  save.levels[id]=dbNodeLevel(save,id)+1;
+  if(node.room!==undefined) save.room=Math.max(save.room,node.room);
+  if(id==='spotless') save.completed=true;
+  return true;
+}
+function dbNewSave() {
+  return {version:1,savedAt:0,dust:0,totalDust:0,bestRound:0,rounds:0,playTime:0,completed:false,room:0,levels:{hallway:1},sound:true};
+}
+function dbNumber(value,fallback,max) {
+  return typeof value==='number'&&isFinite(value)&&value>=0?Math.min(value,max===undefined?Number.MAX_SAFE_INTEGER:max):fallback;
+}
+function migrate(raw) {
+  if(!raw||typeof raw!=='object'||Array.isArray(raw)) throw new Error('This is not a Dust Bunnies save.');
+  if(raw.version!==undefined && (raw.version!==0&&raw.version!==1)) throw new Error('This save version is not supported.');
+  var save=dbNewSave(), fields=['savedAt','dust','totalDust','bestRound','rounds','playTime'];
+  for(var i=0;i<fields.length;i++) save[fields[i]]=dbNumber(raw[fields[i]],save[fields[i]]);
+  save.rounds=Math.floor(save.rounds);
+  save.sound=raw.sound!==false;
+  var levels=raw.levels||raw.upgrades||{};
+  for(i=0;i<DB_NODES.length;i++) {
+    var node=DB_NODES[i];
+    save.levels[node.id]=Math.floor(dbNumber(levels[node.id],0,node.max));
+  }
+  save.levels.hallway=1;
+  // The old room field also migrates saves made before room nodes existed.
+  var room=Math.floor(dbNumber(raw.room,0,DB_ROOMS.length-1));
+  for(i=0;i<DB_ROOMS.length;i++) if(save.levels[DB_ROOMS[i].id]) room=Math.max(room,i);
+  save.room=room;
+  for(i=0;i<=room;i++) save.levels[DB_ROOMS[i].id]=1;
+  save.completed=raw.completed===true||save.levels.spotless===1;
+  if(save.completed) {
+    save.levels.spotless=1;
+    save.room=DB_ROOMS.length-1;
+    for(i=0;i<DB_ROOMS.length;i++) save.levels[DB_ROOMS[i].id]=1;
+  }
+  save.totalDust=Math.max(save.totalDust,save.dust,save.bestRound);
+  return save;
+}
+function encodeBackup(save) { return 'DB1.'+btoa(JSON.stringify(migrate(save))); }
+function decodeBackup(code) {
+  if(typeof code!=='string'||!code.trim()) return null;
+  code=code.trim();
+  if(code.slice(0,4)==='DB1.') code=code.slice(4);
+  try { return migrate(JSON.parse(atob(code))); }
+  catch(e) { return null; }
+}
+function dbStats(save,roomIndex) {
+  var l=save.levels, room=DB_ROOMS[roomIndex];
+  return {
+    broomR:DB_TUNE.broomR*Math.pow(1.15,l.broom||0),
+    pullR:4*(l.pull||0),
+    spawnRate:DB_TUNE.spawnRate*(1+0.2*(l.spawn||0))*room.spawn,
+    startSpecks:DB_TUNE.startSpecks+20*(l.start||0),
+    value:Math.pow(DB_TUNE.roomValue,roomIndex)*Math.pow(1.5,l.value||0),
+    duration:DB_TUNE.roundLength+5*(l.time||0),
+    streakWindow:DB_TUNE.streakWindow+0.2*(l.window||0),
+    streakCap:DB_TUNE.streakCap+0.5*(l.cap||0),
+    streakSaver:!!l.saver,doubleSweep:!!l.double,bunnyBurst:!!l.burst,
+    goldenChance:DB_TUNE.goldenChances[l.golden||0],
+    robotCount:l.robot?1+(l.robots||0):0,
+    robotSpeed:DB_TUNE.robotSpeed*(1+0.2*(l.speed||0)),cat:!!l.cat
+  };
+}
+function dbRandom(round) {
+  var x=round.seed;
+  x^=x<<13; x^=x>>>17; x^=x<<5;
+  round.seed=x>>>0;
+  return round.seed/4294967296;
+}
+function dbSpawn(round,ordinary,x,y) {
+  for(var i=0;i<round.specks.length;i++) {
+    var s=round.specks[i];
+    if(s.active) continue;
+    s.active=true;
+    s.x=x===undefined?2+dbRandom(round)*(round.width-4):Math.max(1,Math.min(round.width-1,x));
+    s.y=y===undefined?2+dbRandom(round)*(round.height-4):Math.max(1,Math.min(round.height-1,y));
+    if(!ordinary) round.spawned++;
+    s.bunny=!ordinary&&round.spawned%DB_TUNE.bunnyEvery===0;
+    s.golden=s.bunny&&dbRandom(round)<round.stats.goldenChance;
+    round.activeSpecks++;
+    return true;
+  }
+  return false;
+}
+function dbNewRound(save,roomIndex,seed) {
+  roomIndex=Math.max(0,Math.min(save.room,Math.floor(dbNumber(roomIndex,save.room,DB_ROOMS.length-1))));
+  var stats=dbStats(save,roomIndex);
+  var round={width:DB_TUNE.width,height:DB_TUNE.height,room:roomIndex,stats:stats,
+    seed:(seed>>>0)||702007,timeLeft:stats.duration,duration:stats.duration,elapsed:0,
+    earned:0,streak:0,multiplier:1,sinceCollect:0,ended:false,finished:false,
+    spawned:0,activeSpecks:0,spawnClock:0,helperClock:0,popIndex:0,
+    broom:{x:50,y:80,prevX:50,prevY:80,down:false,sweeps:[],trail:[]},specks:[],robots:[],cat:stats.cat?{x:50,y:130}:null,pops:[]};
+  for(var i=0;i<DB_TUNE.maxSpecks;i++) round.specks.push({active:false,x:0,y:0,bunny:false,golden:false});
+  for(i=0;i<DB_TUNE.popCount;i++) round.pops.push({active:false,x:0,y:0,age:0,value:0});
+  for(i=0;i<stats.robotCount;i++) round.robots.push({x:20+i*20,y:80,targetX:50,targetY:80});
+  for(i=0;i<Math.min(stats.startSpecks,DB_TUNE.maxSpecks);i++) dbSpawn(round,false);
+  return round;
+}
+function dbCollect(round,s) {
+  s.active=false;
+  round.activeSpecks--;
+  round.sinceCollect=0;
+  round.streak++;
+  round.multiplier=Math.min(round.stats.streakCap,1+Math.floor(round.streak/DB_TUNE.streakStep)*DB_TUNE.streakBonus);
+  var value=round.stats.value*(s.golden?DB_TUNE.goldenValue:s.bunny?DB_TUNE.bunnyValue:1)*round.multiplier*(round.stats.doubleSweep?2:1);
+  round.earned+=value;
+  var pop=round.pops[round.popIndex];
+  round.popIndex=(round.popIndex+1)%round.pops.length;
+  pop.active=true; pop.x=s.x; pop.y=s.y; pop.age=0; pop.value=value;
+  if(s.bunny&&round.stats.bunnyBurst) {
+    // Reuse the fixed speck pool; extra specks never recursively become bunnies.
+    var x=s.x,y=s.y;
+    for(var i=0;i<DB_TUNE.burstSpecks;i++) {
+      var angle=i*Math.PI*2/DB_TUNE.burstSpecks;
+      dbSpawn(round,true,x+Math.cos(angle)*3,y+Math.sin(angle)*3);
+    }
+  }
+}
+function dbHelperTarget(round,robot) {
+  var best=-Infinity;
+  for(var y=10;y<round.height;y+=20) for(var x=10;x<round.width;x+=20) {
+    var score=0;
+    for(var i=0;i<round.specks.length;i++) {
+      var s=round.specks[i];
+      if(!s.active) continue;
+      var dx=s.x-x,dy=s.y-y;
+      if(dx*dx+dy*dy<400) score++;
+    }
+    var rx=x-robot.x,ry=y-robot.y;
+    score-=Math.sqrt(rx*rx+ry*ry)*0.012;
+    if(score>best) { best=score; robot.targetX=x; robot.targetY=y; }
+  }
+  // Aim at actual dust in the chosen cluster so the robot cannot stop in a gap.
+  var nearest=null,nearestD=Infinity;
+  for(var j=0;j<round.specks.length;j++) {
+    var speck=round.specks[j];
+    if(!speck.active) continue;
+    var sx=speck.x-robot.targetX,sy=speck.y-robot.targetY,sd=sx*sx+sy*sy;
+    if(sd<nearestD) { nearest=speck; nearestD=sd; }
+  }
+  robot.targetX=nearest?nearest.x:robot.x;
+  robot.targetY=nearest?nearest.y:robot.y;
+}
+function dbMove(actor,x,y,speed,dt) {
+  var dx=x-actor.x,dy=y-actor.y,d=Math.sqrt(dx*dx+dy*dy),step=Math.min(d,speed*dt);
+  if(d>0) { actor.x+=dx/d*step; actor.y+=dy/d*step; }
+}
+function dbBroomInput(round,finger) {
+  var broom=round.broom;
+  if(!finger||!finger.down) { broom.down=false; return; }
+  var x=Math.max(0,Math.min(round.width,finger.x)),y=Math.max(0,Math.min(round.height,finger.y));
+  if(!broom.down||x!==broom.x||y!==broom.y||!broom.sweeps.length) {
+    broom.prevX=broom.down?broom.x:x; broom.prevY=broom.down?broom.y:y;
+    var sweep={x1:broom.prevX,y1:broom.prevY,x2:x,y2:y,age:0};
+    broom.sweeps.push(sweep);
+    if(x!==broom.prevX||y!==broom.prevY) broom.trail.push(sweep);
+  }
+  broom.x=x; broom.y=y; broom.down=true;
+}
+function dbSweepPoint(sweeps,x,y) {
+  var nearest={x:x,y:y,d2:Infinity};
+  for(var i=0;i<sweeps.length;i++) {
+    var sweep=sweeps[i],dx=sweep.x2-sweep.x1,dy=sweep.y2-sweep.y1,length2=dx*dx+dy*dy;
+    var t=length2?Math.max(0,Math.min(1,((x-sweep.x1)*dx+(y-sweep.y1)*dy)/length2)):0;
+    var px=sweep.x1+t*dx,py=sweep.y1+t*dy,sx=x-px,sy=y-py,d2=sx*sx+sy*sy;
+    if(d2<nearest.d2) { nearest.x=px; nearest.y=py; nearest.d2=d2; }
+  }
+  return nearest;
+}
+function dbStep(round,dt,finger) {
+  if(round.ended||!isFinite(dt)||dt<=0) return;
+  dt=Math.min(dt,0.1,round.timeLeft);
+  round.elapsed+=dt;
+  round.timeLeft=Math.max(0,round.duration-round.elapsed);
+  var broom=round.broom,stats=round.stats;
+  dbBroomInput(round,finger);
+  round.sinceCollect+=dt;
+  if(round.sinceCollect>stats.streakWindow&&round.streak) {
+    round.streak=stats.streakSaver?Math.floor(round.streak/2):0;
+    round.multiplier=Math.min(stats.streakCap,1+Math.floor(round.streak/DB_TUNE.streakStep)*DB_TUNE.streakBonus);
+    round.sinceCollect=0;
+  }
+  round.spawnClock+=dt*stats.spawnRate;
+  while(round.spawnClock>=1) { round.spawnClock--; dbSpawn(round,false); }
+  round.helperClock-=dt;
+  var think=round.helperClock<=0;
+  if(think) round.helperClock=DB_TUNE.helperThink;
+  for(var r=0;r<round.robots.length;r++) {
+    var robot=round.robots[r];
+    if(think) dbHelperTarget(round,robot);
+    dbMove(robot,robot.targetX,robot.targetY,stats.robotSpeed,dt);
+  }
+  if(round.cat&&broom.down) {
+    var nearest=null,nearestD=Infinity;
+    for(var c=0;c<round.specks.length;c++) {
+      var candidate=round.specks[c];
+      if(!candidate.active||!candidate.bunny) continue;
+      var cx=candidate.x-round.cat.x,cy=candidate.y-round.cat.y,cd=cx*cx+cy*cy;
+      if(cd<nearestD) { nearest=candidate; nearestD=cd; }
+    }
+    if(nearest) dbMove(round.cat,nearest.x,nearest.y,DB_TUNE.catSpeed,dt);
+    else dbMove(round.cat,broom.x,broom.y,DB_TUNE.catSpeed,dt);
+  }
+  // A speck can be collected once in a step, including specks emitted by a bunny.
+  for(var i=0;i<round.specks.length;i++) {
+    var s=round.specks[i];
+    if(!s.active) continue;
+    var sweep=dbSweepPoint(broom.sweeps,s.x,s.y);
+    var dx=s.x-broom.x,dy=s.y-broom.y,d2=dx*dx+dy*dy;
+    if(s.bunny&&broom.down&&sweep.d2>stats.broomR*stats.broomR) {
+      var d=Math.sqrt(d2);
+      s.x=Math.max(1,Math.min(round.width-1,s.x+dx/d*DB_TUNE.bunnySpeed*dt));
+      s.y=Math.max(1,Math.min(round.height-1,s.y+dy/d*DB_TUNE.bunnySpeed*dt));
+      if(round.cat) {
+        var kx=s.x-round.cat.x,ky=s.y-round.cat.y;
+        if(kx*kx+ky*ky<DB_TUNE.catHerdR*DB_TUNE.catHerdR) dbMove(s,broom.x,broom.y,DB_TUNE.catHerdSpeed,dt);
+      }
+      sweep=dbSweepPoint(broom.sweeps,s.x,s.y);
+    }
+    if(stats.pullR>0&&sweep.d2<(stats.broomR+stats.pullR)*(stats.broomR+stats.pullR)&&sweep.d2>stats.broomR*stats.broomR) {
+      dbMove(s,sweep.x,sweep.y,DB_TUNE.pullSpeed,dt);
+      sweep=dbSweepPoint(broom.sweeps,s.x,s.y);
+    }
+    var collect=sweep.d2<=stats.broomR*stats.broomR;
+    for(r=0;!collect&&r<round.robots.length;r++) {
+      dx=s.x-round.robots[r].x; dy=s.y-round.robots[r].y;
+      collect=dx*dx+dy*dy<=DB_TUNE.robotR*DB_TUNE.robotR;
+    }
+    if(collect) dbCollect(round,s);
+  }
+  broom.sweeps.length=0;
+  for(i=broom.trail.length-1;i>=0;i--) {
+    broom.trail[i].age+=dt;
+    if(broom.trail[i].age>=DB_TUNE.sweepTrailLife) broom.trail.splice(i,1);
+  }
+  for(i=0;i<round.pops.length;i++) if(round.pops[i].active) {
+    round.pops[i].age+=dt;
+    if(round.pops[i].age>=DB_TUNE.popLife) round.pops[i].active=false;
+  }
+  if(round.timeLeft<0.000001) { round.timeLeft=0; round.ended=true; }
+}
+function dbFinishRound(save,round) {
+  if(!round.ended||round.finished) return false;
+  round.finished=true;
+  round.earned=Math.floor(round.earned);
+  save.dust+=round.earned;
+  save.totalDust+=round.earned;
+  save.bestRound=Math.max(save.bestRound,round.earned);
+  save.rounds++;
+  save.playTime+=round.elapsed;
+  return true;
+}
+
+/* ===================== DRAWING ===================== */
+const DB_TAU=Math.PI*2;
+const DB_EFONT='"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+const DB_FONT='system-ui,-apple-system,"Segoe UI",sans-serif';
+const DB_DASH_REACH=[1,1.2],DB_DASH_NONE=[];
+let _tofu=null; const _okCache={};
+function glyphBits(ch){
+  const c=document.createElement('canvas'); c.width=c.height=24; const g=c.getContext('2d',{willReadFrequently:true});
+  g.font='18px '+DB_EFONT; g.textBaseline='middle'; g.textAlign='center'; g.fillText(ch,12,13);
+  const d=g.getImageData(0,0,24,24).data; let s='', n=0;
+  for (let i=3;i<d.length;i+=4){ if (d[i]>40){ n++; s+=i+':'+(d[i-3]>>4)+(d[i-2]>>4)+(d[i-1]>>4)+','; } }
+  return {s,n};
+}
+function emojiOK(ch){
+  if (ch[0]==='@') return true;
+  if (ch in _okCache) return _okCache[ch];
+  let ok=true;
+  try{ if (!_tofu) _tofu=glyphBits('\u{10FFFE}'); const b=glyphBits(ch); ok=b.n>8 && b.s!==_tofu.s; }catch(e){ ok=true; }
+  return _okCache[ch]=ok;
+}
+
+function dbRoomViewport(width,height){
+  const scale=Math.min(width/100,height/160);
+  return {x:(width-100*scale)/2,y:(height-160*scale)/2,scale:scale,width:100*scale,height:160*scale};
+}
+function dbCircle(g,x,y,r,color){
+  g.fillStyle=color; g.beginPath(); g.arc(x,y,r,0,DB_TAU); g.fill();
+}
+function dbLine(g,x,y,x2,y2,color,lineWidth){
+  g.strokeStyle=color; g.lineWidth=lineWidth; g.beginPath(); g.moveTo(x,y); g.lineTo(x2,y2); g.stroke();
+}
+function dbBrush(g,x,y,size){
+  g.save(); g.translate(x,y); g.rotate(-.38); g.scale(size,size);
+  g.lineCap='round'; dbLine(g,0,-7.6,0,1,'#704d38',1.45);
+  dbLine(g,-.25,-7.5,-.25,-1.5,'#cfaa77',.45);
+  g.fillStyle='#d0a151'; g.beginPath(); g.moveTo(-2.15,.1); g.lineTo(2.15,.1); g.lineTo(3.8,4.5); g.quadraticCurveTo(0,5.9,-3.8,4.5); g.closePath(); g.fill();
+  for(let i=-2;i<=2;i++) dbLine(g,i*.7,1,i*1.35,4.65,'#8c642f',.3);
+  dbLine(g,-2.5,1,2.5,1,'#8b5f47',.85); g.restore();
+}
+function dbPlant(g,x,y){
+  g.fillStyle='#9f705a'; g.beginPath(); g.moveTo(x-2,y); g.lineTo(x+2,y); g.lineTo(x+1.4,y+3); g.lineTo(x-1.4,y+3); g.closePath(); g.fill();
+  dbLine(g,x,y,x,y-5,'#467869',.65);
+  g.fillStyle='#66896b'; g.beginPath(); g.ellipse(x-1.5,y-3,1.4,2.2,-.7,0,DB_TAU); g.ellipse(x+1.5,y-4.2,1.4,2.2,.7,0,DB_TAU); g.fill();
+}
+function dbRoomDecor(g,room){
+  const dark=room===5;
+  g.strokeStyle=dark?'rgba(211,225,242,.09)':'rgba(90,60,41,.09)'; g.lineWidth=.25;
+  if(room===1){
+    for(let x=0;x<=100;x+=12.5){ g.beginPath(); g.moveTo(x,5); g.lineTo(x,160); g.stroke(); }
+    for(let y=10;y<160;y+=12.5){ g.beginPath(); g.moveTo(0,y); g.lineTo(100,y); g.stroke(); }
+    g.fillStyle='#91aaa1'; g.fillRect(1,7,8,31); g.fillRect(91,7,8,24);
+    g.fillStyle='#ede9d8'; g.fillRect(1,7,8,2); g.fillRect(91,7,8,2);
+    g.fillStyle='#c7d7cc'; g.fillRect(2.2,12,5.5,6); g.fillRect(92,12,5.5,6);
+    dbCircle(g,5,15,1.8,'#7f9c92'); dbLine(g,4,12,4,14,'#526e64',.5);
+  } else if(room===4){
+    for(let y=-40;y<170;y+=14){ dbLine(g,0,y,100,y+100,'rgba(129,86,51,.09)',.35); dbLine(g,0,y+100,100,y,'rgba(129,86,51,.09)',.35); }
+    for(let y=21;y<=135;y+=57){
+      g.fillStyle='#d7bf91'; g.fillRect(1,y,5,13); g.fillRect(94,y,5,13);
+      g.fillStyle='#f7e8c8'; g.fillRect(1.7,y,3.6,12); g.fillRect(94.7,y,3.6,12);
+      dbLine(g,1,y+13,6,y+13,'#b19468',.7); dbLine(g,94,y+13,99,y+13,'#b19468',.7);
+    }
+  } else if(room===5){
+    for(let y=18;y<160;y+=20) dbLine(g,0,y,100,y,'rgba(58,78,115,.09)',.3);
+    g.strokeStyle='rgba(58,78,115,.15)'; g.lineWidth=.4;
+    g.beginPath(); g.ellipse(50,83,43,64,0,0,DB_TAU); g.stroke();
+    for(let i=0;i<23;i++){
+      const x=(i*37%89)+6,y=(i*53%141)+12;
+      dbCircle(g,x,y,i%4===0?.42:.22,'rgba(58,78,115,.3)');
+    }
+    g.save(); g.translate(91,18); g.rotate(-.5); g.fillStyle='#92a5b9'; g.fillRect(-2.3,-6,4.6,10);
+    g.fillStyle='#425977'; g.fillRect(-2.8,-6,5.6,1.5); g.restore();
+    dbLine(g,91,19,87,25,'#8398af',.8); dbLine(g,91,19,95,25,'#8398af',.8);
+  } else {
+    for(let y=8;y<160;y+=13){
+      dbLine(g,0,y,100,y,'rgba(90,60,41,.095)',.3);
+      for(let x=(y%3)*17;x<100;x+=34) dbLine(g,x,y,x,y+13,'rgba(90,60,41,.07)',.3);
+    }
+    if(room===2){
+      g.fillStyle='#b78d63'; g.fillRect(1,9,9,10); g.fillRect(88,139,10,11);
+      g.fillStyle='#d6b184'; g.fillRect(2,8,9,7); g.fillRect(86,142,9,11);
+      dbLine(g,6,8,6,15,'#aa8056',.4); dbLine(g,86,146,95,146,'#aa8056',.4);
+      dbLine(g,0,0,13,13,'rgba(238,232,220,.7)',.3); dbLine(g,0,7,7,7,'rgba(238,232,220,.7)',.3);
+    } else if(room===3){
+      for(let side=0;side<2;side++){
+        const x=side===0?1:93;
+        g.fillStyle='#735747'; g.fillRect(x,13,6,40);
+        for(let shelf=0;shelf<4;shelf++){
+          for(let book=0;book<4;book++){
+            g.fillStyle=book%2===0?'#819e8a':'#b98a75';
+            g.fillRect(x+.6+book*1.25,15+shelf*9,1,5.2+book%2);
+          }
+          dbLine(g,x,22+shelf*9,x+6,22+shelf*9,'#b3987c',.6);
+        }
+      }
+    } else {
+      g.fillStyle='rgba(154,106,87,.13)'; g.fillRect(25,13,50,20);
+      g.strokeStyle='rgba(133,87,67,.18)'; g.lineWidth=.4; g.strokeRect(26,14,48,18);
+      dbPlant(g,5,19); dbPlant(g,95,146);
+    }
+  }
+  g.fillStyle=dark?'#1e3049':'#cfb99c'; g.fillRect(0,0,100,4);
+  g.fillStyle=dark?'#334860':'#eee1c9'; g.fillRect(1,3,98,1.2);
+  g.fillStyle=dark?'#17273d':'#aa9279'; g.fillRect(42,0,16,3);
+  const info=DB_ROOMS[room],decor=info&&info.decor;
+  if(decor){
+    for(let i=0;i<decor.length&&i<4;i++){
+      const ch=typeof decor[i]==='string'?decor[i]:decor[i].emoji;
+      const x=i%2===0?6:94,y=i<2?65:115;
+      if(ch&&emojiOK(ch)){
+        g.font='6px '+DB_EFONT; g.textAlign='center'; g.textBaseline='middle'; g.fillStyle='#fff'; g.fillText(ch,x,y);
+      } else dbPlant(g,x,y);
+    }
+  }
+}
+function dbDrawBunny(g,x,y,golden,time){
+  g.save(); g.translate(x,y);
+  dbCircle(g,.3,1.2,2.9,'rgba(37,32,35,.12)');
+  const fur=golden?'#ebc565':'#b9b7bb',light=golden?'#ffe5a0':'#d5d3d5';
+  for(let j=0;j<7;j++){
+    const a=j*DB_TAU/7+time*.2;
+    dbCircle(g,Math.cos(a)*1.65,Math.sin(a)*1.6,1.45,fur);
+  }
+  dbCircle(g,0,0,2.65,fur); dbCircle(g,-.7,-.75,1.6,light);
+  dbCircle(g,-.85,-.1,.31,'#36313c'); dbCircle(g,.85,-.1,.31,'#36313c');
+  if(golden){
+    dbLine(g,3.5,-3.5,3.5,-1.8,'#fff1bc',.4); dbLine(g,2.65,-2.65,4.35,-2.65,'#fff1bc',.4);
+  }
+  g.restore();
+}
+function dbDrawRobot(g,x,y,time){
+  dbCircle(g,x+.2,y+.7,3.2,'rgba(40,40,39,.16)'); dbCircle(g,x,y,3.1,'#526f71'); dbCircle(g,x,y-.25,2.65,'#a8c9bf');
+  dbCircle(g,x,y-.25,1.8,'#d4e7d8'); dbCircle(g,x+.65,y-.9,.35,'#527c75');
+  dbLine(g,x-1.6,y+1.2,x+1.5,y+1.2,'#728e86',.35);
+  const a=time*4; dbLine(g,x+Math.cos(a)*2,y+Math.sin(a)*2,x+Math.cos(a)*3.8,y+Math.sin(a)*3.8,'#526f71',.35);
+}
+function dbDrawCat(g,x,y,time){
+  g.save(); g.translate(x,y); g.fillStyle='#d59d73';
+  g.beginPath(); g.ellipse(0,.5,2,3,0,0,DB_TAU); g.fill();
+  g.lineCap='round'; g.strokeStyle='#b67e59'; g.lineWidth=1; g.beginPath(); g.moveTo(.8,2.5); g.quadraticCurveTo(4.5,4+Math.sin(time*3),3,0); g.stroke();
+  g.beginPath(); g.moveTo(-2.2,-1.5); g.lineTo(-2.1,-4); g.lineTo(-.3,-2.8); g.lineTo(1,-3); g.lineTo(2.4,-4); g.lineTo(2.2,-1.3); g.closePath(); g.fill();
+  dbCircle(g,0,-1.6,2.25,'#e4b38c'); dbCircle(g,-.7,-1.7,.23,'#493a33'); dbCircle(g,.7,-1.7,.23,'#493a33');
+  g.restore();
+}
+let dbViewWidth=-1,dbViewHeight=-1,dbView=null;
+function dbDrawRound(g,round,width,height){
+  if(width!==dbViewWidth||height!==dbViewHeight){ dbView=dbRoomViewport(width,height); dbViewWidth=width; dbViewHeight=height; }
+  const v=dbView,room=DB_ROOMS[round.room]||DB_ROOMS[0];
+  g.clearRect(0,0,width,height); g.fillStyle='#243b3d'; g.fillRect(0,0,width,height);
+  g.save(); g.translate(v.x,v.y); g.scale(v.scale,v.scale);
+  g.beginPath(); g.rect(0,0,100,160); g.clip();
+  g.fillStyle=room.color; g.fillRect(0,0,100,160); dbRoomDecor(g,round.room);
+  for(let i=0;i<round.specks.length;i++){
+    const speck=round.specks[i]; if(!speck.active) continue;
+    if(speck.bunny) dbDrawBunny(g,speck.x,speck.y,speck.golden,round.elapsed);
+    else {
+      dbCircle(g,speck.x+.2,speck.y+.4,.69,'rgba(61,48,40,.12)');
+      dbCircle(g,speck.x,speck.y,.65,round.room===5?'#65718c':'#827568');
+      if(i%3===0) dbCircle(g,speck.x-.35,speck.y-.3,.3,round.room===5?'#8d9db6':'#ac9b87');
+    }
+  }
+  for(let i=0;i<round.robots.length;i++) dbDrawRobot(g,round.robots[i].x,round.robots[i].y,round.elapsed);
+  if(round.cat) dbDrawCat(g,round.cat.x,round.cat.y,round.elapsed);
+  const broom=round.broom;
+  g.save(); g.lineCap='round';
+  const trail=broom.trail||[];
+  for(let i=0;i<trail.length;i++){
+    const sweep=trail[i]; g.globalAlpha=Math.max(0,1-sweep.age/DB_TUNE.sweepTrailLife);
+    dbLine(g,sweep.x1,sweep.y1,sweep.x2,sweep.y2,'rgba(255,249,224,.1)',round.stats.broomR*2);
+    dbLine(g,sweep.x1,sweep.y1,sweep.x2,sweep.y2,'rgba(255,251,233,.18)',round.stats.broomR);
+  }
+  g.restore();
+  if(broom.down){
+    if(round.stats.pullR>0){
+      g.strokeStyle='rgba(242,251,224,.35)'; g.lineWidth=.3; g.setLineDash(DB_DASH_REACH);
+      g.beginPath(); g.arc(broom.x,broom.y,round.stats.broomR+round.stats.pullR,0,DB_TAU); g.stroke(); g.setLineDash(DB_DASH_NONE);
+    }
+    dbCircle(g,broom.x,broom.y,round.stats.broomR,'rgba(255,246,208,.16)');
+    g.strokeStyle='rgba(255,251,233,.65)'; g.lineWidth=.4; g.beginPath(); g.arc(broom.x,broom.y,round.stats.broomR,0,DB_TAU); g.stroke();
+    if(emojiOK('🧹')){
+      g.font='11px '+DB_EFONT; g.textAlign='center'; g.textBaseline='middle'; g.fillStyle='#fff'; g.fillText('🧹',broom.x,broom.y);
+    } else dbBrush(g,broom.x,broom.y,1);
+  }
+  for(let i=0;i<round.pops.length;i++){
+    const pop=round.pops[i]; if(!pop.active) continue;
+    const progress=Math.min(1,pop.age/.65),ease=progress*progress,x=pop.x+(65-pop.x)*ease,y=pop.y+(-4-pop.y)*ease;
+    g.globalAlpha=1-progress*.9;
+    dbCircle(g,x,y,.7*(1-progress*.6),'#fff0ad');
+    if(pop.value>=8&&progress<.42){
+      g.font='bold 3.3px '+DB_FONT; g.fillStyle=round.room===5?'#4b5679':'#6d5539'; g.textAlign='center'; g.fillText('+'+Math.round(pop.value),x,y-2);
+    }
+  }
+  g.globalAlpha=1;
+  if(round.streak>=10){
+    g.fillStyle='rgba(32,55,53,.82)'; g.fillRect(29,149,42,7);
+    g.font='600 3.5px '+DB_FONT; g.fillStyle='#fff1c3'; g.textAlign='center'; g.textBaseline='middle';
+    g.fillText('streak x'+round.multiplier.toFixed(1),50,152.5);
+  } else if(!broom.down&&round.elapsed<2){
+    g.fillStyle='rgba(32,55,53,.84)'; g.fillRect(15,144,70,9);
+    g.font='500 3.5px '+DB_FONT; g.fillStyle='#fff6e6'; g.textAlign='center'; g.textBaseline='middle';
+    g.fillText('Touch and sweep the dust',50,148.5);
+  }
+  g.restore();
+}
+
+const DB_TREE_COLORS=['#d6ab6c','#bfa9cf','#e6ac83','#87b6ad','#92afcc'];
+let dbTreeWidth=-1,dbTreeCount=-1,dbTreeLayout=[],dbTreeRows=0;
+function dbEnsureTree(width){
+  if(dbTreeWidth===width&&dbTreeCount===DB_NODES.length) return;
+  dbTreeWidth=width; dbTreeCount=DB_NODES.length; dbTreeLayout=[];
+  const rows=[0,0,0,0,0],column=(width-20)/5;
+  for(let i=0;i<DB_NODES.length;i++){
+    const node=DB_NODES[i],branch=Math.max(0,Math.min(4,node.branch));
+    dbTreeLayout.push({id:node.id,x:10+column*(branch+.5),y:82+rows[branch]*99,node:node}); rows[branch]++;
+  }
+  dbTreeRows=Math.max.apply(null,rows);
+}
+function dbTreeHeight(width){ dbEnsureTree(width); return 51+dbTreeRows*99; }
+function dbTreeHit(x,y,width){
+  dbEnsureTree(width);
+  for(let i=0;i<dbTreeLayout.length;i++){
+    const p=dbTreeLayout[i]; if(Math.abs(x-p.x)<=24&&Math.abs(y-p.y)<=25) return p.id;
+  }
+  return null;
+}
+function dbTreeFallback(g,x,y,branch){
+  if(branch===0) dbBrush(g,x,y,1.7);
+  else if(branch===1){ g.save(); g.translate(x,y); g.scale(2.5,2.5); dbDrawBunny(g,0,0,false,0); g.restore(); }
+  else if(branch===2){
+    g.fillStyle='#f7e6a7'; g.beginPath();
+    for(let i=0;i<10;i++){ const a=i*Math.PI/5-Math.PI/2,r=i%2?4:9; if(i===0) g.moveTo(x+Math.cos(a)*r,y+Math.sin(a)*r); else g.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r); }
+    g.closePath(); g.fill();
+  } else if(branch===3){ g.save(); g.translate(x,y); g.scale(2.5,2.5); dbDrawRobot(g,0,0,0); g.restore(); }
+  else {
+    g.fillStyle='#f4dfb9'; g.fillRect(x-7,y-2,14,12); g.beginPath(); g.moveTo(x-10,y-2); g.lineTo(x,y-11); g.lineTo(x+10,y-2); g.closePath(); g.fill();
+    g.fillStyle='#7b8e8b'; g.fillRect(x-2,y+3,4,7);
+  }
+}
+function dbTreeName(g,text,x,y,maxWidth){
+  const words=text.split(' '); let line='',row=0;
+  for(let i=0;i<words.length;i++){
+    const next=line?line+' '+words[i]:words[i];
+    if(line&&g.measureText(next).width>maxWidth){ g.fillText(line,x,y+row*12); row++; line=words[i]; }
+    else line=next;
+    if(row===2) break;
+  }
+  if(row<2) g.fillText(line,x,y+row*12);
+}
+function dbDrawTree(g,save,width,height,selectedId){
+  dbEnsureTree(width); g.clearRect(0,0,width,height); g.fillStyle='#f5eddf'; g.fillRect(0,0,width,height);
+  const column=(width-20)/5;
+  g.textAlign='center'; g.textBaseline='middle';
+  for(let branch=0;branch<5;branch++){
+    const x=10+column*(branch+.5);
+    g.fillStyle=DB_TREE_COLORS[branch]; g.fillRect(x-column*.38,11,column*.76,3);
+    g.font='600 '+Math.min(11,column*.19)+'px '+DB_FONT; g.fillStyle='#49635e';
+    g.fillText(DB_BRANCHES[branch],x,32);
+  }
+  for(let i=0;i<dbTreeLayout.length;i++){
+    const p=dbTreeLayout[i]; if(!p.node.parent) continue;
+    let parent=null;
+    for(let j=0;j<dbTreeLayout.length;j++) if(dbTreeLayout[j].id===p.node.parent){ parent=dbTreeLayout[j]; break; }
+    if(!parent) continue;
+    const owned=dbNodeLevel(save,parent.id)>0;
+    g.strokeStyle=owned?'#9cb6a2':'#d2cabb'; g.lineWidth=owned?3:2; g.setLineDash(owned?[]:[3,5]);
+    g.beginPath(); g.moveTo(parent.x,parent.y+22); g.lineTo(p.x,p.y-23); g.stroke();
+  }
+  g.setLineDash([]);
+  for(let i=0;i<dbTreeLayout.length;i++){
+    const p=dbTreeLayout[i],node=p.node,level=dbNodeLevel(save,node.id),maxed=level>=node.max,canBuy=dbCanBuy(save,node.id),selected=node.id===selectedId;
+    if(selected){ dbCircle(g,p.x,p.y,27,'#e9bc73'); dbCircle(g,p.x,p.y,24.8,'#f5eddf'); }
+    dbCircle(g,p.x,p.y+2,21,'rgba(58,65,52,.09)');
+    dbCircle(g,p.x,p.y,21,maxed?'#a8c2ad':level?'#cfdfc8':canBuy?'#fae2b4':'#e3ded3');
+    g.strokeStyle=maxed?'#65866b':canBuy?'#c49550':'#c2c9b9'; g.lineWidth=1.3; g.beginPath(); g.arc(p.x,p.y,21,0,DB_TAU); g.stroke();
+    g.globalAlpha=level||canBuy?1:.55;
+    if(node.emoji&&emojiOK(node.emoji)){
+      g.font='22px '+DB_EFONT; g.fillStyle='#2c4844'; g.textAlign='center'; g.textBaseline='middle'; g.fillText(node.emoji,p.x,p.y+.5);
+    } else dbTreeFallback(g,p.x,p.y,node.branch);
+    g.globalAlpha=1;
+    g.font='500 '+Math.min(10,column*.175)+'px '+DB_FONT; g.fillStyle='#314f49'; g.textAlign='center'; g.textBaseline='middle';
+    dbTreeName(g,node.name,p.x,p.y+33,column-5);
+    g.fillStyle=maxed?'#55785b':'#7d8073'; g.font='600 9px '+DB_FONT; g.fillText(level+'/'+node.max,p.x,p.y+61);
+  }
+}
+
+/* ===================== Screens, input, sound and saves ===================== */
+const DB_SAVE_KEY='dust-bunnies.save.v1';
+const DB_FMT_UNITS=['K','M','B','T','Q'];
+let dbSave=null, dbRound=null, dbScreen='title', dbRoom=0, dbSelected='', dbPaused=false, dbLastTime=0, dbLastTone=0,
+    dbStorage=null, dbLocalOK=true, dbSaveTimer=null, dbToastTimer=null, dbModalKind='', dbResetArmed=false, dbLastFocus=null;
+const dbFinger={x:50,y:80,down:false};
+const dbEl=id=>document.getElementById(id);
+function dbFmt(n){ n=Math.max(0,Math.floor(n||0)); if(n<1000)return String(n);let i=-1;while(n>=1000&&i<DB_FMT_UNITS.length-1){n/=1000;i++;}return (n<10?n.toFixed(2):n<100?n.toFixed(1):Math.floor(n))+DB_FMT_UNITS[i]; }
+function dbPlayTime(s){const m=Math.floor((s||0)/60);return m>=60?Math.floor(m/60)+'h '+m%60+'m':m+'m';}
+function dbText(id,value){const e=dbEl(id),s=String(value);if(e.textContent!==s)e.textContent=s;}
+
+/* Saves use two local stores. A blocked store never stops a round. */
+function dbParseSave(str){try{const o=JSON.parse(str);return o&&typeof o==='object'&&!Array.isArray(o)?migrate(o):null;}catch(e){return null;}}
+function dbWriteSave(){
+  clearTimeout(dbSaveTimer);dbSaveTimer=null;if(!dbSave)return;
+  dbSave.savedAt=Math.max(Date.now(),(dbSave.savedAt||0)+1);
+  const str=JSON.stringify(dbSave);
+  try{localStorage.setItem(DB_SAVE_KEY,str);dbLocalOK=true;}catch(e){dbLocalOK=false;}
+  if(dbStorage){try{dbStorage.transaction('kv','readwrite').objectStore('kv').put(str,'save');}catch(e){}}
+}
+function dbStoreSave(now){if(!dbSave)return;if(now)dbWriteSave();else if(!dbSaveTimer)dbSaveTimer=setTimeout(dbWriteSave,400);}
+function dbOpenStore(){return new Promise(resolve=>{
+  let done=false;const finish=()=>{if(!done){done=true;resolve();}};
+  try{const r=indexedDB.open('dust-bunnies',1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains('kv'))r.result.createObjectStore('kv');};
+    r.onsuccess=()=>{if(done){r.result.close();return;}dbStorage=r.result;finish();};r.onerror=finish;r.onblocked=finish;
+  }catch(e){finish();}setTimeout(finish,1500);
+});}
+function dbReadStore(){return new Promise(resolve=>{
+  if(!dbStorage)return resolve(null);let done=false;const finish=v=>{if(!done){done=true;resolve(v);}};
+  try{const r=dbStorage.transaction('kv').objectStore('kv').get('save');r.onsuccess=()=>finish(r.result||null);r.onerror=()=>finish(null);}catch(e){finish(null);}setTimeout(()=>finish(null),1500);
+});}
+async function dbLoadSave(){
+  let a=null,b=null;try{a=dbParseSave(localStorage.getItem(DB_SAVE_KEY));}catch(e){dbLocalOK=false;}
+  await dbOpenStore();b=dbParseSave(await dbReadStore());
+  const chosen=a&&b?((b.savedAt||0)>(a.savedAt||0)?b:a):(a||b);
+  return chosen?migrate(chosen):dbNewSave();
+}
+
+/* Small synthesized notes start only after a touch or key press. */
+let dbAudioContext=null;
+function dbAudio(){if(!dbSave||!dbSave.sound)return null;try{if(!dbAudioContext){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;dbAudioContext=new A();}if(dbAudioContext.state==='suspended')dbAudioContext.resume();return dbAudioContext;}catch(e){return null;}}
+function dbTone(f,delay){const a=dbAudio();if(!a)return;try{const t=a.currentTime+(delay||0),o=a.createOscillator(),g=a.createGain();o.type='sine';o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*1.25,t+.08);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.07,t+.009);g.gain.exponentialRampToValueAtTime(.0001,t+.11);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+.13);}catch(e){}}
+function dbJingle(){dbTone(440,0);dbTone(550,.1);dbTone(660,.2);}
+function dbToast(text){clearTimeout(dbToastTimer);dbText('toast',text);dbEl('toast').classList.remove('hidden');dbToastTimer=setTimeout(()=>dbEl('toast').classList.add('hidden'),2800);}
+
+function dbShowScreen(name){
+  dbScreen=name;
+  for(const s of ['title','round','results','tree'])dbEl(s+'Screen').classList.toggle('hidden',s!==name);
+  if(name==='title')dbRefreshHome();if(name==='tree')dbRefreshTree();if(name==='results')dbRefreshResults();
+  dbResize();
+}
+function dbRefreshHome(){
+  dbText('titleDust',dbFmt(dbSave.dust));dbText('titleStar',dbSave.completed?'★':'');
+  dbText('titleSweep',dbSave.rounds?'Sweep again':'Sweep');dbText('titleStats',dbSave.rounds?dbSave.rounds+' rounds · Best '+dbFmt(dbSave.bestRound):'Thirty seconds to make a start.');
+  const choice=dbEl('roomChoice');choice.textContent='';
+  for(let i=0;i<DB_ROOMS.length;i++){const room=DB_ROOMS[i],o=document.createElement('option');o.value=i;o.textContent=room.name+(i>dbSave.room?' · Locked':'');o.disabled=i>dbSave.room;choice.appendChild(o);}
+  dbRoom=Math.min(dbRoom,dbSave.room);choice.value=dbRoom;dbRoomNote();
+}
+function dbRoomNote(){const room=DB_ROOMS[dbRoom];dbText('roomNote',dbRoom?'Dust value ×'+dbFmt(room.value)+' · More dust to sweep':'Your broom starts here. Unlock rooms in the skill tree.');}
+function dbRefreshResults(){dbText('resultRoom',DB_ROOMS[dbRoom].name);dbText('resultDust',dbFmt(dbRound?dbRound.earned:0));dbText('resultBest',dbFmt(dbSave.bestRound));dbText('resultBank',dbFmt(dbSave.dust));}
+function dbRefreshTree(){
+  if(!dbSelected)dbSelected=DB_NODES[0].id;
+  dbText('treeDust',dbFmt(dbSave.dust));dbText('treeSweep',dbSave.rounds?'Sweep again':'Sweep');
+  const select=dbEl('nodeChoice');select.textContent='';
+  for(const node of DB_NODES){const o=document.createElement('option');o.value=node.id;o.textContent=node.name+' · '+dbNodeLevel(dbSave,node.id)+'/'+node.max;select.appendChild(o);}select.value=dbSelected;
+  dbNodeDetails();dbDrawSkillTree();
+}
+function dbNodeDetails(){
+  const node=DB_NODES.find(n=>n.id===dbSelected)||DB_NODES[0],level=dbNodeLevel(dbSave,node.id),maxed=level>=node.max;
+  dbText('nodeName',node.name);dbText('nodeLevel',level+' / '+node.max);dbText('nodeEffect',node.effect);
+  const locked=node.parent&&!dbNodeLevel(dbSave,node.parent),parent=locked?DB_NODES.find(n=>n.id===node.parent):null;
+  dbText('nodeCost',maxed?'Fully upgraded':(parent?'Needs '+parent.name+' · ':'')+dbFmt(dbNodeCost(dbSave,node.id))+' dust');
+  dbEl('nodeBuy').disabled=!dbCanBuy(dbSave,node.id);dbText('nodeBuy',maxed?'Owned':'Buy');dbEl('nodeChoice').value=node.id;
+}
+function dbBuySelected(){
+  const completed=dbSave.completed,oldRoom=dbSave.room;if(!dbBuy(dbSave,dbSelected))return;
+  if(dbSave.room>oldRoom)dbRoom=dbSave.room;dbStoreSave(true);dbTone(620);dbRefreshTree();
+  if(!completed&&dbSave.completed)dbShowEnding();
+}
+
+function dbCanvasSize(canvas,width,height){const ratio=Math.min(window.devicePixelRatio||1,3),w=Math.max(1,Math.round(width*ratio)),h=Math.max(1,Math.round(height*ratio));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}const ctx=canvas.getContext('2d');ctx.setTransform(ratio,0,0,ratio,0,0);return ctx;}
+function dbDrawSkillTree(){if(dbScreen!=='tree'||!dbSave)return;const canvas=dbEl('treeCanvas'),w=canvas.parentElement.clientWidth,h=dbTreeHeight(w);canvas.style.height=h+'px';const ctx=dbCanvasSize(canvas,w,h);dbDrawTree(ctx,dbSave,w,h,dbSelected);}
+function dbDrawRoom(){if(!dbRound)return;const canvas=dbEl('roundCanvas'),w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;dbDrawRound(dbCanvasSize(canvas,w,h),dbRound,w,h);}
+function dbResize(){if(dbScreen==='tree')dbDrawSkillTree();if(dbScreen==='round')dbDrawRoom();}
+function dbUpdateHud(){
+  dbText('roundTime',Math.max(0,Math.ceil(dbRound.timeLeft))+'s');dbText('roundDust',dbFmt(dbRound.earned));dbText('roundTotal',dbFmt(dbSave.dust+dbRound.earned));
+  dbText('streakLabel',dbRound.streak?'Streak ×'+dbRound.multiplier.toFixed(1):'Drag to sweep');
+}
+function dbStartRound(){
+  dbCloseModal(false);dbRoom=Math.min(dbRoom,dbSave.room);dbRound=dbNewRound(dbSave,dbRoom,Math.floor(Math.random()*4294967296));dbPaused=false;dbFinger.down=false;dbLastTime=0;dbLastTone=0;dbShowScreen('round');dbUpdateHud();
+}
+function dbRoundDone(){dbFinger.down=false;dbFinishRound(dbSave,dbRound);dbStoreSave(true);dbJingle();dbShowScreen('results');}
+function dbFrame(now){
+  if(dbScreen==='round'&&dbRound&&!dbPaused&&!document.hidden){
+    const dt=dbLastTime?Math.min((now-dbLastTime)/1000,.05):0;dbLastTime=now;const earned=dbRound.earned;dbStep(dbRound,dt,dbFinger);
+    if(dbRound.earned>earned&&now-dbLastTone>90){dbTone(400+Math.min(dbRound.streak,50)*7);dbLastTone=now;}
+    dbUpdateHud();dbDrawRoom();if(dbRound.ended)dbRoundDone();
+  }else dbLastTime=0;
+  requestAnimationFrame(dbFrame);
+}
+function dbPointer(e){const canvas=dbEl('roundCanvas'),r=canvas.getBoundingClientRect(),v=dbRoomViewport(r.width,r.height);dbFinger.x=Math.max(0,Math.min(100,(e.clientX-r.left-v.x)/v.scale));dbFinger.y=Math.max(0,Math.min(160,(e.clientY-r.top-v.y)/v.scale));dbBroomInput(dbRound,dbFinger);}
+
+function dbOpenModal(kind,title,body,sticky){
+  dbModalKind=kind;dbLastFocus=document.activeElement;dbText('modalTitle',title);dbEl('modalBody').innerHTML=body;dbEl('modalClose').classList.toggle('hidden',!!sticky);dbEl('modal').classList.remove('hidden');
+  if(dbScreen==='round'){dbPaused=true;dbFinger.down=false;dbLastTime=0;}
+  const first=dbEl('modalBody').querySelector('button,textarea');(first||dbEl('modalClose')).focus();
+}
+function dbCloseModal(resume){dbEl('modal').classList.add('hidden');dbModalKind='';dbResetArmed=false;if(resume!==false&&dbScreen==='round'&&!document.hidden){dbPaused=false;dbLastTime=0;}if(dbLastFocus&&dbLastFocus.isConnected)dbLastFocus.focus();}
+function dbShowWelcome(){dbOpenModal('welcome','Meet the dust bunnies','<p>A little sweeping goes a long way.</p><ul><li>Drag your finger to sweep dust.</li><li>Keep sweeping to grow your streak.</li><li>Each round lasts thirty seconds to start.</li><li>Spend dust in the skill tree for bigger sweeps and helpful friends.</li><li>Unlock six rooms and leave a spotless house.</li></ul><button class="btn primary big" data-act="welcome">Let\'s go</button>',true);}
+function dbShowPause(){dbOpenModal('pause','Round paused','<p>Your broom can wait. The clock is stopped.</p><button class="btn primary big" data-act="close">Keep sweeping</button><button class="btn" data-act="settings">Settings</button>');}
+function dbShowSettings(){
+  dbResetArmed=false;dbOpenModal('settings','Settings','<div class="settings-row"><span>Sound</span><button class="btn" data-act="sound" id="soundToggle">'+(dbSave.sound?'On':'Off')+'</button></div><button class="btn" data-act="backup">Copy backup code</button><label class="field-label" for="backupCode">Backup code</label><textarea id="backupCode" placeholder="Paste a backup code here" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea><button class="btn" data-act="load">Load backup code</button><p>Loading a backup replaces your current progress.</p><button class="btn danger" data-act="reset" id="resetButton">Start over</button><p class="fine-print">Progress stays on this device. Keep a backup code before changing phones or clearing browser data.</p>'+(!dbLocalOK&&!dbStorage?'<p>Saving is unavailable in this browser. Copy a backup before closing.</p>':'')+(dbSave.rounds&&dbScreen!=='round'?'<button class="btn primary big" data-act="sweep">Sweep again</button>':''));
+}
+function dbShowEnding(){dbJingle();dbOpenModal('ending','A spotless house','<p>From the first dusty corner to the stars above the observatory, every room is clean. The dust bunnies have found a home in your heart.</p><div class="ending-stats"><div><small>Total play time</small><b>'+dbPlayTime(dbSave.playTime)+'</b></div><div><small>Rounds swept</small><b>'+dbSave.rounds+'</b></div><div><small>Best round</small><b>'+dbFmt(dbSave.bestRound)+' dust</b></div></div><p>Your title now has a star. Keep sweeping whenever you like.</p><button class="btn primary big" data-act="sweep">Sweep again</button><button class="btn" data-act="home">Back to the house</button>');}
+async function dbCopyBackup(){
+  const code=encodeBackup(dbSave),box=dbEl('backupCode');box.value=code;box.focus();box.select();
+  try{if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(code);dbToast('Backup code copied');return;}}catch(e){}
+  try{if(document.execCommand('copy')){dbToast('Backup code copied');return;}}catch(e){}
+  dbToast('Backup selected. Touch and hold to copy.');
+}
+function dbLoadBackup(){
+  let loaded=null;try{loaded=decodeBackup(dbEl('backupCode').value);}catch(e){}
+  if(!loaded){dbToast('That backup code could not be loaded');return;}
+  dbSave=migrate(loaded);dbRoom=dbSave.room;dbRound=null;dbStoreSave(true);dbCloseModal(false);dbShowScreen('title');dbToast('Backup loaded');
+}
+function dbReset(){
+  if(!dbResetArmed){dbResetArmed=true;dbText('resetButton','Confirm: erase all progress');dbToast('Tap again to start over');return;}
+  dbSave=dbNewSave();dbRoom=0;dbRound=null;dbSelected=DB_NODES[0].id;dbFinger.down=false;dbStoreSave(true);dbCloseModal(false);dbShowScreen('title');dbToast('A fresh start');
+}
+function dbAction(action){
+  if(!dbSave)return;dbAudio();
+  if(action==='sweep')dbStartRound();
+  else if(action==='tree'){dbCloseModal(false);dbShowScreen('tree');}
+  else if(action==='home'){dbCloseModal(false);dbShowScreen('title');}
+  else if(action==='buy')dbBuySelected();
+  else if(action==='settings')dbShowSettings();
+  else if(action==='pause')dbShowPause();
+  else if(action==='close')dbCloseModal();
+  else if(action==='welcome'){try{localStorage.setItem('dust-bunnies.t','1');}catch(e){}dbCloseModal();}
+  else if(action==='sound'){dbSave.sound=!dbSave.sound;dbStoreSave(true);dbText('soundToggle',dbSave.sound?'On':'Off');if(dbSave.sound)dbTone(550);}
+  else if(action==='backup')dbCopyBackup();
+  else if(action==='load')dbLoadBackup();
+  else if(action==='reset')dbReset();
+}
+
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(b&&!b.disabled)dbAction(b.dataset.act);});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&!dbEl('modal').classList.contains('hidden')&&dbModalKind!=='welcome'){dbCloseModal();e.preventDefault();}
+  if(e.key==='Tab'&&!dbEl('modal').classList.contains('hidden')){const all=dbEl('modal').querySelectorAll('button:not(.hidden):not(:disabled),textarea,select'),first=all[0],last=all[all.length-1];if(e.shiftKey&&document.activeElement===first){last.focus();e.preventDefault();}else if(!e.shiftKey&&document.activeElement===last){first.focus();e.preventDefault();}}
+});
+dbEl('roomChoice').addEventListener('change',e=>{dbRoom=+e.target.value;dbRoomNote();});
+dbEl('nodeChoice').addEventListener('change',e=>{dbSelected=e.target.value;dbNodeDetails();dbDrawSkillTree();});
+let dbTreeDown=null;
+dbEl('treeCanvas').addEventListener('pointerdown',e=>{dbTreeDown={x:e.clientX,y:e.clientY};});
+dbEl('treeCanvas').addEventListener('pointerup',e=>{if(!dbTreeDown||Math.hypot(e.clientX-dbTreeDown.x,e.clientY-dbTreeDown.y)>10){dbTreeDown=null;return;}dbTreeDown=null;const r=e.currentTarget.getBoundingClientRect(),id=dbTreeHit(e.clientX-r.left,e.clientY-r.top,r.width);if(id){dbSelected=id;dbNodeDetails();dbDrawSkillTree();}});
+dbEl('treeCanvas').addEventListener('pointercancel',()=>{dbTreeDown=null;});
+dbEl('roundCanvas').addEventListener('pointerdown',e=>{if(dbPaused||!dbRound)return;dbAudio();e.preventDefault();dbBroomInput(dbRound,{down:false});dbFinger.down=true;dbPointer(e);e.currentTarget.setPointerCapture(e.pointerId);});
+dbEl('roundCanvas').addEventListener('pointermove',e=>{if(!dbFinger.down)return;const moves=e.getCoalescedEvents?e.getCoalescedEvents():[];for(const move of moves)dbPointer(move);dbPointer(e);});
+for(const event of ['pointerup','pointercancel','lostpointercapture'])dbEl('roundCanvas').addEventListener(event,e=>{if(event==='pointerup'&&dbFinger.down)dbPointer(e);dbFinger.down=false;if(dbRound)dbBroomInput(dbRound,dbFinger);});
+window.addEventListener('resize',dbResize);
+window.addEventListener('pagehide',()=>{dbFinger.down=false;dbStoreSave(true);});
+document.addEventListener('visibilitychange',()=>{dbFinger.down=false;dbLastTime=0;if(document.hidden){dbPaused=true;dbStoreSave(true);if(dbAudioContext)dbAudioContext.suspend().catch(()=>{});}else if(dbScreen==='round'&&dbRound&&!dbRound.ended&&dbEl('modal').classList.contains('hidden'))dbShowPause();});
+(async()=>{
+  dbSave=await dbLoadSave();dbRoom=dbSave.room;dbSelected=DB_NODES[0].id;dbShowScreen('title');dbStoreSave(true);
+  let seen=false;try{seen=localStorage.getItem('dust-bunnies.t')==='1';}catch(e){}if(!seen&&!dbSave.rounds)dbShowWelcome();
+  requestAnimationFrame(dbFrame);
+})();
+
+</script>
+</body>
+</html>

@@ -32,6 +32,30 @@
     {
       "name": "Roadbound",
       "url": "./games/roadbound.html"
+    },
+    {
+      "name": "Emberlight",
+      "url": "./games/emberlight.html"
+    },
+    {
+      "name": "Dust Bunnies",
+      "url": "./games/dust-bunnies.html"
+    },
+    {
+      "name": "Deep Pockets",
+      "url": "./games/deep-pockets.html"
+    },
+    {
+      "name": "Bounce House",
+      "url": "./games/bounce-house.html"
+    },
+    {
+      "name": "Matchlock",
+      "url": "./games/matchlock.html"
+    },
+    {
+      "name": "Far Flung",
+      "url": "./games/far-flung.html"
     }
   ]
 }

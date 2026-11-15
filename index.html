@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#121923">
+  <meta name="description" content="Small games that work offline. No ads.">
+  <title>Pocket games</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" href="./icons/icon-192.png">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <style>
+:root {
+  color-scheme: dark;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #121923;
+  color: #eef2f6;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-width: 0;
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+main {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 36px 20px 28px;
+  padding-top: max(36px, env(safe-area-inset-top));
+  padding-bottom: max(28px, env(safe-area-inset-bottom));
+}
+
+header { margin-bottom: 28px; }
+
+h1 {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.15;
+  letter-spacing: -.035em;
+}
+
+.intro {
+  margin: 12px 0 0;
+  color: #aeb9c8;
+  font-size: 15px;
+}
+
+.games { display: grid; gap: 12px; }
+
+.game-card {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) 12px;
+  align-items: center;
+  gap: 12px;
+  min-height: 112px;
+  padding: 18px 16px;
+  border: 1px solid #34404f;
+  border-radius: 18px;
+  background: #1c2633;
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: #344f47;
+}
+
+.game-card:hover { background: #23303e; }
+.game-card:active { background: #2a3949; }
+
+.game-emoji {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #121923;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.game-copy { min-width: 0; }
+.game-name { display: block; font-size: 18px; line-height: 1.3; }
+.game-blurb { display: block; margin-top: 5px; color: #b7c2d0; font-size: 13px; }
+.game-arrow { color: #a6c8bb; font-size: 26px; }
+
+.offline-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin: 16px 2px 0;
+}
+
+.status { margin: 0; color: #a6c8bb; font-size: 12px; }
+
+button {
+  min-width: 72px;
+  min-height: 44px;
+  border: 1px solid #789e8f;
+  border-radius: 10px;
+  padding: 8px 16px;
+  background: #bddbcb;
+  color: #15251e;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+button:hover { background: #d4e9df; }
+
+.update {
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px solid #486a5c;
+  border-radius: 12px;
+  background: #1d302a;
+}
+
+.update p { margin: 0 0 10px; font-size: 14px; }
+.help { margin-top: 28px; border-top: 1px solid #303b49; }
+details { border-bottom: 1px solid #303b49; }
+
+summary {
+  min-height: 48px;
+  padding: 14px 2px;
+  color: #d4dde7;
+  font-size: 13px;
+  line-height: 1.5;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+.detail-body { padding: 0 2px 12px; color: #aeb9c8; font-size: 13px; }
+.detail-body p { margin: 0 0 12px; }
+.detail-body p:last-child { margin-bottom: 0; }
+.detail-body strong { color: #d4dde7; font-weight: 600; }
+footer { margin-top: 18px; }
+
+footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 4px 2px;
+  color: #bddbcb;
+  font-size: 14px;
+  text-underline-offset: 4px;
+}
+
+a:focus-visible, button:focus-visible, summary:focus-visible {
+  outline: 3px solid #bddbcb;
+  outline-offset: 4px;
+}
+
+[hidden] { display: none !important; }
+
+@media (max-width: 340px) {
+  main { padding-right: 16px; padding-left: 16px; padding-top: 28px; }
+  h1 { font-size: 31px; }
+  .game-card { gap: 10px; padding: 16px 12px; }
+}
+
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1 id="hub-title">Pocket games</h1>
+      <p class="intro">Small games that work offline. No ads.</p>
+    </header>
+
+    <nav id="games" class="games" aria-label="Games"></nav>
+
+    <div class="offline-tools">
+      <p id="offline-status" class="status" role="status" hidden>Saving games for offline play…</p>
+      <button id="install" type="button" hidden>Install</button>
+    </div>
+    <div id="update" class="update" role="status" hidden>
+      <p>A new version is ready.</p>
+      <button id="update-now" type="button">Update now</button>
+    </div>
+
+    <section class="help" aria-label="Help and backups">
+      <details>
+        <summary>Add to your home screen</summary>
+        <div class="detail-body">
+          <p><strong>Chrome:</strong> open this page online, tap the three-dot menu, then <strong>Install and create shortcut</strong> → <strong>Install</strong>. For a shortcut, choose <strong>Create shortcut</strong> → <strong>Add</strong> instead.</p>
+          <p><strong>Samsung Internet:</strong> open this page, tap the bottom-right menu, then <strong>+ Add page to</strong> → <strong>Home screen</strong> and confirm.</p>
+          <p>Wait for “Ready to play offline”, then try both games in airplane mode. Import old backups in the browser you plan to use.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Played from a downloaded file before?</summary>
+        <div class="detail-body">
+          <p>Your progress is stored with that file, not with this site. Open the old file, go to Settings and copy the backup code. Open the same game here and paste it in Settings.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Keep a backup</summary>
+        <div class="detail-body">
+          <p>Clearing browser data deletes saves. Copy the backup code from each game's Settings now and then.</p>
+        </div>
+      </details>
+    </section>
+
+    <footer id="support" hidden><a id="support-link">Support these games</a></footer>
+  </main>
+  <script>
+var HUB = {
+  title: 'Pocket games',
+  supportUrl: '',
+  games: [
+    {
+      slug: 'down-the-hatch',
+      name: 'Down the Hatch',
+      emoji: '\uD83D\uDD73\uFE0F',
+      blurb: 'Steer a hole, swallow things and grow through colourful maps.',
+      src: 'down-the-hatch/dist/down-the-hatch.html'
+    },
+    {
+      slug: 'roadbound',
+      name: 'Roadbound',
+      emoji: '\u2694\uFE0F',
+      blurb: 'Battle waves, collect gear and grow stronger on an endless road.',
+      src: 'roadbound/dist/roadbound-v2.html'
+    }
+  ]
+};
+
+if (typeof module !== 'undefined' && module.exports) module.exports = HUB;
+
+  </script>
+  <script>
+var gameList = document.getElementById('games');
+var installButton = document.getElementById('install');
+var offlineStatus = document.getElementById('offline-status');
+var updateBox = document.getElementById('update');
+var updateButton = document.getElementById('update-now');
+var installPrompt = null;
+var storageRequested = false;
+var waitingWorker = null;
+
+document.title = HUB.title;
+document.getElementById('hub-title').textContent = HUB.title;
+
+HUB.games.forEach(function(game) {
+  var card = document.createElement('a');
+  card.className = 'game-card';
+  card.href = './games/' + game.slug + '.html';
+
+  var emoji = document.createElement('span');
+  emoji.className = 'game-emoji';
+  emoji.setAttribute('aria-hidden', 'true');
+  emoji.textContent = game.emoji;
+
+  var copy = document.createElement('span');
+  copy.className = 'game-copy';
+  var name = document.createElement('strong');
+  name.className = 'game-name';
+  name.textContent = game.name;
+  var blurb = document.createElement('span');
+  blurb.className = 'game-blurb';
+  blurb.textContent = game.blurb;
+  copy.appendChild(name);
+  copy.appendChild(blurb);
+
+  var arrow = document.createElement('span');
+  arrow.className = 'game-arrow';
+  arrow.setAttribute('aria-hidden', 'true');
+  arrow.textContent = '\u203a';
+  card.appendChild(emoji);
+  card.appendChild(copy);
+  card.appendChild(arrow);
+  gameList.appendChild(card);
+});
+
+if (HUB.supportUrl) {
+  document.getElementById('support-link').href = HUB.supportUrl;
+  document.getElementById('support').hidden = false;
+}
+
+gameList.addEventListener('click', function(event) {
+  if (storageRequested || !event.target.closest('.game-card')) return;
+  storageRequested = true;
+  try {
+    if (navigator.storage && navigator.storage.persist) {
+      var request = navigator.storage.persist();
+      if (request && request.catch) request.catch(function() {});
+    }
+  } catch (error) {}
+});
+
+window.addEventListener('beforeinstallprompt', function(event) {
+  event.preventDefault();
+  installPrompt = event;
+  installButton.hidden = false;
+});
+
+installButton.addEventListener('click', async function() {
+  if (!installPrompt) return;
+  var prompt = installPrompt;
+  installPrompt = null;
+  installButton.hidden = true;
+  try {
+    await prompt.prompt();
+    await prompt.userChoice;
+  } catch (error) {}
+});
+
+window.addEventListener('appinstalled', function() {
+  installPrompt = null;
+  installButton.hidden = true;
+});
+
+function showUpdate(worker) {
+  waitingWorker = worker;
+  updateButton.disabled = false;
+  updateBox.hidden = false;
+}
+
+updateButton.addEventListener('click', function() {
+  if (!waitingWorker) return;
+  updateButton.disabled = true;
+  waitingWorker.postMessage({ type: 'SKIP_WAITING' });
+});
+
+async function startOffline() {
+  if (!('serviceWorker' in navigator)) return;
+  if (location.protocol !== 'https:' && location.hostname !== 'localhost') return;
+  offlineStatus.hidden = false;
+  try {
+    var hadController = !!navigator.serviceWorker.controller;
+    var reloading = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function() {
+      if (!hadController) {
+        hadController = true;
+        return;
+      }
+      if (reloading) return;
+      reloading = true;
+      location.reload();
+    });
+
+    var registration = await navigator.serviceWorker.register('./sw.js');
+    if (registration.waiting) showUpdate(registration.waiting);
+
+    function watchInstalling() {
+      var worker = registration.installing;
+      if (!worker) return;
+      worker.addEventListener('statechange', function() {
+        if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+          showUpdate(registration.waiting || worker);
+        }
+      });
+    }
+    registration.addEventListener('updatefound', watchInstalling);
+    watchInstalling();
+
+    await navigator.serviceWorker.ready;
+    offlineStatus.textContent = 'Ready to play offline';
+  } catch (error) {
+    offlineStatus.hidden = true;
+  }
+}
+
+startOffline();
+
+  </script>
+</body>
+</html>

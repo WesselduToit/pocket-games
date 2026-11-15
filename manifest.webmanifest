@@ -1,0 +1,37 @@
+{
+  "name": "Pocket games",
+  "short_name": "Pocket games",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "theme_color": "#121923",
+  "background_color": "#121923",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "./icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Down the Hatch",
+      "url": "./games/down-the-hatch.html"
+    },
+    {
+      "name": "Roadbound",
+      "url": "./games/roadbound.html"
+    }
+  ]
+}

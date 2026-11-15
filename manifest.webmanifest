@@ -56,6 +56,18 @@
     {
       "name": "Far Flung",
       "url": "./games/far-flung.html"
+    },
+    {
+      "name": "Night Market",
+      "url": "./games/night-market.html"
+    },
+    {
+      "name": "Dicewright",
+      "url": "./games/dicewright.html"
+    },
+    {
+      "name": "Mole Sense",
+      "url": "./games/mole-sense.html"
     }
   ]
 }

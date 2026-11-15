@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#121b29">
+<title>Night Market</title>
+<style>:root{color-scheme:dark;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#f7eedb;background:#101722;font-synthesis:none;font-size:14px}*{box-sizing:border-box}body{margin:0;overflow-x:hidden;background:radial-gradient(ellipse at top,#233c46,#101722 72%);min-height:100vh;min-height:100dvh}button,select,textarea{font:inherit}button,select{min-height:40px}button{border:1px solid #50635f;border-radius:10px;background:#293c40;color:#f7eedb;font-weight:650;padding:9px 12px;cursor:pointer;touch-action:manipulation}button:hover{filter:brightness(1.13)}button:active{transform:translateY(1px)}button:disabled{opacity:.42;cursor:default;transform:none}button:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #f3c87a;outline-offset:2px}button.primary{background:#e6b969;color:#231f24;border-color:#ffd18a}button.quiet{background:#1b2a35;border-color:#3a4c56;font-size:12px}button.danger{background:#653c3b;border-color:#b76d61}h1,h2,h3,p{margin:0}h1{font-size:20px;letter-spacing:.2px;font-weight:750}h2{font-size:13px}#app{width:100%;max-width:480px;margin:0 auto;padding:0 12px calc(8px + env(safe-area-inset-bottom));display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}header{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:65px;padding-top:env(safe-area-inset-top)}.brand{display:flex;align-items:center;gap:11px}.brand p{font-size:10px;color:#adbdba;margin-top:2px}.moon{width:24px;height:24px;border-radius:50%;box-shadow:-7px 4px 0 0 #efc778;transform:rotate(-22deg);margin-left:6px;margin-right:2px}.stats{display:grid;grid-template-columns:1fr 1fr 1.1fr;gap:6px;background:#1b2a34;border:1px solid #34474a;border-radius:12px;padding:8px 10px;min-height:56px}.stat span{font-size:9px;text-transform:uppercase;letter-spacing:1.4px;color:#b2c0b9;display:block;margin-bottom:2px}.stat strong{font-size:18px;line-height:1.1;color:#f7e4bc}.stat:last-child{text-align:right}.stat small{font-size:10px;color:#b9c7c0;font-weight:400}.coin-mark{color:#eac16f;font-style:normal}#stage{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:0 8px;flex:none;margin:4px -4px 0}#market{width:100%;display:block;grid-column:1/-1}#stageCaption{margin-left:4px;font-size:10px;color:#a8beb7;pointer-events:none}.fast{margin-right:4px;background:#172832d9;min-height:40px;font-size:10px;padding:5px 10px;border-color:#3a5157;border-radius:9px}.fast[aria-pressed=true]{color:#f5cd85;border-color:#b3925a}#actions{margin-top:7px;min-height:92px;flex:none}.action-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;gap:7px}.action-heading p{font-size:10px;color:#aebeaf}.action-heading h2{font-size:13px}.wide{width:100%}.subline{font-size:11px;line-height:1.45;color:#b3c3bb;text-align:center;margin:6px 0}.offer-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.offer{padding:8px 4px 6px;min-width:0;background:linear-gradient(#354a47,#243b3d);border-color:#5a7564;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:106px}.offer .item-glyph{width:33px;height:33px}.offer strong{font-size:11px;line-height:1.15;text-align:center;max-width:100%;overflow-wrap:anywhere}.offer small{font-size:9px;letter-spacing:.2px;color:#b8c8bb;font-weight:400}.offer[data-rarity=rare],.offer[data-rarity="very rare"]{border-color:#be9b59;background:linear-gradient(#554b39,#343d3b)}.token-row{display:grid;grid-template-columns:1fr 1fr auto;gap:5px;margin-top:6px}.token-row button{font-size:10px;padding:6px 5px;min-height:40px}.token-row button[aria-pressed=true]{background:#65543a;border-color:#e5b56b}.setup-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px}.setup-row label{font-size:10px;color:#b3c3bb}.setup-row select{display:block;background:#1d3037;border:1px solid #4a6264;border-radius:8px;color:#f5ebd6;width:100%;padding:7px;margin-top:3px;font-size:12px;min-width:0}.setup-buttons{display:grid;grid-template-columns:1.6fr 1fr;gap:7px}.setup-buttons button{font-size:12px}.end-note{font-size:12px;line-height:1.5;margin-bottom:7px;color:#efce91}.section-line{display:flex;justify-content:space-between;align-items:baseline;gap:7px;margin:10px 0 5px}.section-line h2{white-space:nowrap}.section-line h2 span{color:#e8c37c;font-weight:400}.section-line>span{font-size:9px;color:#a8bdb6;text-align:right}#crate{display:grid;grid-template-columns:repeat(auto-fill,minmax(48px,1fr));grid-auto-rows:48px;gap:5px;max-height:101px;min-height:48px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:1px 3px 1px 1px}#crate button{position:relative;min-height:48px;padding:3px;background:#22343a;border-color:#3e5454;display:flex;justify-content:center;align-items:center}#crate .count{position:absolute;right:4px;bottom:1px;font-size:10px;background:#17282e;border-radius:4px;padding:0 3px;color:#f0d49b}.item-glyph{width:30px;height:30px;display:inline-block;vertical-align:middle}footer{font-size:10px;color:#92aaa2;text-align:center;line-height:1.5;padding-top:8px;margin-top:auto}#overlay{position:fixed;inset:0;z-index:20;background:#071019c9;backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:16px}#overlay[hidden],#toast[hidden]{display:none}#sheet{width:100%;max-width:410px;max-height:90vh;max-height:90dvh;overflow-y:auto;background:linear-gradient(155deg,#293e43,#172a33);border:1px solid #6c7e6a;border-radius:20px;padding:20px;box-shadow:0 18px 70px #0008}#sheet h2{font-size:23px;color:#f1cf93;margin-bottom:12px;letter-spacing:.2px}#sheet h3{font-size:13px;margin:17px 0 8px}#sheet p,#sheet li{font-size:13px;line-height:1.6;color:#d3dfd2}#sheet ul{padding-left:19px;margin:12px 0 20px}#sheet li{padding-left:3px;margin:7px 0}#sheet .sheet-buttons{display:flex;gap:8px;margin-top:17px}#sheet .sheet-buttons button{flex:1}#sheet .settings-row{display:flex;align-items:center;justify-content:space-between;gap:9px;margin:8px 0}#sheet .settings-row p{font-size:12px}#sheet textarea{resize:vertical;width:100%;min-height:84px;background:#10232c;color:#efe7d7;border:1px solid #536a68;border-radius:9px;padding:9px;font-size:12px;line-height:1.4;margin-top:9px}#sheet .warn{font-size:11px;color:#f1c69d;margin:9px 0}#sheet .item-detail{display:flex;align-items:center;gap:14px}.item-detail .item-glyph{width:60px;height:60px}.unlock-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid #3a5052}.unlock-row strong{display:block;font-size:13px}.unlock-row small{font-size:11px;color:#afc1b8;display:block;margin-top:3px}.unlock-row button{font-size:12px;white-space:nowrap}#toast{position:fixed;z-index:30;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom));max-width:calc(100vw - 32px);width:max-content;border:1px solid #7c8c6b;background:#243b3e;padding:12px 18px;border-radius:12px;font-size:12px;box-shadow:0 5px 25px #0006;text-align:center}.welcome-kicker{color:#9fc4b6!important;letter-spacing:2px;text-transform:uppercase;font-size:10px!important;margin-bottom:5px!important}@media(max-height:620px){header{min-height:54px}h1{font-size:18px}.stats{min-height:48px;padding:6px 9px}.stat strong{font-size:16px}#actions{margin-top:4px;min-height:83px}.offer{min-height:89px;padding-top:5px;gap:3px}.offer .item-glyph{width:27px;height:27px}.action-heading{margin-bottom:5px}.section-line{margin-top:7px}#crate{max-height:48px}footer{padding-top:5px;font-size:9px}.subline{margin:4px 0}.setup-row{margin-bottom:5px}#sheet{padding:17px}#sheet h2{font-size:21px;margin-bottom:9px}#sheet p,#sheet li{font-size:12px}}@media(prefers-reduced-motion:reduce){button{transition:none}}
+.crate-puff{position:fixed;z-index:25;pointer-events:none}.crate-puff i{position:absolute;left:-5px;top:-5px;width:10px;height:10px;background:#f2e5c5;border-radius:50%;animation:cratePuff .6s ease-out forwards}@keyframes cratePuff{from{opacity:.85;transform:translate(0,0) scale(.8)}to{opacity:0;transform:translate(var(--px),var(--py)) scale(1.7)}}
+@media(max-height:720px){#crate{max-height:48px}footer{display:none}}@media(max-height:620px){header{min-height:48px}.offer{min-height:82px}#crate{grid-auto-rows:44px;min-height:44px;max-height:44px}#crate button{min-height:44px}}
+</style>
+</head>
+<body>
+<main id="app">
+  <header><div class="brand"><span class="moon" aria-hidden="true"></span><div><h1>Night Market</h1><p>A little luck. A busy table.</p></div></div><button id="settingsBtn" class="quiet" aria-label="Settings">Settings</button></header>
+  <section id="stats" class="stats" aria-label="Season progress"></section>
+  <div id="stage"><canvas id="market" aria-label="Your market table"></canvas><span id="stageCaption"></span><button id="fastBtn" class="fast" aria-pressed="false">Fast: off</button></div>
+  <section id="actions" aria-live="polite"></section>
+  <section id="crateSection"><div class="section-line"><h2>Your crate <span id="crateCount"></span></h2><span id="crateHint">Tap an item to learn about it</span></div><div id="crate" aria-label="Items in your crate"></div></section>
+  <footer id="foot"></footer>
+</main>
+<div id="overlay" hidden><section id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" tabindex="-1"></section></div>
+<div id="toast" role="status" hidden></div>
+<script>/* Night Market content. TUNE values are grouped at the top. */
+const NM={
+  name:'Night Market', version:1,
+  // TUNE: starting crate, unlocked families, fees, offer odds and fee ladder.
+  startItems:['apple','lantern','lantern','cat','fish','fish'],
+  startFamilies:['fish','critter','sweet','tool','gem','plant'],
+  fees:[25,75,315,410,780,815,915,925],
+  ladderFeeStep:0.05,
+  ladderStarStep:0.25,
+  ladderCost:3,
+  offerWeights:[
+    {night:1,weights:[60,30,2,8]},
+    {night:11,weights:[40,40,5,15]},
+    {night:21,weights:[25,45,5,25]},
+    {night:31,weights:[20,40,5,35]}
+  ],
+  makerCap:100,
+  families:[
+    {id:'fish',name:'River finds',cost:5},
+    {id:'critter',name:'Little visitors',cost:5},
+    {id:'sweet',name:'Sweet treats',cost:8},
+    {id:'tool',name:'Useful things',cost:5},
+    {id:'gem',name:'Shiny stones',cost:12},
+    {id:'plant',name:'Green shoots',cost:8}
+  ],
+  shapes:[
+    {id:'table',name:'Market table',cols:5,rows:4,cost:0,cells:[
+      {x:0,y:0},{x:1,y:0},{x:2,y:0},{x:3,y:0},{x:4,y:0},
+      {x:0,y:1},{x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},
+      {x:0,y:2},{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},
+      {x:0,y:3},{x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3}
+    ]},
+    {id:'long',name:'Long table',cols:6,rows:4,cost:12,cells:[
+      {x:0,y:0},{x:1,y:0},{x:2,y:0},{x:3,y:0},{x:4,y:0},{x:5,y:0},
+      {x:0,y:1},{x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},
+      {x:0,y:2},{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},
+      {x:0,y:3},{x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3}
+    ]},
+    {id:'cross',name:'Cross stall',cols:6,rows:4,cost:12,cells:[
+      {x:1,y:0},{x:2,y:0},{x:3,y:0},
+      {x:0,y:1},{x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},
+      {x:0,y:2},{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},
+      {x:1,y:3},{x:2,y:3},{x:3,y:3}
+    ]}
+  ],
+  items:[
+    {id:'apple',name:'Apple',emoji:'🍎',base:1,rarity:'common',family:'food',tags:['food'],effect:{kind:'plain'}},
+    {id:'pear',name:'Sunny pear',emoji:'🍐',base:4,rarity:'common',family:'food',tags:['food'],effect:{kind:'plain'}},
+    {id:'bread',name:'Warm loaf',emoji:'🍞',base:5,rarity:'uncommon',family:'food',tags:['food'],effect:{kind:'plain'}},
+    {id:'pepper',name:'Pepper bunch',emoji:'🌶️',base:1,rarity:'uncommon',family:'food',tags:['food','plant'],effect:{kind:'booster',tag:'food',amount:1}},
+    {id:'basket',name:'Supper basket',emoji:'🧺',base:2,rarity:'rare',family:'food',tags:['food'],effect:{kind:'booster',tag:'food',amount:2}},
+    {id:'egg',name:'Speckled egg',emoji:'🥚',base:1,rarity:'common',family:'food',tags:['food'],effect:{kind:'breaker',after:5,amount:9}},
+    {id:'lantern',name:'Lantern',emoji:'🏮',base:0,rarity:'common',family:'light',tags:['light'],effect:{kind:'booster',amount:1}},
+    {id:'candle',name:'Stubby candle',emoji:'🕯️',base:1,rarity:'common',family:'light',tags:['light'],effect:{kind:'breaker',after:6,amount:12}},
+    {id:'glowjar',name:'Glow jar',emoji:'🫙',base:2,rarity:'uncommon',family:'light',tags:['light'],effect:{kind:'booster',tag:'light',amount:2}},
+    {id:'moonlamp',name:'Moon lamp',emoji:'🌙',base:1,rarity:'rare',family:'light',tags:['light'],effect:{kind:'booster',amount:2}},
+    {id:'fish',name:'Silver fish',emoji:'🐟',base:1,rarity:'common',family:'fish',tags:['fish','food'],effect:{kind:'plain'}},
+    {id:'eel',name:'Ribbon eel',emoji:'🐠',base:3,rarity:'uncommon',family:'fish',tags:['fish'],effect:{kind:'plain'}},
+    {id:'crab',name:'Hermit crab',emoji:'🦀',base:1,rarity:'uncommon',family:'fish',tags:['fish','critter'],effect:{kind:'lonely',amount:1}},
+    {id:'coral',name:'Coral curl',emoji:'🪸',base:1,rarity:'rare',family:'fish',tags:['fish'],effect:{kind:'booster',tag:'fish',amount:3}},
+    {id:'cat',name:'Market cat',emoji:'🐈',base:1,rarity:'common',family:'critter',tags:['critter'],effect:{kind:'eater',eats:['fish'],amount:10}},
+    {id:'goat',name:'Pocket goat',emoji:'🐐',base:1,rarity:'uncommon',family:'critter',tags:['critter'],effect:{kind:'eater',eats:['apple','pear'],amount:8}},
+    {id:'hen',name:'Busy hen',emoji:'🐔',base:1,rarity:'common',family:'critter',tags:['critter'],effect:{kind:'maker',chance:0.2,item:'egg'}},
+    {id:'owl',name:'Quiet owl',emoji:'🦉',base:2,rarity:'uncommon',family:'critter',tags:['critter'],effect:{kind:'lonely',amount:1}},
+    {id:'beetle',name:'Copper beetle',emoji:'🪲',base:2,rarity:'rare',family:'critter',tags:['critter','gem'],effect:{kind:'booster',tag:'critter',amount:2}},
+    {id:'honey',name:'Honey pot',emoji:'🍯',base:1,rarity:'common',family:'sweet',tags:['sweet'],effect:{kind:'booster',tag:'sweet',amount:2}},
+    {id:'bonbon',name:'Berry bonbon',emoji:'🍬',base:2,rarity:'common',family:'sweet',tags:['sweet','food'],effect:{kind:'plain'}},
+    {id:'cake',name:'Cloud cake',emoji:'🧁',base:5,rarity:'uncommon',family:'sweet',tags:['sweet','food'],effect:{kind:'plain'}},
+    {id:'sugarjar',name:'Sugar jar',emoji:'🍚',base:2,rarity:'rare',family:'sweet',tags:['sweet'],effect:{kind:'maker',chance:0.25,item:'bonbon'}},
+    {id:'toffee',name:'Toffee tower',emoji:'🍭',base:3,rarity:'very rare',family:'sweet',tags:['sweet'],effect:{kind:'booster',tag:'sweet',amount:4}},
+    {id:'purse',name:'Coin purse',emoji:'👛',base:2,rarity:'common',family:'tool',tags:['tool'],effect:{kind:'plain'}},
+    {id:'piggy',name:'Piggy bank',emoji:'🐖',base:0,rarity:'common',family:'tool',tags:['tool'],effect:{kind:'breaker',after:6,amount:30}},
+    {id:'bell',name:'Little bell',emoji:'🔔',base:1,rarity:'uncommon',family:'tool',tags:['tool','light'],effect:{kind:'booster',tag:'tool',amount:2}},
+    {id:'scale',name:'Golden scale',emoji:'⚖️',base:1,rarity:'rare',family:'tool',tags:['tool'],effect:{kind:'doubler'}},
+    {id:'wheel',name:'Potter wheel',emoji:'⚙️',base:3,rarity:'very rare',family:'tool',tags:['tool'],effect:{kind:'booster',tag:'tool',amount:3}},
+    {id:'pebble',name:'Rose pebble',emoji:'🪨',base:2,rarity:'common',family:'gem',tags:['gem'],effect:{kind:'plain'}},
+    {id:'pearl',name:'Dusk pearl',emoji:'🦪',base:3,rarity:'uncommon',family:'gem',tags:['gem','fish'],effect:{kind:'grower',amount:1}},
+    {id:'amber',name:'Warm amber',emoji:'🟠',base:2,rarity:'uncommon',family:'gem',tags:['gem','light'],effect:{kind:'booster',tag:'gem',amount:2}},
+    {id:'prism',name:'Star prism',emoji:'💎',base:4,rarity:'rare',family:'gem',tags:['gem','light'],effect:{kind:'doubler'}},
+    {id:'geode',name:'Hollow geode',emoji:'🔮',base:1,rarity:'very rare',family:'gem',tags:['gem'],effect:{kind:'breaker',after:4,amount:65}},
+    {id:'seedling',name:'Seedling',emoji:'🌱',base:0,rarity:'common',family:'plant',tags:['plant'],effect:{kind:'grower',amount:1,after:6,into:'tree'}},
+    {id:'tree',name:'Market tree',emoji:'🌳',base:1,rarity:'uncommon',family:'plant',tags:['plant'],effect:{kind:'grower',amount:1}},
+    {id:'clover',name:'Lucky clover',emoji:'☘️',base:1,rarity:'common',family:'plant',tags:['plant'],effect:{kind:'lonely',amount:1}},
+    {id:'sunflower',name:'Sunflower',emoji:'🌻',base:2,rarity:'uncommon',family:'plant',tags:['plant','light'],effect:{kind:'booster',tag:'plant',amount:2}},
+    {id:'mushroom',name:'Button patch',emoji:'🍄',base:1,rarity:'rare',family:'plant',tags:['plant','food'],effect:{kind:'maker',chance:0.25,item:'mushroom'}},
+    {id:'orchid',name:'Night orchid',emoji:'🌺',base:3,rarity:'very rare',family:'plant',tags:['plant'],effect:{kind:'booster',tag:'plant',amount:4}}
+  ]
+};
+
+/* Night Market rules. This file has no DOM and runs under plain Node. */
+const NM_ITEMS={}, NM_SHAPES={}, NM_NEIGHBOURS={};
+NM.items.forEach(function(item){ NM_ITEMS[item.id]=item; });
+NM.shapes.forEach(function(shape){
+  NM_SHAPES[shape.id]=shape;
+  NM_NEIGHBOURS[shape.id]=shape.cells.map(function(cell){
+    const near=[];
+    shape.cells.forEach(function(other,i){ if (other!==cell && Math.abs(other.x-cell.x)<=1 && Math.abs(other.y-cell.y)<=1) near.push(i); });
+    return near;
+  });
+});
+function itemById(id){ return NM_ITEMS[id]||null; }
+function shapeById(id){ return NM_SHAPES[id]||null; }
+function nmInt(value,min,max,fallback){ return Number.isSafeInteger(value) && value>=min && value<=max ? value : fallback; }
+function nmNumber(value,min,max,fallback){ return Number.isFinite(value) && value>=min && value<=max ? value : fallback; }
+function random(run){
+  run.rng=(run.rng+0x6D2B79F5)>>>0;
+  let n=run.rng;
+  n=Math.imul(n^(n>>>15),n|1);
+  n^=n+Math.imul(n^(n>>>7),n|61);
+  return ((n^(n>>>14))>>>0)/4294967296;
+}
+function newSave(){
+  return {game:'night-market',v:NM.version,rev:0,stars:0,totalStars:0,runs:0,wins:0,sound:true,fast:false,
+    unlocked:NM.startFamilies.slice(),shapes:['table'],ladderUnlocked:0,active:null};
+}
+function nmCrateItem(run,id){
+  const item={uid:run.nextUid++,id:id,placed:0,earned:0};
+  run.crate.push(item);
+  return item;
+}
+function newRun(save,seed,shapeId,ladder){
+  const shape=shapeById(shapeId) && save.shapes.indexOf(shapeId)>=0 ? shapeId : 'table';
+  const initial=(Number.isFinite(seed)?Math.floor(seed):Date.now())>>>0;
+  const run={seed:initial,rng:initial,shape:shape,ladder:Math.max(0,Math.min(10,save.ladderUnlocked,Math.floor(ladder)||0)),
+    families:save.unlocked.slice(),night:0,feePaid:0,coins:0,crate:[],nextUid:1,rerolls:1,removes:1,
+    phase:'ready',offers:[],board:shapeById(shape).cells.map(function(){ return null; }),result:null,won:false,settled:false};
+  NM.startItems.forEach(function(id){ nmCrateItem(run,id); });
+  save.active=run;
+  return run;
+}
+function nmShuffle(run,list){
+  for (let i=list.length-1;i>0;i--){ const j=Math.floor(random(run)*(i+1)), old=list[i]; list[i]=list[j]; list[j]=old; }
+  return list;
+}
+function nmOfferWeights(night){
+  const odds=NM.offerWeights;
+  let a=odds[0], b=a;
+  for (let i=1;i<odds.length;i++){
+    b=odds[i];
+    if (night<=b.night) break;
+    a=b;
+  }
+  const t=a===b ? 0 : Math.max(0,Math.min(1,(night-a.night)/(b.night-a.night)));
+  return a.weights.map(function(value,i){ return value+(b.weights[i]-value)*t; });
+}
+function nmOffers(run){
+  const rarities=['common','uncommon','rare','very rare'], weights=nmOfferWeights(run.night), pools=rarities.map(function(){ return []; });
+  NM.items.forEach(function(item){
+    if (item.family==='food' || item.family==='light' || run.families.indexOf(item.family)>=0) pools[rarities.indexOf(item.rarity)].push(item.id);
+  });
+  const offers=[];
+  for (let n=0;n<3;n++){
+    const available=pools.map(function(pool,i){ return pool.some(function(id){ return offers.indexOf(id)<0; }) ? weights[i] : 0; });
+    let roll=random(run)*available.reduce(function(sum,w){ return sum+w; },0), rarity=0;
+    for (let i=0;i<available.length;i++){ roll-=available[i]; if (roll<0){ rarity=i; break; } }
+    const choices=pools[rarity].filter(function(id){ return offers.indexOf(id)<0; });
+    offers.push(choices[Math.floor(random(run)*choices.length)]);
+  }
+  return offers;
+}
+function openStall(run){
+  if (!run || run.phase!=='ready' || run.night>=40) return false;
+  forecastNight(run);
+  run.offers=nmOffers(run);
+  run.phase='offer';
+  return run.result;
+}
+function forecastNight(run){
+  const shape=shapeById(run.shape), crate=nmShuffle(run,run.crate.slice()), slots=nmShuffle(run,shape.cells.map(function(_,i){ return i; }));
+  run.board=shape.cells.map(function(){ return null; });
+  for (let i=0;i<Math.min(crate.length,slots.length);i++) run.board[slots[i]]=crate[i].uid;
+  run.night++;
+  resolveNight(run);
+  return run.result;
+}
+function resolveNight(run){
+  const shape=shapeById(run.shape), near=NM_NEIGHBOURS[run.shape], byUid={}, cells=[], entries=[], multipliers=[];
+  run.crate.forEach(function(item){ byUid[item.uid]=item; });
+  run.board.forEach(function(uid,i){
+    const item=byUid[uid], point=shape.cells[i];
+    if (!item){ entries[i]=null; return; }
+    item.placed++;
+    const entry={uid:item.uid,id:item.id,coins:0,x:point.x,y:point.y,removed:false};
+    entries[i]=entry; cells.push(entry); multipliers[i]=1;
+  });
+  const result={cells:cells,total:0,events:[]};
+  function removeAt(index,kind,actor){
+    const entry=entries[index];
+    entry.removed=true;
+    const pos=run.crate.indexOf(byUid[entry.uid]);
+    if (pos>=0) run.crate.splice(pos,1);
+    const event={kind:kind,uid:entry.uid,id:entry.id,x:entry.x,y:entry.y};
+    if (actor!=null) event.by=actor;
+    result.events.push(event);
+  }
+  for (let i=0;i<entries.length;i++){
+    const entry=entries[i];
+    if (!entry || entry.removed) continue;
+    const owned=byUid[entry.uid], item=itemById(entry.id), effect=item.effect;
+    let earned=item.base;
+    if (effect.kind==='grower') earned+=(owned.placed-1)*(effect.amount||1);
+    near[i].forEach(function(j){
+      const neighbour=entries[j];
+      if (!neighbour || neighbour.removed) return;
+      const boost=itemById(neighbour.id).effect;
+      if (boost.kind==='booster' && (!boost.tag || item.tags.indexOf(boost.tag)>=0)) earned+=boost.amount;
+    });
+    if (effect.kind==='eater'){
+      const prey=near[i].filter(function(j){ const other=entries[j]; return other && !other.removed && (Array.isArray(effect.eats) ? effect.eats.indexOf(other.id)>=0 : itemById(other.id).tags.indexOf(effect.tag)>=0); });
+      if (prey.length){ const j=prey[Math.floor(random(run)*prey.length)]; removeAt(j,'eat',entry.uid); earned+=effect.amount; }
+    } else if (effect.kind==='maker'){
+      if (random(run)<effect.chance && run.crate.length<NM.makerCap){
+        const made=nmCrateItem(run,effect.item);
+        result.events.push({kind:'make',uid:made.uid,id:made.id,x:entry.x,y:entry.y});
+      }
+    } else if (effect.kind==='doubler'){
+      const targets=near[i].filter(function(j){ return entries[j] && !entries[j].removed; });
+      if (targets.length){
+        const j=targets[Math.floor(random(run)*targets.length)];
+        multipliers[j]*=2;
+        if (j<i){ const extra=entries[j].coins; entries[j].coins+=extra; byUid[entries[j].uid].earned+=extra; }
+      }
+    } else if (effect.kind==='lonely'){
+      earned+=near[i].filter(function(j){ return !entries[j] || entries[j].removed; }).length*effect.amount;
+    } else if (effect.kind==='breaker' && owned.placed>=effect.after){
+      earned+=effect.amount;
+      removeAt(i,'break');
+    }
+    entry.coins=earned*multipliers[i];
+    owned.earned+=entry.coins;
+    if (effect.kind==='grower' && effect.into && owned.placed>=effect.after){
+      owned.id=effect.into;
+      result.events.push({kind:'grow',uid:owned.uid,id:owned.id,x:entry.x,y:entry.y});
+    }
+  }
+  result.total=cells.reduce(function(sum,entry){ return sum+entry.coins; },0);
+  run.coins+=result.total;
+  run.result=result;
+  return result;
+}
+function chooseOffer(run,index){
+  if (!run || run.phase!=='offer' || !Number.isInteger(index) || index< -1 || index>=run.offers.length) return false;
+  if (index>=0) nmCrateItem(run,run.offers[index]);
+  run.offers=[];
+  run.phase=run.night%5===0 ? 'fee' : 'ready';
+  return true;
+}
+function rerollOffer(run){
+  if (!run || run.phase!=='offer' || run.rerolls<1) return false;
+  run.rerolls--;
+  run.offers=nmOffers(run);
+  return true;
+}
+function removeItem(run,uid){
+  if (!run || run.phase!=='offer' || run.removes<1) return false;
+  const index=run.crate.findIndex(function(item){ return item.uid===uid; });
+  if (index<0) return false;
+  run.crate.splice(index,1);
+  run.removes--;
+  return true;
+}
+function feeAmount(run){ return Math.ceil((NM.fees[run.feePaid]||0)*(1+NM.ladderFeeStep*run.ladder)); }
+function payFee(run){
+  if (!run || run.phase!=='fee') return false;
+  const fee=feeAmount(run);
+  if (run.coins<fee){ run.phase='over'; run.won=false; return false; }
+  run.coins-=fee;
+  run.feePaid++; run.rerolls++; run.removes++;
+  run.won=run.feePaid===8;
+  run.phase=run.won ? 'over' : 'ready';
+  return true;
+}
+function finishRun(save,run){
+  if (!run || run.phase!=='over' || run.settled) return 0;
+  const stars=Math.floor((run.feePaid+(run.won?3:0))*(1+NM.ladderStarStep*run.ladder));
+  run.settled=true;
+  run.starsEarned=stars;
+  save.stars+=stars; save.totalStars+=stars; save.runs++;
+  if (run.won) save.wins++;
+  save.active=run;
+  return stars;
+}
+function unlock(save,key){
+  let target=NM.families.find(function(family){ return family.id===key; }), list=save.unlocked;
+  if (!target){ target=shapeById(key); list=save.shapes; }
+  if (key==='ladder'){
+    if (!save.wins || save.ladderUnlocked>=10 || save.stars<NM.ladderCost) return false;
+    save.stars-=NM.ladderCost; save.ladderUnlocked++;
+    return true;
+  }
+  if (!target || list.indexOf(key)>=0 || save.stars<target.cost) return false;
+  save.stars-=target.cost; list.push(key);
+  return true;
+}
+function describeItem(id){
+  const item=itemById(id);
+  if (!item) return '';
+  const e=item.effect, base='Earns '+item.base+' coin'+(item.base===1?'':'s');
+  if (e.kind==='plain') return base+' each night.';
+  if (e.kind==='booster') return base+' and gives '+(e.tag?e.tag+' ':'')+'neighbours +'+e.amount+' coins.';
+  if (e.kind==='eater'){
+    if (!Array.isArray(e.eats)) return base+' and eats one '+e.tag+' neighbour for +'+e.amount+' coins.';
+    const names=e.eats.map(function(id){ return itemById(id).name; });
+    return base+'. Eats a neighbouring '+(names.length>1 ? names.slice(0,-1).join(', ')+' or '+names[names.length-1] : names[0])+' for '+e.amount+' coins.';
+  }
+  if (e.kind==='grower') return base+' and gains +'+(e.amount||1)+' each placement'+(e.into?', becoming '+itemById(e.into).name.toLowerCase()+' after '+e.after+' placements':' forever')+'.';
+  if (e.kind==='maker') return base+' and has a '+Math.round(e.chance*100)+'% chance to add '+itemById(e.item).name.toLowerCase()+' to the crate.';
+  if (e.kind==='doubler') return base+' and doubles one neighbour\'s earnings.';
+  if (e.kind==='lonely') return base+' plus '+e.amount+' for each empty neighbour.';
+  return base+' and breaks for +'+e.amount+' coins after '+e.after+' placements.';
+}
+function migrate(raw){
+  if (!raw || typeof raw!=='object' || Array.isArray(raw) || (raw.game!=null && raw.game!=='night-market') ||
+      (raw.v!=null && (!Number.isInteger(raw.v) || raw.v<0 || raw.v>NM.version)) ||
+      (!Object.prototype.hasOwnProperty.call(raw,'stars') && !Array.isArray(raw.unlocked))) return null;
+  for (const key of ['rev','stars','totalStars','runs','wins']) if (raw[key]!=null && nmInt(raw[key],0,Number.MAX_SAFE_INTEGER,null)==null) return null;
+  const save=newSave();
+  ['rev','stars','totalStars','runs','wins'].forEach(function(key){ save[key]=nmInt(raw[key],0,Number.MAX_SAFE_INTEGER,0); });
+  if (raw.totalStars==null) save.totalStars=save.stars;
+  save.totalStars=Math.max(save.totalStars,save.stars);
+  save.wins=Math.min(save.wins,save.runs);
+  save.sound=raw.sound!==false; save.fast=raw.fast===true;
+  if (Array.isArray(raw.unlocked)) save.unlocked=raw.unlocked.filter(function(id){ return NM.families.some(function(f){ return f.id===id; }); }).concat(NM.startFamilies).filter(function(id,i,a){ return a.indexOf(id)===i; });
+  if (Array.isArray(raw.shapes)) save.shapes=raw.shapes.filter(function(id){ return !!shapeById(id); }).concat(['table']).filter(function(id,i,a){ return a.indexOf(id)===i; });
+  save.ladderUnlocked=save.wins ? nmInt(raw.ladderUnlocked,0,10,0) : 0;
+  if (raw.active!=null){
+    const run=nmMigrateRun(raw.active,save);
+    if (!run) return null;
+    save.active=run;
+  }
+  return save;
+}
+function nmMigrateRun(raw,save){
+  if (!raw || typeof raw!=='object' || !shapeById(raw.shape) || save.shapes.indexOf(raw.shape)<0 ||
+      !Array.isArray(raw.crate) || raw.crate.length>500 || ['ready','offer','fee','over'].indexOf(raw.phase)<0) return null;
+  const shape=shapeById(raw.shape), seed=nmInt(raw.seed,0,4294967295,null), rng=nmInt(raw.rng,0,4294967295,null);
+  const night=nmInt(raw.night,0,40,null), feePaid=nmInt(raw.feePaid,0,8,null), ladder=nmInt(raw.ladder,0,save.ladderUnlocked,null);
+  if (seed==null || rng==null || night==null || feePaid==null || ladder==null || feePaid>Math.floor(night/5)) return null;
+  const crate=[], seen={};
+  for (const source of raw.crate){
+    if (!source || !itemById(source.id) || nmInt(source.uid,1,1000000000,null)==null || seen[source.uid]) return null;
+    seen[source.uid]=true;
+    crate.push({uid:source.uid,id:source.id,placed:nmInt(source.placed,0,40,0),earned:nmNumber(source.earned,0,1e15,0)});
+  }
+  if (!Array.isArray(raw.board) || raw.board.length!==shape.cells.length) return null;
+  const boardSeen={};
+  for (const uid of raw.board){
+    if (uid!==null && (nmInt(uid,1,1000000000,null)==null || boardSeen[uid])) return null;
+    if (uid!==null) boardSeen[uid]=true;
+  }
+  const offers=Array.isArray(raw.offers) ? raw.offers.slice() : [];
+  if (offers.some(function(id){ const item=itemById(id); return !item || (item.family!=='food' && item.family!=='light' && save.unlocked.indexOf(item.family)<0); }) ||
+      (raw.phase==='offer' ? offers.length!==3 : offers.length!==0)) return null;
+  if ((raw.phase==='offer' && (!night || feePaid!==Math.floor((night-1)/5))) ||
+      (raw.phase==='fee' && (!night || night%5 || feePaid!==night/5-1)) ||
+      (raw.phase==='ready' && (night===40 || feePaid!==Math.floor(night/5))) ||
+      (raw.phase==='over' && (!night || night%5 || (raw.won ? feePaid!==8 || night!==40 : feePaid!==night/5-1)))) return null;
+  let result=null, highest=crate.reduce(function(max,item){ return Math.max(max,item.uid); },0);
+  if (raw.result!=null){
+    if (!raw.result || !Array.isArray(raw.result.cells) || !Array.isArray(raw.result.events) || raw.result.cells.length>shape.cells.length || raw.result.events.length>shape.cells.length) return null;
+    const cells=[], resultSeen={};
+    for (const source of raw.result.cells){
+      if (!source || typeof source!=='object') return null;
+      const index=shape.cells.findIndex(function(point){ return point.x===source.x && point.y===source.y; });
+      if (index<0 || nmInt(source.uid,1,1000000000,null)==null || raw.board[index]!==source.uid || resultSeen[source.uid] || !itemById(source.id) || nmNumber(source.coins,0,1e15,null)==null) return null;
+      resultSeen[source.uid]=true; highest=Math.max(highest,source.uid);
+      cells.push({uid:source.uid,id:source.id,coins:source.coins,x:source.x,y:source.y,removed:source.removed===true});
+    }
+    if (raw.board.some(function(uid){ return uid!==null && !resultSeen[uid]; })) return null;
+    const events=[];
+    for (const source of raw.result.events){
+      if (!source || ['eat','break','make','grow'].indexOf(source.kind)<0 || !itemById(source.id) || nmInt(source.uid,1,1000000000,null)==null ||
+          !shape.cells.some(function(point){ return point.x===source.x && point.y===source.y; })) return null;
+      const event={kind:source.kind,uid:source.uid,id:source.id,x:source.x,y:source.y};
+      if (source.by!=null){ if (nmInt(source.by,1,1000000000,null)==null) return null; event.by=source.by; }
+      highest=Math.max(highest,source.uid); events.push(event);
+    }
+    const total=cells.reduce(function(sum,cell){ return sum+cell.coins; },0);
+    if (total!==raw.result.total) return null;
+    result={cells:cells,total:total,events:events};
+  } else if (night || raw.board.some(function(uid){ return uid!==null; })) return null;
+  const families=Array.isArray(raw.families) ? raw.families.filter(function(id){ return save.unlocked.indexOf(id)>=0; }) : save.unlocked.slice();
+  const coins=nmNumber(raw.coins,0,1e15,null), rerolls=nmInt(raw.rerolls,0,9,null), removes=nmInt(raw.removes,0,9,null);
+  if (coins==null || rerolls==null || removes==null) return null;
+  const run={seed:seed,rng:rng,shape:raw.shape,ladder:ladder,families:families,night:night,feePaid:feePaid,coins:coins,crate:crate,
+    nextUid:Math.max(highest+1,nmInt(raw.nextUid,1,1000000001,1)),rerolls:rerolls,removes:removes,phase:raw.phase,offers:offers,
+    board:raw.board.slice(),result:result,won:raw.won===true,settled:raw.phase==='over' && raw.settled===true};
+  if (run.settled) run.starsEarned=Math.floor((run.feePaid+(run.won?3:0))*(1+NM.ladderStarStep*run.ladder));
+  return run;
+}
+
+/* The stall and its little wares are drawn locally; no images are downloaded. */
+const EFONT='"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+const V={cv:null,ctx:null,w:360,h:230,dpr:1,layout:{cs:0,ox:0,oy:0},raf:0,last:0};
+const SPR={}, EMOJI_CACHE={};
+let tofuBits=null;
+function glyphBits(ch){
+  const c=document.createElement('canvas'); c.width=c.height=24;
+  const g=c.getContext('2d',{willReadFrequently:true});
+  g.font='18px '+EFONT; g.textBaseline='middle'; g.textAlign='center'; g.fillText(ch,12,13);
+  const d=g.getImageData(0,0,24,24).data; let s='',n=0;
+  for(let i=3;i<d.length;i+=4) if(d[i]>40){ n++; s+=i+':'+(d[i-3]>>4)+(d[i-2]>>4)+(d[i-1]>>4)+','; }
+  return {s,n};
+}
+function emojiOK(ch){
+  if(ch in EMOJI_CACHE) return EMOJI_CACHE[ch];
+  let ok=true;
+  try{ if(!tofuBits) tofuBits=glyphBits('\u{10FFFE}'); const b=glyphBits(ch); ok=b.n>8&&b.s!==tofuBits.s; }catch(e){ ok=false; }
+  return EMOJI_CACHE[ch]=ok;
+}
+function rounded(g,x,y,w,h,r){
+  r=Math.min(r,w/2,h/2); g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath();
+}
+function itemSprite(id){
+  if(SPR[id]) return SPR[id];
+  const item=itemById(id),c=document.createElement('canvas'); c.width=c.height=80;
+  const g=c.getContext('2d'); g.textBaseline='middle'; g.textAlign='center';
+  if(item&&emojiOK(item.emoji)){ g.font='61px '+EFONT; g.fillText(item.emoji,40,43); }
+  else {
+    const colors={food:'#de826c',fish:'#88bec9',light:'#f1c671',critter:'#b5a7d1',sweet:'#e6a0ba',tool:'#b2bdba',gem:'#96cfba',plant:'#9bbe75'};
+    g.fillStyle=colors[item&&item.family]||'#d5b783'; g.strokeStyle='#fff2c6'; g.lineWidth=3;
+    g.beginPath(); g.moveTo(40,7); g.lineTo(70,25); g.lineTo(68,59); g.lineTo(40,74); g.lineTo(12,59); g.lineTo(10,25); g.closePath(); g.fill(); g.stroke();
+    g.font='bold 34px system-ui,sans-serif'; g.fillStyle='#233339'; g.fillText(item?item.name.charAt(0):'?',40,42);
+  }
+  SPR[id]=c; return c;
+}
+function iconHTML(id,extra){ return '<canvas class="item-glyph '+(extra||'')+'" width="80" height="80" data-icon="'+id+'" aria-hidden="true"></canvas>'; }
+function paintIcons(){
+  const list=document.querySelectorAll('canvas[data-icon]');
+  for(let i=0;i<list.length;i++){ const c=list[i]; c.getContext('2d').drawImage(itemSprite(c.getAttribute('data-icon')),0,0,80,80); }
+}
+function resizeMarket(){
+  if(!V.cv) return;
+  const stage=document.getElementById('stage'),shape=shapeById(G?G.shape:chosenShape)||NM.shapes[0];
+  V.cv.style.height=Math.ceil((stage.getBoundingClientRect().width-24)/shape.cols*shape.rows+47)+'px';
+  const rect=V.cv.getBoundingClientRect(); V.w=rect.width; V.h=rect.height; V.dpr=Math.min(3,window.devicePixelRatio||1);
+  V.cv.width=Math.round(V.w*V.dpr); V.cv.height=Math.round(V.h*V.dpr); V.ctx.setTransform(V.dpr,0,0,V.dpr,0,0);
+  drawMarket();
+}
+function prepareMarket(){
+  V.cv=document.getElementById('market'); V.ctx=V.cv.getContext('2d');
+  for(let i=0;i<NM.items.length;i++) itemSprite(NM.items[i].id);
+  resizeMarket(); window.addEventListener('resize',resizeMarket);
+}
+function drawMarket(){
+  if(!V.ctx) return;
+  const g=V.ctx,w=V.w,h=V.h,shape=shapeById(G?G.shape:chosenShape)||NM.shapes[0];
+  const cs=(w-24)/shape.cols,bw=cs*shape.cols,bh=cs*shape.rows,ox=(w-bw)/2,oy=30+(h-43-bh)/2;
+  V.layout.cs=cs; V.layout.ox=ox; V.layout.oy=oy; g.clearRect(0,0,w,h);
+  /* A string of warm bulbs over a canvas awning. */
+  g.strokeStyle='#52645c'; g.lineWidth=1; g.beginPath(); g.moveTo(0,8); g.quadraticCurveTo(w/2,33,w,8); g.stroke();
+  for(let i=0;i<7;i++){
+    const x=(i+.5)*w/7,t=x/w,y=8+50*t*(1-t);
+    g.fillStyle=i%2?'#dca969':'#92bdad'; g.beginPath(); g.arc(x,y+3,2.4,0,Math.PI*2); g.fill();
+  }
+  g.fillStyle='#152b32'; rounded(g,ox-8,oy-6,bw+16,bh+15,10); g.fill();
+  g.strokeStyle='#597067'; g.lineWidth=1; g.stroke();
+  for(let i=0;i<shape.cells.length;i++){
+    const cell=shape.cells[i],x=ox+cell.x*cs,y=oy+cell.y*cs;
+    g.fillStyle=(cell.x+cell.y)%2?'#34504c':'#2d4746'; rounded(g,x+2,y+2,cs-4,cs-4,5); g.fill();
+    g.strokeStyle='#49625a'; g.lineWidth=.6; g.stroke();
+    g.fillStyle='#769080'; g.globalAlpha=.18; g.fillRect(x+8,y+cs-10,cs-16,1); g.globalAlpha=1;
+  }
+  if(G&&G.result&&G.result.cells){
+    const cells=G.result.cells,n=cells.length;
+    for(let i=0;i<n;i++){
+      const c=cells[i],x=ox+(c.x+.5)*cs,y=oy+(c.y+.5)*cs;
+      let p=0;
+      if(anim) p=Math.max(0,Math.min(1,(anim.elapsed-i*anim.duration*.65/Math.max(1,n))/(anim.duration*.35)));
+      if(!c.removed||anim&&p<.55){
+        g.globalAlpha=c.removed&&anim?Math.max(0,1-p*1.8):1;
+        g.drawImage(itemSprite(c.id),x-cs*.36,y-cs*.36,cs*.72,cs*.72); g.globalAlpha=1;
+      }
+      if(anim&&p>0&&p<1){
+        g.globalAlpha=Math.sin(p*Math.PI); g.fillStyle='#ffe4a8'; g.strokeStyle='#22322d'; g.lineWidth=3;
+        g.font='bold '+Math.max(11,cs*.27)+'px system-ui,sans-serif'; g.textAlign='center'; g.textBaseline='middle';
+        const text='+'+c.coins,fy=y-cs*.12-p*cs*.63; g.strokeText(text,x,fy); g.fillText(text,x,fy); g.globalAlpha=1;
+      }
+      if(c.removed&&anim&&p>.4&&p<1){
+        const q=(p-.4)/.6; g.fillStyle='#f3e7c5'; g.globalAlpha=(1-q)*.65;
+        for(let j=0;j<5;j++){ const a=j*1.256; g.beginPath(); g.arc(x+Math.cos(a)*q*cs*.42,y+Math.sin(a)*q*cs*.34,cs*.09*(1-q)+1,0,Math.PI*2); g.fill(); }
+        g.globalAlpha=1;
+      }
+    }
+  } else {
+    g.fillStyle='#b5c2ac'; g.font='11px system-ui,sans-serif'; g.textAlign='center'; g.textBaseline='middle';
+    g.fillText('A fresh table. A new season.',w/2,oy+bh/2);
+  }
+  /* Each paid fee lights another tiny market lantern. */
+  const paid=G?G.feePaid:0,dx=13,sx=w/2-3.5*dx;
+  for(let i=0;i<8;i++){ g.fillStyle=i<paid?'#e8bd6f':'#3b534e'; rounded(g,sx+i*dx-3,oy+bh+7,6,4,2); g.fill(); }
+}
+function requestMarketFrame(){ if(!V.raf) V.raf=requestAnimationFrame(marketFrame); }
+function marketFrame(t){
+  V.raf=0;
+  if(paused){ V.last=0; return; }
+  if(anim){
+    if(V.last) anim.elapsed+=Math.min(80,t-V.last); V.last=t;
+    const cells=G.result.cells,n=cells.length; let coins=0;
+    for(let i=0;i<n;i++) coins+=cells[i].coins*Math.max(0,Math.min(1,(anim.elapsed-i*anim.duration*.65/Math.max(1,n))/(anim.duration*.35)));
+    const counter=document.getElementById('coinValue'); if(counter) counter.textContent=Math.floor(anim.base+coins);
+    drawMarket();
+    if(anim.elapsed>=anim.duration){ anim=null; V.last=0; renderUI(); tone(660,.06,.035); }
+    else requestMarketFrame();
+  } else { V.last=0; drawMarket(); }
+}
+
+/* Screens, sound and the two independent copies of a save. */
+const SAVE_KEY='night-market.save.v1', TUTORIAL_KEY='night-market.t';
+let SV=null,G=null,idb=null,saveRev=0,saveT=null,lsOK=true,storageOK=true;
+let paused=false,anim=null,removeMode=false,chosenShape='table',chosenLadder=0,modalKind='',toastT=null,lastFocus=null;
+let audio=null,soundReady=false;
+const $=id=>document.getElementById(id);
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function parseSave(raw){ try{ return raw?migrate(typeof raw==='string'?JSON.parse(raw):raw):null; }catch(e){ return null; } }
+function writeSave(){
+  clearTimeout(saveT); saveT=null; if(!SV) return;
+  saveRev=Math.max(saveRev,SV.rev||0)+1; SV.rev=saveRev;
+  const str=JSON.stringify(SV);
+  try{ localStorage.setItem(SAVE_KEY,str); lsOK=true; }catch(e){ lsOK=false; }
+  let dbWriteOK=false;
+  if(idb){
+    try{ const tx=idb.transaction('kv','readwrite'); tx.objectStore('kv').put(str,'save'); dbWriteOK=true; tx.onerror=tx.onabort=()=>{ storageOK=lsOK; }; }
+    catch(e){ dbWriteOK=false; }
+  }
+  storageOK=lsOK||dbWriteOK;
+}
+function save(now){ if(!SV) return; if(now) writeSave(); else if(!saveT) saveT=setTimeout(writeSave,300); }
+function idbOpen(){
+  return new Promise(resolve=>{
+    let done=false; const finish=()=>{ if(!done){ done=true; resolve(); } };
+    try{
+      const rq=indexedDB.open('night-market',1);
+      rq.onupgradeneeded=()=>{ try{ rq.result.createObjectStore('kv'); }catch(e){} };
+      rq.onsuccess=()=>{ if(done){ try{ rq.result.close(); }catch(e){} return; } idb=rq.result; finish(); };
+      rq.onerror=finish; rq.onblocked=finish;
+    }catch(e){ finish(); }
+    setTimeout(finish,1200);
+  });
+}
+function idbGet(){
+  return new Promise(resolve=>{
+    if(!idb) return resolve(null);
+    let done=false; const finish=v=>{ if(!done){ done=true; resolve(v); } };
+    try{ const rq=idb.transaction('kv').objectStore('kv').get('save'); rq.onsuccess=()=>finish(rq.result||null); rq.onerror=()=>finish(null); }catch(e){ finish(null); }
+    setTimeout(()=>finish(null),1200);
+  });
+}
+async function loadSave(){
+  let a=null;
+  try{ a=parseSave(localStorage.getItem(SAVE_KEY)); }catch(e){ lsOK=false; }
+  await idbOpen(); const b=parseSave(await idbGet());
+  saveRev=Math.max(a&&a.rev||0,b&&b.rev||0);
+  storageOK=lsOK||!!idb;
+  return a&&b?((b.rev||0)>(a.rev||0)?b:a):(a||b);
+}
+function exportCode(){ return 'NM1:'+btoa(unescape(encodeURIComponent(JSON.stringify(SV)))); }
+function importCode(code){
+  try{
+    let compact=String(code).replace(/\s+/g,'');
+    if(compact.slice(0,4)==='NM1:') compact=compact.slice(4);
+    else if(compact.indexOf(':')>=0) return false;
+    const next=parseSave(decodeURIComponent(escape(atob(compact))));
+    if(!next) return false;
+    SV=next; G=SV.active; anim=null; removeMode=false; save(true); return true;
+  }catch(e){ return false; }
+}
+function startSound(){
+  if(soundReady) return;
+  try{ const AC=window.AudioContext||window.webkitAudioContext; if(AC){ audio=new AC(); audio.resume(); soundReady=true; } }catch(e){}
+}
+function tone(hz,duration,volume){
+  if(!audio||!SV||!SV.sound||paused) return;
+  try{ const o=audio.createOscillator(),v=audio.createGain(),t=audio.currentTime; o.type='sine'; o.frequency.setValueAtTime(hz,t); v.gain.setValueAtTime(volume||.025,t); v.gain.exponentialRampToValueAtTime(.001,t+(duration||.06)); o.connect(v); v.connect(audio.destination); o.start(t); o.stop(t+(duration||.06)); }catch(e){}
+}
+function toast(message){
+  $('toast').textContent=message; $('toast').hidden=false;
+  clearTimeout(toastT); toastT=setTimeout(()=>{ $('toast').hidden=true; },2800);
+}
+function showSheet(kind,html){
+  if($('overlay').hidden) lastFocus=document.activeElement;
+  modalKind=kind; $('sheet').innerHTML=html; $('overlay').hidden=false; paintIcons(); $('sheet').focus();
+}
+function closeSheet(){
+  $('overlay').hidden=true; modalKind='';
+  if(lastFocus&&lastFocus.isConnected) lastFocus.focus();
+}
+function welcome(){
+  showSheet('welcome','<p class="welcome-kicker">The market is waking up</p><h2 id="sheetTitle">Set up your little stall</h2><ul><li>Your crate lands randomly on the table each night.</li><li>Items earn coins, helped by their eight neighbours.</li><li>Choose one new item after each night, or skip it.</li><li>Pay a fee every five nights. Pay all eight to win.</li><li>Use tokens to change offers or remove items. Earn stars for new market finds.</li></ul><button class="primary wide" data-act="welcome">Let\'s go</button>');
+}
+function settings(){
+  showSheet('settings','<h2 id="sheetTitle">Settings</h2><div class="settings-row"><p>Little market sounds</p><button data-act="sound" aria-pressed="'+SV.sound+'">Sound: '+(SV.sound?'on':'off')+'</button></div><div class="settings-row"><p>Quicker coin counting</p><button data-act="sheetFast" aria-pressed="'+SV.fast+'">Fast: '+(SV.fast?'on':'off')+'</button></div>'+(storageOK?'':'<p class="warn">This browser cannot keep a save here. Copy a backup code before closing.</p>')+'<h3>Keep your progress</h3><button class="wide" data-act="copy">Copy backup code</button><textarea id="loadCode" aria-label="Backup code" placeholder="Paste a backup code here" spellcheck="false"></textarea><button class="wide" data-act="import">Load backup code</button><h3>A fresh beginning</h3><button class="danger wide" data-act="reset">Start over</button><div class="sheet-buttons"><button data-act="close">Back to the market</button></div>');
+}
+function unlockSheet(){
+  let rows='';
+  for(let i=0;i<NM.families.length;i++){
+    const f=NM.families[i],owned=SV.unlocked.indexOf(f.id)>=0;
+    rows+='<div class="unlock-row"><div><strong>'+esc(f.name)+'</strong><small>More '+esc(f.id)+' items in future seasons</small></div><button data-act="unlock" data-key="'+f.id+'" '+(owned||SV.stars<f.cost?'disabled':'')+'>'+(owned?'Open':f.cost+' stars')+'</button></div>';
+  }
+  for(let i=1;i<NM.shapes.length;i++){
+    const s=NM.shapes[i],owned=SV.shapes.indexOf(s.id)>=0;
+    rows+='<div class="unlock-row"><div><strong>'+esc(s.name)+'</strong><small>'+s.cells.length+' places at the stall</small></div><button data-act="unlock" data-key="'+s.id+'" '+(owned||SV.stars<s.cost?'disabled':'')+'>'+(owned?'Open':s.cost+' stars')+'</button></div>';
+  }
+  rows+='<div class="unlock-row"><div><strong>Fee ladder '+SV.ladderUnlocked+' / 10</strong><small>'+(SV.wins?'Each step: fees +'+Math.round(NM.ladderFeeStep*100)+'%, stars +'+Math.round(NM.ladderStarStep*100)+'%':'Win a season to open the ladder')+'</small></div><button data-act="unlock" data-key="ladder" '+(!SV.wins||SV.ladderUnlocked>=10||SV.stars<NM.ladderCost?'disabled':'')+'>'+(SV.ladderUnlocked>=10?'Complete':NM.ladderCost+' stars')+'</button></div>';
+  showSheet('unlocks','<h2 id="sheetTitle">Make room for more</h2><p>You have <strong>'+SV.stars+' stars</strong>. Unlocks add choices for your next season.</p>'+rows+'<div class="sheet-buttons"><button data-act="close">Back to the market</button></div>');
+}
+function itemSheet(id){
+  const item=itemById(id); if(!item) return;
+  const entry=G&&G.crate.find(c=>c.id===id),canRemove=removeMode&&G&&G.phase==='offer'&&G.removes>0&&entry;
+  showSheet('item','<h2 id="sheetTitle">'+esc(item.name)+'</h2><div class="item-detail">'+iconHTML(id)+'<p>'+esc(describeItem(id))+'</p></div>'+(canRemove?'<p class="subline">Use one remove token on this item?</p><button class="danger wide" data-act="remove" data-uid="'+entry.uid+'">Remove one '+esc(item.name.toLowerCase())+'</button>':'')+'<div class="sheet-buttons"><button data-act="close">Back to the market</button></div>');
+}
+function offerSheet(index){
+  if(!G||G.phase!=='offer'||anim) return;
+  const item=itemById(G.offers[index]); if(!item) return;
+  showSheet('offer','<p class="welcome-kicker">'+esc(item.rarity)+' find</p><h2 id="sheetTitle">'+esc(item.name)+'</h2><div class="item-detail">'+iconHTML(item.id)+'<p>'+esc(describeItem(item.id))+'</p></div><div class="sheet-buttons"><button data-act="close">Keep looking</button><button class="primary" data-act="choose" data-index="'+index+'">Add to crate</button></div>');
+}
+function cratePuff(id){
+  const tile=$('crate').querySelector('[data-id="'+id+'"]'); if(!tile) return;
+  const r=tile.getBoundingClientRect(),p=document.createElement('div'); p.className='crate-puff'; p.setAttribute('aria-hidden','true');
+  p.style.left=(r.left+r.width/2)+'px'; p.style.top=(r.top+r.height/2)+'px';
+  for(let i=0;i<5;i++){ const dot=document.createElement('i'),a=i*Math.PI*2/5; dot.style.setProperty('--px',Math.cos(a)*24+'px'); dot.style.setProperty('--py',Math.sin(a)*20+'px'); p.appendChild(dot); }
+  document.body.appendChild(p); setTimeout(()=>p.remove(),650);
+}
+function statsHTML(){
+  if(!G) return '<div class="stat"><span>Your stars</span><strong>'+SV.stars+'</strong></div><div class="stat"><span>Seasons won</span><strong>'+SV.wins+'</strong></div><div class="stat"><span>A new season</span><strong>40 <small>nights</small></strong></div>';
+  const night=Math.min(40,G.night+(G.phase==='ready'?1:0)),fee=G.feePaid<8?feeAmount(G):0;
+  return '<div class="stat"><span>Coins</span><strong><i class="coin-mark">●</i> <b id="coinValue">'+(anim?anim.base:G.coins)+'</b></strong></div><div class="stat"><span>Night</span><strong>'+Math.max(1,night)+' <small>/ 40</small></strong></div><div class="stat"><span>'+(G.feePaid>=8?'All fees paid':'Next fee · '+Math.min(8,G.feePaid+1)+'/8')+'</span><strong>'+(G.feePaid>=8?'Season won':fee+' <small>coins</small>')+'</strong></div>';
+}
+function setupHTML(){
+  let tables='',ladders='';
+  for(let i=0;i<NM.shapes.length;i++){ const s=NM.shapes[i]; if(SV.shapes.indexOf(s.id)>=0) tables+='<option value="'+s.id+'" '+(chosenShape===s.id?'selected':'')+'>'+esc(s.name)+'</option>'; }
+  for(let i=0;i<=SV.ladderUnlocked;i++) ladders+='<option value="'+i+'" '+(chosenLadder===i?'selected':'')+'>'+(i?'Step '+i+' · +'+Math.round(i*NM.ladderFeeStep*100)+'% fees':'Gentle beginnings')+'</option>';
+  const end=G&&G.phase==='over'?'<p class="end-note">'+(G.won?'A whole season, beautifully traded.':'The market closes for the season.')+' '+G.feePaid+' fees paid · '+(G.starsEarned===undefined?'Stars saved':G.starsEarned+' stars earned')+'</p>':'';
+  return end+'<div class="setup-row"><label>Table<select id="shapeSelect" aria-label="Table shape">'+tables+'</select></label><label>Fee ladder<select id="ladderSelect" aria-label="Fee ladder">'+ladders+'</select></label></div><div class="setup-buttons"><button class="primary" data-act="start">Start a season</button><button data-act="unlocks">Spend stars · '+SV.stars+'</button></div>';
+}
+function actionsHTML(){
+  if(!G||G.phase==='over') return setupHTML();
+  if(anim) return '<div class="action-heading"><h2>The stall is earning…</h2><p>Neighbours make a difference</p></div><p class="subline">A little light, a lucky visitor, a table full of possibilities.</p>';
+  if(G.phase==='ready') return '<button class="primary wide" data-act="open">Open the stall</button><p class="subline">'+Math.max(0,5-G.night%5)+' nights until the next market fee</p>';
+  if(G.phase==='fee'){
+    const fee=feeAmount(G),can=G.coins>=fee;
+    return '<div class="action-heading"><h2>Market fee due</h2><p>'+G.feePaid+' of 8 paid</p></div><button class="'+(can?'primary':'danger')+' wide" data-act="pay">'+(can?'Pay '+fee+' coins':'Close the season')+'</button><p class="subline">'+(can?'Paying brings one reroll and one remove token.':'You need '+fee+' coins. Your '+G.feePaid+' paid fees still earn stars.')+'</p>';
+  }
+  let offers='';
+  for(let i=0;i<G.offers.length;i++){
+    const item=itemById(G.offers[i]);
+    offers+='<button class="offer" data-act="offer" data-index="'+i+'" data-rarity="'+item.rarity+'" aria-label="Read about '+esc(item.name)+'. '+esc(describeItem(item.id))+'">'+iconHTML(item.id)+'<strong>'+esc(item.name)+'</strong><small>'+esc(item.rarity)+' · '+item.base+' base</small></button>';
+  }
+  return '<div class="action-heading"><h2>Choose for your crate</h2><p>One find, or skip</p></div><div class="offer-grid">'+offers+'</div><div class="token-row"><button data-act="reroll" '+(G.rerolls?'':'disabled')+'>Reroll offer · '+G.rerolls+'</button><button data-act="removeMode" aria-pressed="'+removeMode+'" '+(G.removes&&G.crate.length?'':'disabled')+'>Remove an item · '+G.removes+'</button><button data-act="skip">Skip</button></div>';
+}
+function renderCrate(){
+  const crate=G?G.crate:NM.startItems.map((id,i)=>({id,uid:i})),counts={}; let html='';
+  for(let i=0;i<crate.length;i++) counts[crate[i].id]=(counts[crate[i].id]||0)+1;
+  for(const id in counts){ const item=itemById(id); html+='<button data-act="item" data-id="'+id+'" aria-label="'+esc(item.name)+', '+counts[id]+' in crate">'+iconHTML(id)+'<span class="count">'+counts[id]+'</span></button>'; }
+  $('crate').innerHTML=html||'<p class="subline">An empty crate. There is room to grow.</p>';
+  $('crateCount').textContent=crate.length; $('crateHint').textContent=removeMode?'Tap a find to remove one':'Tap an item to learn about it';
+}
+function renderUI(){
+  $('stats').innerHTML=statsHTML(); $('actions').innerHTML=actionsHTML(); renderCrate();
+  $('fastBtn').textContent='Fast: '+(SV.fast?'on':'off'); $('fastBtn').setAttribute('aria-pressed',String(SV.fast));
+  $('stageCaption').textContent=anim?'Coins counted from left to right':G&&G.result?'Last night: +'+G.result.total+' coins':'Your table finds its own arrangement';
+  $('foot').textContent=G&&G.phase!=='over'?'Season stars: '+G.feePaid+' fees · '+(1+G.ladder*NM.ladderStarStep)+'× reward':SV.totalStars+' stars earned · '+SV.runs+' seasons played';
+  paintIcons(); resizeMarket();
+}
+function settleSeason(){
+  if(G&&G.phase==='over'){ const before=SV.stars; finishRun(SV,G); if(G.starsEarned===undefined) G.starsEarned=SV.stars-before; }
+}
+function startSeason(){
+  const seed=(Date.now()^Math.floor(Math.random()*4294967296))>>>0;
+  G=newRun(SV,seed,chosenShape,chosenLadder); removeMode=false; anim=null; save(true); renderUI(); tone(440,.08,.035);
+}
+function openNight(){
+  if(!G||G.phase!=='ready'||anim) return;
+  const before=G.coins; openStall(G);
+  anim={elapsed:0,duration:SV.fast?400:1500,base:before}; removeMode=false; save(true); renderUI(); V.last=0; requestMarketFrame(); tone(392,.08,.03);
+}
+function afterChoice(index){
+  if(!G||G.phase!=='offer'||anim) return;
+  chooseOffer(G,index); removeMode=false; if(modalKind==='offer') closeSheet(); save(true); renderUI(); tone(523,.045,.025);
+}
+function toggleFast(){ SV.fast=!SV.fast; if(anim){ const progress=anim.elapsed/anim.duration; anim.duration=SV.fast?400:1500; anim.elapsed=progress*anim.duration; } save(); renderUI(); }
+async function copyBackup(){
+  const code=exportCode();
+  try{ if(!navigator.clipboard||!navigator.clipboard.writeText) throw Error(); await navigator.clipboard.writeText(code); toast('Backup code copied'); }
+  catch(e){ const box=$('loadCode'); if(box){ box.value=code; box.focus(); box.select(); toast('Your backup is selected. Copy it to keep it safe.'); } }
+}
+function performAction(button){
+  const act=button.getAttribute('data-act');
+  if(act==='welcome'){ try{ localStorage.setItem(TUTORIAL_KEY,'1'); }catch(e){} closeSheet(); }
+  else if(act==='close') closeSheet();
+  else if(act==='start') startSeason();
+  else if(act==='open') openNight();
+  else if(act==='offer') offerSheet(+button.getAttribute('data-index'));
+  else if(act==='choose') afterChoice(+button.getAttribute('data-index'));
+  else if(act==='skip') afterChoice(-1);
+  else if(act==='reroll'&&G&&!anim){ if(rerollOffer(G)){ save(true); renderUI(); tone(490,.04,.02); } }
+  else if(act==='removeMode'&&G&&!anim){ removeMode=!removeMode; renderUI(); if(removeMode) toast('Tap an item in your crate'); }
+  else if(act==='item') itemSheet(button.getAttribute('data-id'));
+  else if(act==='remove'&&G&&!anim){ const uid=+button.getAttribute('data-uid'),entry=G.crate.find(c=>c.uid===uid); if(removeItem(G,uid)){ removeMode=false; closeSheet(); if(entry) cratePuff(entry.id); save(true); renderUI(); toast('One item removed from your crate'); tone(260,.08,.02); } }
+  else if(act==='pay'&&G){ const paid=payFee(G); settleSeason(); save(true); renderUI(); tone(paid?740:180,.13,.03); if(paid&&G.phase!=='over') toast('Fee paid. One reroll and one remove token gained.'); }
+  else if(act==='unlocks') unlockSheet();
+  else if(act==='unlock'){ if(unlock(SV,button.getAttribute('data-key'))){ save(true); renderUI(); unlockSheet(); tone(660,.1,.03); } }
+  else if(act==='sound'){ SV.sound=!SV.sound; save(); settings(); if(SV.sound) tone(550,.07,.025); }
+  else if(act==='sheetFast'){ toggleFast(); settings(); }
+  else if(act==='copy') copyBackup();
+  else if(act==='import'){ const code=$('loadCode').value; if(importCode(code)){ settleSeason(); closeSheet(); chosenShape=G?G.shape:SV.shapes[0]; chosenLadder=G?G.ladder:0; renderUI(); toast('Your market progress is restored'); } else toast('That backup code could not be read. Your progress is safe.'); }
+  else if(act==='reset') showSheet('reset','<h2 id="sheetTitle">Start over?</h2><p>This removes your stars, unlocks and current season. Copy a backup first if you want to keep them.</p><div class="sheet-buttons"><button data-act="settings">Keep my market</button><button class="danger" data-act="confirmReset">Erase my progress</button></div>');
+  else if(act==='settings') settings();
+  else if(act==='confirmReset'){ SV=newSave(); G=null; anim=null; removeMode=false; chosenShape=SV.shapes[0]; chosenLadder=0; save(true); closeSheet(); renderUI(); toast('A fresh market is ready'); }
+}
+async function boot(){
+  SV=await loadSave()||newSave(); G=SV.active; settleSeason(); chosenShape=G?G.shape:SV.shapes[0]; chosenLadder=G?G.ladder:0;
+  prepareMarket(); renderUI(); save(true);
+  $('settingsBtn').addEventListener('click',settings); $('fastBtn').addEventListener('click',toggleFast);
+  document.addEventListener('pointerdown',startSound,{passive:true});
+  document.addEventListener('click',e=>{ const button=e.target.closest('button[data-act]'); if(button&&!button.disabled) performAction(button); });
+  document.addEventListener('change',e=>{ if(e.target.id==='shapeSelect'){ chosenShape=e.target.value; resizeMarket(); } if(e.target.id==='ladderSelect') chosenLadder=+e.target.value; });
+  document.addEventListener('visibilitychange',()=>{
+    paused=document.hidden;
+    if(paused){ save(true); V.last=0; if(audio) audio.suspend().catch(()=>{}); }
+    else { if(audio&&soundReady) audio.resume().catch(()=>{}); V.last=0; if(anim) requestMarketFrame(); else drawMarket(); }
+  });
+  window.addEventListener('pagehide',()=>save(true));
+  $('overlay').addEventListener('click',e=>{ if(e.target===$('overlay')&&modalKind!=='welcome'&&modalKind!=='reset') closeSheet(); });
+  document.addEventListener('keydown',e=>{
+    if($('overlay').hidden) return;
+    if(e.key==='Escape'&&modalKind!=='welcome'&&modalKind!=='reset'){ closeSheet(); return; }
+    if(e.key==='Tab'){
+      const nodes=$('sheet').querySelectorAll('button:not(:disabled),textarea,select'),first=nodes[0],last=nodes[nodes.length-1];
+      if(!first) return;
+      if(e.shiftKey&&(document.activeElement===first||document.activeElement===$('sheet'))){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey&&(document.activeElement===last||document.activeElement===$('sheet'))){ e.preventDefault(); first.focus(); }
+    }
+  });
+  let seen=false; try{ seen=localStorage.getItem(TUTORIAL_KEY)==='1'; }catch(e){}
+  if(!seen) welcome();
+}
+boot();
+</script>
+</body>
+</html>

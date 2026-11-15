@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#191c30">
+<title>Dicewright</title>
+<style>:root{color-scheme:dark;--bg:#191c30;--panel:#24283e;--panel2:#2e324b;--ink:#f8f0df;--muted:#adb1c6;--gold:#ffca73;--mint:#98e1c5;--line:#41435a;--red:#ffaaa5;font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);overscroll-behavior-y:none}button,select,textarea,input{font:inherit}button,select{min-height:44px;min-width:40px}button{cursor:pointer;border:1px solid var(--line);border-radius:12px;padding:10px 13px;background:var(--panel2);color:var(--ink);font-weight:650;touch-action:manipulation}button:active{transform:translateY(1px)}button:disabled{opacity:.42;cursor:default}button:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--mint);outline-offset:2px}button.primary{background:var(--gold);border-color:var(--gold);color:#292334}button.quiet{background:transparent}button.small{padding:7px 10px;font-size:12px}button.wide{width:100%}button.danger{color:var(--red)}[hidden]{display:none!important}h1,h2,h3,p{margin:0}h1{font-size:38px;line-height:1.08;letter-spacing:-1.5px}h2{font-size:17px}h3{font-size:15px}p{margin-bottom:12px}small,.subtle{color:var(--muted);font-size:12px}strong{font-variant-numeric:tabular-nums}label{display:block;font-size:13px;color:var(--muted);margin:12px 0 5px}select,textarea{display:block;width:100%;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);padding:10px;max-width:100%}textarea{min-height:80px;resize:vertical;overflow-wrap:anywhere}#app{max-width:460px;margin:auto;padding:0 16px calc(10px + env(safe-area-inset-bottom));min-height:100dvh}.masthead{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:4px 0}.wordmark{border:0;background:transparent;padding:0;display:flex;align-items:center;gap:9px;letter-spacing:-.4px;font-size:20px}.brand-die{display:inline-grid;place-items:center;width:30px;height:30px;color:var(--bg);background:var(--gold);border-radius:9px;transform:rotate(-9deg);font-size:18px}.masthead #settings{font-size:12px;padding:8px 10px}.hero{position:relative;padding:26px 0 20px}.eyebrow{display:block;color:var(--mint);letter-spacing:1.5px;text-transform:uppercase;font-size:10px;font-weight:800;margin-bottom:7px}.hero p{color:var(--muted);margin:14px 0 0;max-width:290px}.home-art{display:flex;gap:14px;padding:22px 5px 10px}.home-art span{display:grid;place-items:center;width:60px;height:60px;border-radius:16px;background:var(--ink);color:#343047;font-size:32px;font-weight:800;box-shadow:0 6px 0 #b8b0a3;transform:rotate(-12deg)}.home-art span:nth-child(2){background:var(--mint);transform:rotate(8deg);color:#264b43;box-shadow:0 6px 0 #569e88}.home-art span:nth-child(3){background:var(--gold);transform:rotate(-5deg);color:#5d3c2c;box-shadow:0 6px 0 #b98048}.home-card{border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:16px;margin:10px 0}.home-card label:first-child{margin-top:0}.home-card .primary{margin-top:15px}.home-card .description{font-size:12px;color:var(--muted);margin:8px 0}.home-stats{display:flex;gap:22px;margin:20px 0;color:var(--muted);font-size:12px}.home-stats strong{display:block;color:var(--ink);font-size:22px}.run-bar{display:flex;align-items:center;gap:10px;font-size:13px}.run-bar button{min-height:40px}.run-bar #floor-label{font-weight:750;flex:1}.coins{color:var(--gold);font-weight:750}.twist{margin:8px 0;color:var(--muted);font-size:11px;border-left:2px solid var(--gold);padding:3px 8px}.twist.heat{color:var(--gold)}.target-card{position:relative;padding:6px 10px;background:var(--panel);border:1px solid var(--line);border-radius:15px}.target-card>div:first-child{display:flex;align-items:baseline;gap:6px}.target-card .eyebrow{margin-bottom:0;font-size:9px}.target-card strong{font-size:22px;letter-spacing:-1px}.target-card #target-label{color:var(--muted);font-size:13px}.meter{height:5px;background:#42465e;border-radius:4px;overflow:hidden;margin:3px 75px 0 0}.meter i{display:block;width:0;height:100%;background:var(--mint);transition:width .25s}#throw-label{position:absolute;right:10px;bottom:3px;font-size:11px}#dice-tray{height:116px;position:relative;overflow:hidden;margin:0 -3px}#board{position:relative;top:-14px;display:block;width:100%;height:132px}#dice-controls{position:absolute;inset:0;display:flex;gap:8px;padding:0 7px}.die-control{flex:1;min-width:0;height:116px;border:0;padding:0;background:transparent;border-radius:12px;font-size:0;position:relative}.die-control[aria-pressed=true]{box-shadow:inset 0 0 0 1px #98e1c542}.die-control:disabled{opacity:1}.hint{text-align:center;font-size:11px;color:var(--muted);margin:0;min-height:16px}#roll{min-height:44px}.section-label{display:flex;justify-content:space-between;gap:8px;align-items:center;margin:7px 0 4px}.section-label h2{font-size:13px}.section-label span{font-size:10px;color:var(--muted)}.pattern-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}.pattern{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:16px 12px;align-items:center;column-gap:4px;height:44px;min-height:44px;padding:7px 8px;font-size:11px;text-align:left;background:var(--panel)}.pattern-name{white-space:nowrap}.pattern strong{font-size:16px;line-height:1}.pattern .mult{grid-column:1/-1;color:var(--muted);font-size:10px;line-height:1}.pattern.best{border-color:var(--mint);background:#28423f}.pattern.best strong{color:var(--mint)}.pattern:first-child{grid-column:1/-1}.held-charms{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}.charm-tag{font-size:10px;border-radius:7px;background:var(--panel);padding:4px 7px;color:var(--gold)}.last-score{font-size:12px;color:var(--mint);text-align:center;margin:10px 0}footer{text-align:center;padding:20px 0 6px;font-size:10px;color:#8589a3;letter-spacing:1px}#sheet-wrap{position:fixed;inset:0;background:#0d1024bd;z-index:5;display:flex;align-items:flex-end;justify-content:center;padding-top:20px;backdrop-filter:blur(5px)}#sheet{width:100%;max-width:460px;max-height:calc(100dvh - 20px);overflow-y:auto;overscroll-behavior:contain;background:var(--panel);border:1px solid var(--line);border-bottom:0;border-radius:24px 24px 0 0;padding:24px 20px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -15px 60px #0004}#sheet:focus{outline:0}#sheet h2{font-size:26px;letter-spacing:-.7px;margin-bottom:12px}#sheet h3{margin:20px 0 9px}#sheet p{font-size:13px;color:var(--muted)}.sheet-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.sheet-actions>*{flex:1;min-width:110px}.welcome-list{padding-left:21px;color:var(--muted);font-size:14px;line-height:1.65}.welcome-list li{margin:8px 0}.floor-number{font-size:64px;font-weight:800;color:var(--gold);line-height:1;letter-spacing:-3px;margin:10px 0 20px}.twist-card{border-left:3px solid var(--gold);padding:10px 12px;background:#ffca7309;margin:10px 0;border-radius:0 10px 10px 0}.twist-card strong{display:block;font-size:14px}.twist-card p{margin:4px 0 0!important}.shop-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.shop-top .coins{font-size:24px}.stock-card{background:var(--bg);padding:12px;border:1px solid var(--line);border-radius:12px;margin:8px 0;display:flex;align-items:center;gap:10px}.stock-card>div{flex:1;min-width:0}.stock-card p{font-size:11px!important;margin:3px 0 0!important}.stock-card strong{font-size:13px}.stock-card button{font-size:12px;white-space:nowrap}.levels-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.level-button{font-size:11px;display:flex;justify-content:space-between;gap:3px;align-items:center;text-align:left;background:var(--bg);padding:9px 10px}.level-button span{color:var(--gold);white-space:nowrap}.result-score{font-size:46px;letter-spacing:-2px;font-weight:800;color:var(--gold);margin:5px 0 15px}.result-line{font-size:12px!important;overflow-wrap:anywhere;background:var(--bg);border-radius:10px;padding:12px;color:var(--ink)!important}.faces{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;margin:12px 0}.faces span{display:grid;place-items:center;background:var(--bg);border-radius:8px;min-height:40px;font-size:12px}.faces span.selected{border:1px solid var(--gold)}.score-pop{animation:score-pop .5s ease-out}@keyframes score-pop{20%{transform:translate(-3px,1px) scale(1.05)}40%{transform:translate(3px,-2px) scale(1.08)}70%{transform:translate(-1px,0) scale(1.03)}}#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);max-width:calc(100% - 28px);width:max-content;padding:12px 18px;background:var(--ink);color:var(--bg);border-radius:12px;z-index:10;font-size:12px;box-shadow:0 6px 30px #0004}.storage-note{color:var(--gold)!important;font-size:11px!important}.divider{height:1px;background:var(--line);margin:20px 0}.backup-label{font-size:11px;color:var(--mint);display:block;margin-bottom:5px}
+@media(min-height:780px){#sheet-wrap{align-items:center;padding:20px}#sheet{border-bottom:1px solid var(--line);border-radius:24px;max-height:calc(100dvh - 40px)}}
+@media(max-width:340px){#app{padding-left:12px;padding-right:12px}#sheet{padding-left:15px;padding-right:15px}.masthead{padding:0}.hero{padding-top:16px}.hero h1{font-size:34px}.pattern{font-size:10px}.stock-card{padding:10px}.stock-card button{padding:8px}.twist{display:none}.target-card{padding:4px 10px}.section-label{margin:1px 0}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main id="app">
+  <header class="masthead"><button id="home" data-act="home" class="wordmark" aria-label="Dicewright home"><span class="brand-die" aria-hidden="true">D</span> Dicewright</button><button id="settings" data-act="settings" class="quiet">Settings</button></header>
+  <section id="home-screen" aria-label="New run"></section>
+  <section id="game-screen" hidden>
+    <div class="run-bar"><span id="floor-label"></span><span id="coin-label" class="coins"></span><button id="pause" data-act="pause" class="small quiet">Pause</button></div>
+    <div id="twist-label" class="twist"></div>
+    <div class="target-card"><div><span id="round-label" class="eyebrow"></span><strong id="round-score">0</strong><span id="target-label"></span></div><div class="meter" role="progressbar" aria-label="Round target" aria-valuemin="0"><i id="target-fill"></i></div><span id="throw-label" class="subtle"></span></div>
+    <div id="dice-tray"><canvas id="board" aria-hidden="true"></canvas><div id="dice-controls"></div></div>
+    <p id="keep-hint" class="hint">Roll to begin your throw.</p>
+    <button id="roll" data-act="roll" class="primary wide">Roll dice</button>
+    <div class="section-label"><h2>Choose a pattern</h2><span id="reroll-label"></span></div>
+    <div id="patterns" class="pattern-grid"></div>
+    <div id="held-charms" class="held-charms"></div>
+    <p id="last-score" class="last-score" aria-live="polite"></p>
+  </section>
+  <footer>Make your own luck.</footer>
+</main>
+<div id="sheet-wrap" hidden><section id="sheet" role="dialog" aria-modal="true" tabindex="-1" aria-labelledby="sheet-title"></section></div>
+<div id="toast" role="status" hidden></div>
+<script>var DW_DATA = {
+  startCoins: 8,
+  TUNE: {
+    targetStart: 110,
+    targetGrowth: 1.18,
+    heatTargetGrowth: 1.06,
+    baseCoins: 7,
+    interestEvery: 5,
+    interestCap: 5,
+    normalReforgePrice: 4,
+    specialReforgePrice: 8,
+    patternLevelBase: 3,
+    patternLevelGrowth: 2,
+    restockBase: 4,
+    restockGrowth: 3
+  },
+  patterns: [
+    { id: 'single', name: 'Highest die', mult: 1 },
+    { id: 'pair', name: 'Pair', mult: 2 },
+    { id: 'two_pairs', name: 'Two pairs', mult: 3 },
+    { id: 'three', name: 'Three of a kind', mult: 4 },
+    { id: 'small_run', name: 'Small run', mult: 5 },
+    { id: 'full_house', name: 'Full house', mult: 6 },
+    { id: 'big_run', name: 'Big run', mult: 7 },
+    { id: 'four', name: 'Four of a kind', mult: 9 },
+    { id: 'five', name: 'Five of a kind', mult: 45 }
+  ],
+  starters: [
+    { id: 'plain', name: 'Plain', text: 'Five honest dice. Your first forge.', unlockFloor: 0 },
+    { id: 'lucky', name: 'Lucky', text: 'One face starts wild.', unlockFloor: 2, faces: [{ die: 0, face: 0, n: 6, type: 'wild' }] },
+    { id: 'heavy', name: 'Heavy', text: 'No ones. Each die has two fives.', unlockFloor: 3, numbers: [5, 2, 3, 4, 5, 6] },
+    { id: 'gambler', name: 'Gambler', text: 'Two charms, easier first floor, only 2 coins.', unlockFloor: 5, startCoins: 2, firstFloorTargetFactor: 0.8, charms: ['loaded_die', 'coin_chain'] },
+    { id: 'tinker', name: 'Tinker', text: 'A twin face and a spark face to build around.', unlockFloor: 4, faces: [{ die: 0, face: 0, n: 6, type: 'twin' }, { die: 1, face: 0, n: 6, type: 'spark' }] },
+    { id: 'scholar', name: 'Scholar', text: 'Every pattern starts one level higher.', unlockWins: 1, patternLevel: 1 }
+  ],
+  charms: [
+    { id: 'odd_luck', name: 'Odd luck', text: 'Odd dice score 2 more each.', price: 10 },
+    { id: 'long_road', name: 'Long road', text: 'Run scores are doubled.', price: 13 },
+    { id: 'spare_breath', name: 'Spare breath', text: 'One more reroll each throw.', price: 14 },
+    { id: 'sixth_sense', name: 'Sixth sense', text: 'Sixes count as wild.', price: 16 },
+    { id: 'penny_jar', name: 'Penny jar', text: 'Interest can pay one more coin.', price: 10 },
+    { id: 'loaded_die', name: 'Loaded die', text: 'Every first roll includes a six.', price: 12 },
+    { id: 'echo', name: 'Echo', text: 'The last die used adds its value again.', price: 13 },
+    { id: 'tight_fist', name: 'Tight fist', text: '4 more coins per round. One fewer reroll in heats.', price: 11 },
+    { id: 'pair_pin', name: 'Pair pin', text: 'Pair and two pairs get 4 more multiplier.', price: 10 },
+    { id: 'threefold', name: 'Threefold', text: 'Three of a kind gets 5 more multiplier.', price: 11 },
+    { id: 'cinder_ring', name: 'Cinder ring', text: 'Each scored spark adds another 1 multiplier.', price: 11 },
+    { id: 'twin_hammer', name: 'Twin hammer', text: 'Each scored twin adds 3 multiplier.', price: 13 },
+    { id: 'wild_loom', name: 'Wild loom', text: 'Each scored wild adds 2 multiplier.', price: 14 },
+    { id: 'full_cup', name: 'Full cup', text: 'Full house scores are doubled.', price: 12 },
+    { id: 'square_seal', name: 'Square seal', text: 'Four of a kind scores are doubled.', price: 13 },
+    { id: 'five_stars', name: 'Five stars', text: 'Five of a kind scores are doubled.', price: 14 },
+    { id: 'glass_crown', name: 'Glass crown', text: 'Using all five dice doubles the score.', price: 16 },
+    { id: 'red_thread', name: 'Red thread', text: 'Each charm you hold adds 1 multiplier.', price: 14 },
+    { id: 'coin_chain', name: 'Coin chain', text: 'Each 5 coins held adds 1 multiplier.', price: 14 },
+    { id: 'even_keel', name: 'Even keel', text: 'Even dice score 2 more each.', price: 10 }
+  ],
+  twists: [
+    { id: 'ones_zero', name: 'Hollow ones', text: 'Ones have no scoring value.' },
+    { id: 'short_breath', name: 'Short breath', text: 'Only one base reroll each throw.' },
+    { id: 'pair_drought', name: 'Thin pairs', text: 'Pairs start at a multiplier of 1.' },
+    { id: 'high_lock', name: 'Heavy lock', text: 'The highest die cannot be scored.' },
+    { id: 'still_wild', name: 'Still wilds', text: 'Wild faces count only as sixes.' },
+    { id: 'cold_sparks', name: 'Cold sparks', text: 'Spark faces add no multiplier.' },
+    { id: 'heavy_air', name: 'Heavy air', text: 'Fives and sixes have half their scoring value.' },
+    { id: 'narrow_road', name: 'Narrow road', text: 'Run scores are halved.' },
+    { id: 'closed_till', name: 'Closed till', text: 'Gold faces pay no coins.' },
+    { id: 'thin_purse', name: 'Thin purse', text: 'This round pays no interest.' }
+  ],
+  faceTypes: [
+    { id: 'normal', name: 'Number', text: 'A plain number from 1 to 6.' },
+    { id: 'wild', name: 'Wild', text: 'Any number for a pattern. Worth 6.' },
+    { id: 'twin', name: 'Twin', text: 'Counts as two matching dice. Double value.' },
+    { id: 'gold', name: 'Gold', text: 'Pays 3 coins when scored.' },
+    { id: 'spark', name: 'Spark', text: 'Adds 1 multiplier when scored.' }
+  ]
+};
+
+function dwHash(value) {
+  var s = String(value), h = 2166136261;
+  for (var i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619);
+  return h >>> 0;
+}
+
+function dwRandom(run) {
+  var t = run.rng = (run.rng + 0x6D2B79F5) >>> 0;
+  t = Math.imul(t ^ t >>> 15, t | 1);
+  t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+  return ((t ^ t >>> 14) >>> 0) / 4294967296;
+}
+
+function dwDailySeed(date) { return dwHash('Dicewright daily ' + date); }
+function dwFind(table, id) {
+  for (var i = 0; i < table.length; i++) if (table[i].id === id) return table[i];
+  return null;
+}
+function dwHas(run, id) { return run.charms.indexOf(id) >= 0; }
+function dwActiveTwists(run) { return run.round === 3 ? run.twists : []; }
+function dwTwist(run, id) { return run.round === 3 && run.twists.indexOf(id) >= 0; }
+
+function dwTarget(run) {
+  var t = DW_DATA.TUNE, index = (run.floor - 1) * 3 + run.round - 1;
+  var target = t.targetStart * Math.pow(t.targetGrowth, index);
+  target *= Math.pow(t.heatTargetGrowth, run.step);
+  var starter = dwFind(DW_DATA.starters, run.starterId);
+  if (starter && starter.firstFloorTargetFactor && run.floor === 1) target *= starter.firstFloorTargetFactor;
+  return Math.ceil(target);
+}
+
+function dwRerolls(run) {
+  var n = dwTwist(run, 'short_breath') ? 1 : 2;
+  if (dwHas(run, 'spare_breath')) n++;
+  if (run.round === 3 && dwHas(run, 'tight_fist')) n--;
+  return Math.max(0, n);
+}
+
+function dwFloorTwists(run) {
+  var pool = DW_DATA.twists.slice(), picked = [];
+  var count = run.step > 1 ? 2 : 1;
+  for (var i = 0; i < count; i++) picked.push(pool.splice(Math.floor(dwRandom(run) * pool.length), 1)[0].id);
+  run.twists = picked;
+}
+
+function dwNewRun(starterId, step, seed, dailyDate) {
+  if (!dwFind(DW_DATA.starters, starterId)) starterId = 'plain';
+  var starter = dwFind(DW_DATA.starters, starterId);
+  var seedNumber = typeof seed === 'number' ? seed >>> 0 : dwHash(seed === undefined ? Date.now() : seed);
+  var run = {
+    starterId: starterId, step: Math.max(0, Math.min(8, step | 0)), seed: seedNumber, rng: seedNumber,
+    dailyDate: dailyDate || '', floor: 1, round: 1, throw: 1, roundScore: 0,
+    target: 0, coins: starter.startCoins === undefined ? DW_DATA.startCoins : starter.startCoins, dice: [], rolled: [],
+    rerollsLeft: 2, keepMask: 0, status: 'ready', shop: null, levels: {}, charms: [],
+    bestThrow: 0, twists: [], unusedRerolls: 0, lastScore: null, totalThrows: 0, recorded: false, uiFloor: 0
+  };
+  for (var d = 0; d < 5; d++) {
+    var faces = [];
+    for (var f = 1; f <= 6; f++) faces.push({ n: starter.numbers ? starter.numbers[f - 1] : f, type: 'normal' });
+    run.dice.push({ faces: faces });
+  }
+  if (starter.faces) for (var s = 0; s < starter.faces.length; s++) {
+    var special = starter.faces[s];
+    run.dice[special.die].faces[special.face] = { n: special.n, type: special.type };
+  }
+  if (starter.charms) run.charms = starter.charms.slice();
+  for (var p = 0; p < DW_DATA.patterns.length; p++) run.levels[DW_DATA.patterns[p].id] = starter.patternLevel || 0;
+  dwFloorTwists(run);
+  run.target = dwTarget(run);
+  run.rerollsLeft = dwRerolls(run);
+  return run;
+}
+
+function dwRoll(run, keepMask) {
+  if (run.status !== 'ready' && run.status !== 'rolled') return false;
+  var first = run.status === 'ready';
+  if (!first && run.rerollsLeft <= 0) return false;
+  keepMask = first ? 0 : (keepMask | 0) & 31;
+  if (!first) run.rerollsLeft--;
+  for (var i = 0; i < 5; i++) {
+    if (!(keepMask & (1 << i))) run.rolled[i] = run.dice[i].faces[Math.floor(dwRandom(run) * 6)];
+  }
+  if (first && dwHas(run, 'loaded_die')) {
+    var sixes = [];
+    for (var d = 0; d < 5; d++) for (var f = 0; f < 6; f++) if (run.dice[d].faces[f].n === 6) sixes.push([d, f]);
+    if (sixes.length) {
+      var six = sixes[Math.floor(dwRandom(run) * sixes.length)];
+      run.rolled[six[0]] = run.dice[six[0]].faces[six[1]];
+    } else run.rolled[0] = { n: 6, type: 'normal' };
+  }
+  run.status = 'rolled';
+  run.keepMask = keepMask;
+  return true;
+}
+
+function dwScores(run, rolledFaces) {
+  var faces = rolledFaces || run.rolled;
+  if (!faces || faces.length !== 5) return [];
+  var active = dwActiveTwists(run), flags = {}, charms = {}, best = {}, excluded = -1;
+  var i, j, p;
+  for (i = 0; i < active.length; i++) flags[active[i]] = true;
+  for (i = 0; i < run.charms.length; i++) charms[run.charms[i]] = true;
+  if (flags.high_lock) {
+    excluded = 0;
+    for (i = 1; i < 5; i++) if (faces[i].n > faces[excluded].n) excluded = i;
+  }
+  var values = [], wilds = [], capacities = [];
+  for (i = 0; i < 5; i++) {
+    var face = faces[i], v = face.type === 'wild' ? 6 : face.n;
+    if (flags.heavy_air && face.n >= 5) v /= 2;
+    if (charms.odd_luck && face.n % 2) v += 2;
+    if (charms.even_keel && face.n % 2 === 0) v += 2;
+    if (flags.ones_zero && face.n === 1) v = 0;
+    values[i] = v * (face.type === 'twin' ? 2 : 1);
+    wilds[i] = !flags.still_wild && (face.type === 'wild' || charms.sixth_sense && face.n === 6);
+    capacities[i] = face.type === 'twin' ? 2 : 1;
+  }
+  for (var mask = 1; mask < 32; mask++) {
+    if (excluded >= 0 && mask & (1 << excluded)) continue;
+    var count = [0, 0, 0, 0, 0, 0, 0], used = [], sum = 0, wild = 0, total = 0;
+    var spark = 0, twins = 0, wildCount = 0, wildTwin = 0, last = 0;
+    for (i = 0; i < 5; i++) if (mask & (1 << i)) {
+      used.push(i); sum += values[i]; last = values[i]; total += capacities[i];
+      if (wilds[i]) { wild += capacities[i]; wildCount++; if (faces[i].type === 'twin') wildTwin++; } else count[faces[i].n] += capacities[i];
+      if (faces[i].type === 'spark' && !flags.cold_sparks) spark++;
+      if (faces[i].type === 'twin') twins++;
+    }
+    if (charms.echo) sum += last;
+    var distinct = 0, max = 0, second = 0;
+    for (i = 1; i <= 6; i++) if (count[i]) {
+      distinct++;
+      if (count[i] > max) { second = max; max = count[i]; } else if (count[i] > second) second = count[i];
+    }
+    var valid = {};
+    if (used.length === 1) valid.single = true;
+    if (distinct <= 1) {
+      if (total === 2) valid.pair = true;
+      if (total === 3) valid.three = true;
+      if (total === 4) valid.four = true;
+      if (total === 5) valid.five = true;
+    }
+    if (total === 4 && distinct <= 2 && max <= 2 && !(wildTwin && distinct === 2 && max === 1)) valid.two_pairs = true;
+    if (total === 5 && distinct <= 2 && max <= 3 && second <= 2) valid.full_house = true;
+    if (used.length === 4 || used.length === 5) {
+      var length = used.length, runOK = false;
+      for (var start = 1; start <= 7 - length; start++) {
+        var missing = 0, outside = false;
+        for (j = 1; j <= 6; j++) {
+          if (j >= start && j < start + length) {
+            if (count[j] === 0) missing++;
+            if (count[j] > 1) outside = true;
+          } else if (count[j]) outside = true;
+        }
+        if (!outside && missing === wild) { runOK = true; break; }
+      }
+      if (runOK) valid[length === 4 ? 'small_run' : 'big_run'] = true;
+    }
+    for (p = 0; p < DW_DATA.patterns.length; p++) {
+      var pattern = DW_DATA.patterns[p], id = pattern.id;
+      if (!valid[id]) continue;
+      var mult = (flags.pair_drought && id === 'pair' ? 1 : pattern.mult) + (run.levels[id] || 0) + spark;
+      if (charms.cinder_ring) mult += spark;
+      if (charms.twin_hammer) mult += twins * 3;
+      if (charms.wild_loom) mult += wildCount * 2;
+      if (charms.pair_pin && (id === 'pair' || id === 'two_pairs')) mult += 4;
+      if (charms.threefold && id === 'three') mult += 5;
+      if (charms.red_thread) mult += run.charms.length;
+      if (charms.coin_chain) mult += Math.floor(run.coins / 5);
+      var score = sum * mult;
+      if (id === 'small_run' || id === 'big_run') {
+        if (charms.long_road) score *= 2;
+        if (flags.narrow_road) score /= 2;
+      }
+      if (charms.full_cup && id === 'full_house') score *= 2;
+      if (charms.square_seal && id === 'four') score *= 2;
+      if (charms.five_stars && id === 'five') score *= 2;
+      if (charms.glass_crown && used.length === 5) score *= 2;
+      score = Math.floor(score);
+      if (!best[id] || score > best[id].score) best[id] = { id: id, name: pattern.name, score: score, used: used.slice(), sum: sum, multiplier: mult };
+    }
+  }
+  var result = [];
+  for (p = 0; p < DW_DATA.patterns.length; p++) if (best[DW_DATA.patterns[p].id]) result.push(best[DW_DATA.patterns[p].id]);
+  return result;
+}
+
+function dwMakeShop(run) {
+  var pool = [], stock = [];
+  for (var i = 0; i < DW_DATA.charms.length; i++) if (!dwHas(run, DW_DATA.charms[i].id)) pool.push(DW_DATA.charms[i].id);
+  while (stock.length < 3 && pool.length) stock.push(pool.splice(Math.floor(dwRandom(run) * pool.length), 1)[0]);
+  var types = ['normal', 'wild', 'twin', 'gold', 'spark'];
+  run.shop = { charms: stock, reforges: ['normal', types[1 + Math.floor(dwRandom(run) * 4)]], restocks: 0, large: run.round === 3 };
+  if (run.shop.large) run.shop.reforges[0] = types[Math.floor(dwRandom(run) * types.length)];
+}
+
+function dwScore(run, patternId) {
+  if (run.status !== 'rolled') return false;
+  var scores = dwScores(run), selected = null;
+  for (var i = 0; i < scores.length; i++) if (scores[i].id === patternId) selected = scores[i];
+  if (!selected) return false;
+  var gold = 0;
+  if (!dwTwist(run, 'closed_till')) for (i = 0; i < selected.used.length; i++) if (run.rolled[selected.used[i]].type === 'gold') gold += 3;
+  run.coins += gold;
+  run.roundScore += selected.score;
+  run.bestThrow = Math.max(run.bestThrow, selected.score);
+  run.unusedRerolls += run.rerollsLeft;
+  run.lastScore = selected;
+  run.totalThrows++;
+  run.keepMask = 0;
+  var cleared = run.roundScore >= run.target;
+  if (cleared) {
+    var interest = dwTwist(run, 'thin_purse') ? 0 : Math.min(DW_DATA.TUNE.interestCap + (dwHas(run, 'penny_jar') ? 1 : 0), Math.floor(run.coins / DW_DATA.TUNE.interestEvery));
+    var earned = DW_DATA.TUNE.baseCoins + run.unusedRerolls + interest + (dwHas(run, 'tight_fist') ? 4 : 0);
+    run.coins += earned;
+    run.lastReward = earned + gold;
+    if (run.floor === 8 && run.round === 3) run.status = 'won';
+    else { run.status = 'shop'; dwMakeShop(run); }
+  } else if (run.throw === 3) run.status = 'lost';
+  else {
+    run.throw++;
+    run.status = 'ready';
+    run.rolled = [];
+    run.rerollsLeft = dwRerolls(run);
+  }
+  return { score: selected.score, pattern: selected.id, cleared: cleared, status: run.status, gold: gold };
+}
+
+function dwNext(run) {
+  if (run.status !== 'shop') return false;
+  if (run.round === 3) { run.floor++; run.round = 1; dwFloorTwists(run); } else run.round++;
+  run.throw = 1;
+  run.roundScore = 0;
+  run.unusedRerolls = 0;
+  run.rolled = [];
+  run.keepMask = 0;
+  run.status = 'ready';
+  run.shop = null;
+  run.target = dwTarget(run);
+  run.rerollsLeft = dwRerolls(run);
+  return true;
+}
+
+function dwCharmPrice(run, index) {
+  var charm = run.shop && dwFind(DW_DATA.charms, run.shop.charms[index]);
+  return charm ? charm.price : Infinity;
+}
+function dwReforgePrice(run, index) {
+  if (!run.shop || !run.shop.reforges[index]) return Infinity;
+  return run.shop.reforges[index] === 'normal' ? DW_DATA.TUNE.normalReforgePrice : DW_DATA.TUNE.specialReforgePrice;
+}
+function dwLevelPrice(run, id) {
+  return dwFind(DW_DATA.patterns, id) ? DW_DATA.TUNE.patternLevelBase + (run.levels[id] || 0) * DW_DATA.TUNE.patternLevelGrowth : Infinity;
+}
+function dwRestockPrice(run) { return run.shop ? DW_DATA.TUNE.restockBase + run.shop.restocks * DW_DATA.TUNE.restockGrowth : Infinity; }
+
+function dwBuyCharm(run, index) {
+  var price = dwCharmPrice(run, index), id = run.shop && run.shop.charms[index];
+  if (run.status !== 'shop' || !id || run.charms.length >= 5 || run.coins < price || dwHas(run, id)) return false;
+  run.coins -= price;
+  run.charms.push(id);
+  run.shop.charms.splice(index, 1);
+  return true;
+}
+function dwSellCharm(run, index) {
+  if (run.status !== 'shop' || !run.charms[index]) return false;
+  var charm = dwFind(DW_DATA.charms, run.charms[index]);
+  run.coins += Math.floor(charm.price / 2);
+  run.charms.splice(index, 1);
+  return true;
+}
+function dwBuyReforge(run, index, dieIndex, faceIndex, number) {
+  var price = dwReforgePrice(run, index);
+  if (run.status !== 'shop' || run.coins < price || !Number.isInteger(dieIndex) || !Number.isInteger(faceIndex) || dieIndex < 0 || dieIndex >= 5 || faceIndex < 0 || faceIndex >= 6 || !Number.isInteger(number) || number < 1 || number > 6) return false;
+  var type = run.shop.reforges[index];
+  run.dice[dieIndex].faces[faceIndex] = { n: type === 'wild' ? 6 : number, type: type };
+  run.coins -= price;
+  run.shop.reforges.splice(index, 1);
+  return true;
+}
+function dwLevelPattern(run, id) {
+  var price = dwLevelPrice(run, id);
+  if (run.status !== 'shop' || run.coins < price) return false;
+  run.coins -= price;
+  run.levels[id] = (run.levels[id] || 0) + 1;
+  return true;
+}
+function dwRestock(run) {
+  var price = dwRestockPrice(run);
+  if (run.status !== 'shop' || run.coins < price) return false;
+  var count = run.shop.restocks + 1;
+  run.coins -= price;
+  dwMakeShop(run);
+  run.shop.restocks = count;
+  return true;
+}
+
+function dwUnlocked(save) {
+  var ids = [];
+  for (var i = 0; i < DW_DATA.starters.length; i++) {
+    var set = DW_DATA.starters[i];
+    if (set.unlockWins !== undefined ? save.wins >= set.unlockWins : save.bestFloor >= set.unlockFloor) ids.push(set.id);
+  }
+  return ids;
+}
+
+function dwNewSave() { return { version: 1, updatedAt: 0, wins: 0, bestFloor: 0, totalRuns: 0, unlockedStep: 0, sound: true, seen: false, run: null }; }
+function dwRecordRun(save) {
+  var run = save.run;
+  if (!run) return;
+  save.bestFloor = Math.max(save.bestFloor, run.floor);
+  if (run.recorded || run.status !== 'won' && run.status !== 'lost') return;
+  run.recorded = true;
+  save.totalRuns++;
+  if (run.status === 'won') {
+    save.wins++;
+    save.unlockedStep = Math.min(8, Math.max(save.unlockedStep, run.step + 1));
+  }
+}
+
+function dwMigrate(raw) {
+  var save = dwNewSave();
+  if (!raw || typeof raw !== 'object') return save;
+  function integer(value, fallback, max) { return Number.isFinite(value) ? Math.max(0, Math.min(max || 1000000000, Math.floor(value))) : fallback; }
+  save.updatedAt = integer(raw.updatedAt || raw.savedAt, 0, Number.MAX_SAFE_INTEGER);
+  save.wins = integer(raw.wins, 0);
+  save.bestFloor = integer(raw.bestFloor === undefined ? raw.floorsReached : raw.bestFloor, 0, 8);
+  save.totalRuns = integer(raw.totalRuns, save.wins);
+  save.unlockedStep = integer(raw.unlockedStep, save.wins ? 1 : 0, 8);
+  save.sound = raw.sound !== false;
+  save.seen = raw.seen === true;
+  var old = raw.run;
+  if (old && typeof old === 'object' && Array.isArray(old.dice) && old.dice.length === 5) {
+    var valid = true;
+    for (var d = 0; d < 5; d++) if (!old.dice[d] || !Array.isArray(old.dice[d].faces) || old.dice[d].faces.length !== 6) valid = false;
+    if (valid) {
+      var run = dwNewRun(old.starterId, integer(old.step, 0, 8), old.seed === undefined ? 1 : old.seed, old.dailyDate);
+      var copy = JSON.parse(JSON.stringify(old));
+      Object.keys(copy).forEach(function (key) { if (Object.prototype.hasOwnProperty.call(run, key) || key === 'lastReward') run[key] = copy[key]; });
+      if (!dwFind(DW_DATA.starters, run.starterId)) run.starterId = 'plain';
+      run.seed = integer(run.seed, 1, 4294967295);
+      run.step = integer(run.step, 0, 8);
+      run.dailyDate = typeof run.dailyDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(run.dailyDate) ? run.dailyDate : '';
+      run.floor = Math.max(1, integer(run.floor, 1, 8));
+      run.round = Math.max(1, integer(run.round, 1, 3));
+      run.throw = Math.max(1, integer(run.throw, 1, 3));
+      run.coins = integer(run.coins, DW_DATA.startCoins);
+      run.roundScore = integer(run.roundScore, 0);
+      run.bestThrow = integer(run.bestThrow, 0);
+      run.unusedRerolls = integer(run.unusedRerolls, 0, 9);
+      run.totalThrows = integer(run.totalThrows, 0, 72);
+      run.uiFloor = integer(run.uiFloor, 0, 8);
+      run.recorded = run.recorded === true;
+      if (run.lastReward !== undefined) run.lastReward = integer(run.lastReward, 0);
+      if (run.lastScore && (typeof run.lastScore !== 'object' || !dwFind(DW_DATA.patterns, run.lastScore.id))) run.lastScore = null;
+      run.rng = integer(run.rng, run.seed, 4294967295);
+      run.keepMask = integer(run.keepMask, 0, 31);
+      run.charms = Array.isArray(run.charms) ? run.charms.filter(function (id, index, list) { return dwFind(DW_DATA.charms, id) && list.indexOf(id) === index; }).slice(0, 5) : [];
+      run.twists = Array.isArray(run.twists) ? run.twists.filter(function (id) { return dwFind(DW_DATA.twists, id); }).slice(0, 2) : [];
+      run.levels = run.levels && typeof run.levels === 'object' && !Array.isArray(run.levels) ? run.levels : {};
+      for (var p = 0; p < DW_DATA.patterns.length; p++) run.levels[DW_DATA.patterns[p].id] = integer(run.levels[DW_DATA.patterns[p].id], 0);
+      for (d = 0; d < 5; d++) for (var f = 0; f < 6; f++) {
+        var face = run.dice[d].faces[f];
+        if (typeof face === 'number') face = { n: face, type: 'normal' };
+        if (!face || typeof face !== 'object') face = { n: f + 1, type: 'normal' };
+        face.n = Math.max(1, integer(face.n, f + 1, 6));
+        if (!dwFind(DW_DATA.faceTypes, face.type)) face.type = 'normal';
+        if (face.type === 'wild') face.n = 6;
+        run.dice[d].faces[f] = face;
+      }
+      if (!Array.isArray(run.rolled) || run.rolled.length !== 5) {
+        run.rolled = [];
+        if (run.status === 'rolled') run.status = 'ready';
+      } else {
+        for (d = 0; d < 5; d++) {
+          var rolled = run.rolled[d];
+          if (typeof rolled === 'number') rolled = { n: rolled, type: 'normal' };
+          var found = false;
+          for (f = 0; f < 6; f++) if (rolled && rolled.n === run.dice[d].faces[f].n && rolled.type === run.dice[d].faces[f].type) { run.rolled[d] = run.dice[d].faces[f]; found = true; break; }
+          if (!found) run.rolled[d] = rolled && rolled.n === 6 && rolled.type === 'normal' && dwHas(run, 'loaded_die') ? { n: 6, type: 'normal' } : run.dice[d].faces[0];
+        }
+      }
+      if (['ready', 'rolled', 'shop', 'won', 'lost'].indexOf(run.status) < 0) run.status = 'ready';
+      run.target = dwTarget(run);
+      run.rerollsLeft = integer(run.rerollsLeft, dwRerolls(run), 3);
+      if (run.status === 'shop' && (!run.shop || !Array.isArray(run.shop.charms) || !Array.isArray(run.shop.reforges))) dwMakeShop(run);
+      if (run.shop && typeof run.shop === 'object') {
+        run.shop.charms = Array.isArray(run.shop.charms) ? run.shop.charms.filter(function (id, index, list) { return dwFind(DW_DATA.charms, id) && list.indexOf(id) === index; }).slice(0, 3) : [];
+        run.shop.reforges = Array.isArray(run.shop.reforges) ? run.shop.reforges.filter(function (id) { return dwFind(DW_DATA.faceTypes, id); }).slice(0, 2) : [];
+        run.shop.restocks = integer(run.shop.restocks, 0);
+        run.shop.large = run.round === 3;
+      } else run.shop = null;
+      save.run = run;
+    }
+  }
+  return save;
+}
+
+function dwEncodeBackup(save) {
+  var json = JSON.stringify(save);
+  var bytes = unescape(encodeURIComponent(json));
+  return 'DW1.' + (typeof btoa === 'function' ? btoa(bytes) : Buffer.from(bytes, 'binary').toString('base64'));
+}
+function dwDecodeBackup(code) {
+  try {
+    code = String(code).trim();
+    if (code.slice(0, 4) !== 'DW1.') return null;
+    var bytes = typeof atob === 'function' ? atob(code.slice(4)) : Buffer.from(code.slice(4), 'base64').toString('binary');
+    var raw = JSON.parse(decodeURIComponent(escape(bytes)));
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw) || !Number.isInteger(raw.version) || raw.version < 0) return null;
+    return dwMigrate(raw);
+  } catch (e) { return null; }
+}
+
+/* Dice are drawn locally; buttons above the canvas provide touch and keyboard input. */
+const V={cv:null,ctx:null,w:320,h:132,dpr:1,raf:0,start:0,end:0,mask:0,tumble:false,reduced:false};
+const DW_PIPS=[[],[0,0],[-1,-1,1,1],[-1,-1,0,0,1,1],[-1,-1,1,-1,-1,1,1,1],[-1,-1,1,-1,0,0,-1,1,1,1],[-1,-1,1,-1,-1,0,1,0,-1,1,1,1]];
+const DW_FACE_COLORS={normal:'#f8f0df',wild:'#c6afe9',twin:'#a9d7ef',gold:'#ffca73',spark:'#98e1c5'};
+let _tofu=null;const _okCache={};
+function glyphBits(ch){
+  const c=document.createElement('canvas');c.width=c.height=24;const g=c.getContext('2d',{willReadFrequently:true});
+  g.font='18px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';g.textBaseline='middle';g.textAlign='center';g.fillText(ch,12,13);
+  const d=g.getImageData(0,0,24,24).data;let s='',n=0;
+  for(let i=3;i<d.length;i+=4)if(d[i]>40){n++;s+=i+':'+(d[i-3]>>4)+(d[i-2]>>4)+(d[i-1]>>4)+',';}return {s,n};
+}
+function emojiOK(ch){
+  if(ch in _okCache)return _okCache[ch];let ok=false;
+  try{if(!_tofu)_tofu=glyphBits('\u{10FFFE}');const b=glyphBits(ch);ok=b.n>8&&b.s!==_tofu.s;}catch(e){}return _okCache[ch]=ok;
+}
+function dwCanvasInit(){
+  V.cv=document.getElementById('board');V.ctx=V.cv.getContext('2d');
+  V.reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.addEventListener('resize',dwCanvasSize);dwCanvasSize();
+}
+function dwCanvasSize(){
+  if(!V.cv)return;const r=V.cv.getBoundingClientRect();V.w=r.width||320;V.h=132;V.dpr=window.devicePixelRatio||1;
+  V.cv.width=Math.round(V.w*V.dpr);V.cv.height=Math.round(V.h*V.dpr);dwDraw(performance.now());
+}
+function dwRoundRect(g,x,y,w,h,r){g.beginPath();g.roundRect(x,y,w,h,r);}
+function dwDraw(t){
+  if(!V.ctx)return;const g=V.ctx;g.setTransform(V.dpr,0,0,V.dpr,0,0);g.clearRect(0,0,V.w,V.h);
+  const cell=(V.w-14)/5,size=Math.min(55,cell-8),rolling=V.tumble&&t<V.start+400,landing=V.tumble&&t>=V.start+400;
+  for(let i=0;i<5;i++){
+    const kept=G&&((G.keepMask||0)&(1<<i)),moving=V.tumble&&!(V.mask&(1<<i));
+    const phase=Math.max(0,(t-V.start-400)/220),bounce=landing&&moving&&phase<1?Math.sin(phase*Math.PI*2.5)*(1-phase)*9:0;
+    const x=7+cell*(i+.5),y=(kept?49:64)+bounce,turn=rolling&&moving?Math.sin((t-V.start)*.023+i*2)*.18:0;
+    let face=G&&G.rolled&&G.rolled[i]||{n:i+1,type:'normal'};
+    let n=face.n;if(rolling&&moving)n=1+((Math.floor((t-V.start)/55)+i*3)%6);
+    g.fillStyle='#0f1224';g.globalAlpha=.45;g.beginPath();g.ellipse(x,102,size*.43,5,0,0,Math.PI*2);g.fill();g.globalAlpha=1;
+    g.save();g.translate(x,y);g.rotate(turn);
+    g.fillStyle=kept?'#65a994':'#b2aaa1';dwRoundRect(g,-size/2,-size/2+5,size,size,12);g.fill();
+    g.fillStyle=DW_FACE_COLORS[rolling&&moving?'normal':face.type]||DW_FACE_COLORS.normal;dwRoundRect(g,-size/2,-size/2,size,size,12);g.fill();
+    g.strokeStyle=kept?'#98e1c5':'#ffffff66';g.lineWidth=kept?2:1;g.stroke();g.fillStyle='#343047';
+    if(face.type==='wild'&&!(rolling&&moving)){g.font='bold '+Math.round(size*.57)+'px system-ui';g.textAlign='center';g.textBaseline='middle';g.fillText('*',0,5);}
+    else{const p=DW_PIPS[n]||DW_PIPS[6],d=size*.23;for(let j=0;j<p.length;j+=2){g.beginPath();g.arc(p[j]*d,p[j+1]*d,size*.065,0,Math.PI*2);g.fill();}}
+    if(face.type!=='normal'&&!(rolling&&moving)){g.font='bold 9px system-ui';g.textAlign='right';g.textBaseline='bottom';g.fillText(face.type==='twin'?'x2':face.type==='gold'?'+3':face.type==='spark'?'+1':'6',size/2-4,size/2-3);}
+    g.restore();g.textAlign='center';g.textBaseline='alphabetic';g.font='bold 9px system-ui';g.fillStyle=kept?'#98e1c5':'#8589a3';g.fillText(kept?'KEPT':String(i+1),x,124);
+  }
+}
+function dwRenderFrame(t){V.raf=0;dwDraw(t);if(t<V.end&&!document.hidden)V.raf=requestAnimationFrame(dwRenderFrame);else{V.tumble=false;if(typeof dwRollSettled==='function')dwRollSettled();}}
+function dwAnimateRoll(mask){
+  cancelAnimationFrame(V.raf);V.start=performance.now();V.end=V.start+(V.reduced?0:640);V.mask=mask;V.tumble=true;
+  V.raf=requestAnimationFrame(dwRenderFrame);
+}
+function dwStopDrawing(){cancelAnimationFrame(V.raf);V.raf=0;V.tumble=false;}
+
+/* Screens, input, synthesized sound and two local save copies. */
+const SAVE_KEY='dicewright.save.v1',TUTORIAL_KEY='dicewright.t';
+let SV=null,G=null,modalKind='',paused=false,rolling=false,idb=null,saveRev=0,saveT=null,toastT=null,storageOK=true,selectedStarter='plain',selectedStep=0,reforgeIndex=0,pendingDaily=false;
+const $=id=>document.getElementById(id);
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function fmt(n){return Math.floor(n||0).toLocaleString('en-US');}
+function tableItem(table,id){return DW_DATA[table].find(x=>x.id===id);}
+function toast(s){clearTimeout(toastT);$('toast').textContent=s;$('toast').hidden=false;toastT=setTimeout(()=>{$('toast').hidden=true;},3200);}
+function actionButton(act,text,cls,extra){return '<button data-act="'+act+'" class="'+(cls||'')+'" '+(extra||'')+'>'+text+'</button>';}
+function sheet(kind,title,body){modalKind=kind;$('sheet').innerHTML='<h2 id="sheet-title">'+title+'</h2>'+body;$('sheet-wrap').hidden=false;$('app').inert=true;$('sheet').scrollTop=0;$('sheet').focus();}
+function closeSheet(){modalKind='';$('sheet-wrap').hidden=true;$('app').inert=false;paused=false;}
+
+function idbOpen(){return new Promise(resolve=>{
+  let done=false;const finish=()=>{if(!done){done=true;resolve();}};
+  try{const r=indexedDB.open('dicewright',1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains('kv'))r.result.createObjectStore('kv');};
+    r.onsuccess=()=>{if(done){r.result.close();return;}idb=r.result;finish();};r.onerror=finish;r.onblocked=finish;
+  }catch(e){finish();}setTimeout(finish,1500);
+});}
+function idbGet(){return new Promise(resolve=>{
+  if(!idb)return resolve(null);let done=false;const finish=value=>{if(!done){done=true;resolve(value);}};
+  try{const r=idb.transaction('kv').objectStore('kv').get('save');r.onsuccess=()=>finish(r.result||null);r.onerror=()=>finish(null);}catch(e){finish(null);}setTimeout(()=>finish(null),1500);
+});}
+function parseSave(s){try{const o=JSON.parse(s);return o&&typeof o==='object'&&(o.version!==undefined||o.v!==undefined||o.wins!==undefined)?o:null;}catch(e){return null;}}
+async function loadSave(){
+  let a=null;try{a=parseSave(localStorage.getItem(SAVE_KEY));}catch(e){}
+  await idbOpen();const b=parseSave(await idbGet()),stamp=o=>o?(o.updatedAt||o.rev||0):0;
+  saveRev=Math.max(stamp(a),stamp(b));return dwMigrate(a&&b?(stamp(b)>stamp(a)?b:a):a||b);
+}
+function writeSave(){
+  clearTimeout(saveT);saveT=null;if(!SV)return;SV.run=G;SV.updatedAt=saveRev=Math.max(Date.now(),saveRev+1);const s=JSON.stringify(SV);let localOK=false;
+  try{localStorage.setItem(SAVE_KEY,s);localOK=true;}catch(e){}
+  storageOK=localOK||!!idb;
+  if(idb)try{const tx=idb.transaction('kv','readwrite');tx.objectStore('kv').put(s,'save');tx.onerror=()=>{storageOK=localOK;};}catch(e){storageOK=localOK;}
+}
+function save(now){if(now)writeSave();else if(!saveT)saveT=setTimeout(writeSave,250);}
+function checkpoint(){
+  if(G){SV.bestFloor=Math.max(SV.bestFloor||0,G.floor);SV.run=G;if(G.status==='won'||G.status==='lost')dwRecordRun(SV);}
+  save(true);updateUI();
+}
+
+let AC=null;
+function audio(){if(!SV||!SV.sound)return null;try{if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume().catch(()=>{});return AC;}catch(e){return null;}}
+function tone(freq,time,volume,delay){const a=audio();if(!a)return;try{const o=a.createOscillator(),g=a.createGain(),t=a.currentTime+(delay||0);o.type='sine';o.frequency.setValueAtTime(freq,t);g.gain.setValueAtTime(volume||.07,t);g.gain.exponentialRampToValueAtTime(.001,t+time);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+time);}catch(e){}}
+function scoreSound(score){tone(330,.12,.06);tone(score>=500?880:550,.2,.06,.08);}
+
+function showWelcome(){sheet('welcome','Welcome to the forge',
+  '<span class="eyebrow">Five dice. Endless possibilities.</span><ul class="welcome-list"><li>Roll five dice. Tap any to keep them, then reroll up to twice.</li><li>Choose a pattern to bank its score. You have three throws to beat each target.</li><li>Buy charms, level patterns and reforge individual dice faces.</li><li>Every third round brings a heat. Its twist is revealed before the floor.</li><li>Clear eight floors to win. Your run saves automatically, even offline.</li></ul><div class="sheet-actions">'+actionButton('welcome',"Let's go",'primary')+'</div>');}
+function updateHome(){
+  const unlocked=dwUnlocked(SV),starters=DW_DATA.starters;
+  if(!unlocked.includes(selectedStarter))selectedStarter='plain';
+  const starter=tableItem('starters',selectedStarter)||starters[0];
+  let heatOptions='';for(let i=0;i<=8;i++)heatOptions+='<option value="'+i+'" '+(i===selectedStep?'selected ':'')+(i>(SV.unlockedStep||0)?'disabled':'')+'> '+(i===0?'Standard heats':'Hotter heats '+i)+(i>(SV.unlockedStep||0)?' — locked':'')+'</option>';
+  const active=G&&!['won','lost'].includes(G.status);
+  $('home-screen').innerHTML='<div class="hero"><span class="eyebrow">A pocket-sized dice forge</span><h1>Small dice.<br>Ridiculous scores.</h1><p>Keep the good ones. Forge better ones.<br>See how far your luck can go.</p><div class="home-art" aria-hidden="true"><span>6</span><span>*</span><span>6</span></div></div>'+
+    (active?'<button data-act="continue" class="primary wide">Continue floor '+G.floor+'</button>':'')+
+    '<div class="home-card"><label for="starter">Starter set</label><select id="starter">'+starters.map(s=>'<option value="'+s.id+'" '+(s.id===selectedStarter?'selected ':'')+(!unlocked.includes(s.id)?'disabled':'')+'>'+esc(s.name)+(!unlocked.includes(s.id)?' — locked':'')+'</option>').join('')+'</select><p class="description" id="starter-description">'+esc(starter.text)+'</p><label for="heat-step">Heat level</label><select id="heat-step">'+heatOptions+'</select>'+actionButton('start','Start a run','primary wide')+'</div>'+actionButton('daily',"Play today's daily dice",'wide quiet')+'<div class="home-stats"><span><strong>'+fmt(SV.wins)+'</strong>runs won</span><span><strong>'+fmt(SV.bestFloor)+'</strong>best floor</span><span><strong>'+unlocked.length+' / 6</strong>sets unlocked</span></div><p class="subtle">'+starters.filter(s=>!unlocked.includes(s.id)).map(s=>esc(s.name)+': '+(s.unlockWins?'win '+s.unlockWins+' run'+(s.unlockWins===1?'':'s'):'reach floor '+s.unlockFloor)).join(' · ')+'</p>';
+}
+function updateUI(){
+  if(!SV)return;const inRun=!!G&&!$('game-screen').hidden;
+  if(!inRun){updateHome();return;}
+  $('floor-label').textContent='Floor '+G.floor+' / 8'+(G.dailyDate?' · Daily':'');$('coin-label').textContent=fmt(G.coins)+' coins';
+  const twists=G.twists.map(id=>tableItem('twists',id)).filter(Boolean);
+  $('twist-label').classList.toggle('heat',G.round===3);$('twist-label').textContent=(G.round===3?'Heat: ':'This floor’s heat: ')+twists.map(t=>t.text).join(' + ');
+  $('round-label').textContent='Round '+G.round+' of 3'+(G.round===3?' · Heat':'');$('round-score').textContent=fmt(G.roundScore);$('target-label').textContent='/ '+fmt(G.target);
+  $('target-fill').style.width=Math.min(100,G.roundScore/G.target*100)+'%';const meter=$('target-fill').parentElement;meter.setAttribute('aria-valuemax',G.target);meter.setAttribute('aria-valuenow',G.roundScore);
+  $('throw-label').textContent='Throw '+G.throw+' of 3';$('reroll-label').textContent=G.status==='rolled'?G.rerollsLeft+' rerolls left':'';
+  $('keep-hint').textContent=rolling?'Finding your fortune…':G.status==='rolled'?'Tap dice to keep them. Pick a pattern any time.':'Your next throw starts fresh.';
+  $('roll').textContent=rolling?'Rolling…':G.status==='rolled'?'Reroll · '+G.rerollsLeft+' left':'Roll dice';$('roll').disabled=rolling||paused||!(G.status==='ready'||G.status==='rolled'&&G.rerollsLeft>0);
+  let controls='';for(let i=0;i<5;i++){
+    const face=G.rolled[i],kept=!!((G.keepMask||0)&(1<<i));controls+='<button id="dice-'+i+'" class="die-control" data-act="keep" data-index="'+i+'" aria-pressed="'+kept+'" aria-label="Die '+(i+1)+(face?', '+face.n+', '+face.type:'')+(kept?', kept':'')+'" '+(G.status!=='rolled'||rolling?'disabled':'')+'>Die '+(i+1)+'</button>';
+  }$('dice-controls').innerHTML=controls;
+  const scores=G.status==='rolled'?dwScores(G):[],best=Math.max(0,...scores.map(s=>s.score));
+  $('patterns').innerHTML=DW_DATA.patterns.map(p=>{const s=scores.find(s=>s.id===p.id);return '<button data-act="score" data-pattern="'+p.id+'" class="pattern'+(s&&s.score===best?' best':'')+'" '+(!s||rolling||paused?'disabled':'')+'><span class="pattern-name">'+esc(p.name)+'</span><strong>'+(s?fmt(s.score):'—')+'</strong><span class="mult">x'+(s?s.multiplier:p.mult+(G.levels[p.id]||0))+'</span></button>';}).join('');
+  $('held-charms').innerHTML=G.charms.map(id=>{const c=tableItem('charms',id);return '<span class="charm-tag" title="'+esc(c.text)+'">'+esc(c.name)+'</span>';}).join('');dwDraw(performance.now());
+}
+function localDate(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function startRun(daily,confirmed){
+  if(G&&!['won','lost'].includes(G.status)&&!confirmed){pendingDaily=daily;sheet('new-confirm','Start a fresh run?','<p>Your current run will end. Your unlocked sets and wins stay with you.</p><div class="sheet-actions">'+actionButton('cancel-new','Keep playing')+actionButton('confirm-new','Start fresh','primary')+'</div>');return;}
+  const date=daily?localDate():null,seed=daily?dwDailySeed(date):(Date.now()^Math.floor(Math.random()*4294967296))>>>0;
+  G=dwNewRun(daily?'plain':selectedStarter,daily?0:selectedStep,seed,date);SV.run=G;paused=false;rolling=false;$('home-screen').hidden=true;$('game-screen').hidden=false;$('last-score').textContent='';checkpoint();dwCanvasSize();showFloor();
+}
+function showFloor(){
+  const twists=G.twists.map(id=>tableItem('twists',id)).filter(Boolean);
+  sheet('floor','The next floor','<span class="eyebrow">'+esc(tableItem('starters',G.starterId).name)+' set'+(G.step?' · Hotter heats '+G.step:'')+'</span><div class="floor-number">'+G.floor+'<small> / 8</small></div><p>Three rounds. Three throws each. The last round brings '+(twists.length>1?'these twists':'this twist')+'.</p>'+twists.map(t=>'<div class="twist-card"><strong>'+esc(t.name)+'</strong><p>'+esc(t.text)+'</p></div>').join('')+'<div class="sheet-actions">'+actionButton('begin-floor','Enter floor '+G.floor,'primary')+'</div>');
+}
+function continueRun(){
+  $('home-screen').hidden=true;$('game-screen').hidden=false;closeSheet();dwCanvasSize();updateUI();
+  if(G.status==='shop')showShop();else if(G.status==='won'||G.status==='lost')showResult();else if(G.uiFloor!==G.floor)showFloor();
+}
+function goHome(){closeSheet();$('home-screen').hidden=false;$('game-screen').hidden=true;save(true);updateHome();}
+function showPause(){paused=true;save(true);sheet('pause','Take a breath','<p>Your dice and progress are saved. Pick up exactly where you left off.</p><div class="sheet-actions">'+actionButton('resume','Keep playing','primary')+actionButton('return-home','Return home')+'</div>');}
+function doRoll(){
+  if(rolling||paused||!G)return;const mask=G.status==='rolled'?(G.keepMask||0):0;if(!dwRoll(G,mask))return;
+  rolling=true;tone(180,.07,.04);checkpoint();dwAnimateRoll(mask);
+}
+function dwRollSettled(){
+  if(!rolling)return;rolling=false;tone(660,.04,.035);updateUI();save(true);
+}
+function doScore(id){
+  if(rolling||paused||G.status!=='rolled')return;const score=dwScores(G).find(p=>p.id===id);if(!score)return;
+  dwScore(G,id);G.keepMask=0;scoreSound(score.score);$('last-score').textContent=score.name+' · +'+fmt(score.score);checkpoint();
+  if(score.score>=Math.max(100,G.target/3)){$('round-score').classList.remove('score-pop');void $('round-score').offsetWidth;$('round-score').classList.add('score-pop');}
+  if(G.status==='shop')showShop();else if(G.status==='won'||G.status==='lost')showResult();
+}
+function showShop(){
+  const charms=G.shop.charms.map((id,i)=>{const c=tableItem('charms',id);if(!c)return '';const price=dwCharmPrice(G,i);return '<div class="stock-card"><div><strong>'+esc(c.name)+'</strong><p>'+esc(c.text)+'</p></div>'+actionButton('buy-charm',fmt(price)+' coins','','data-index="'+i+'" '+(G.coins<price||G.charms.length>=5?'disabled':''))+'</div>';}).join('');
+  const reforges=G.shop.reforges.map((type,i)=>{if(!type)return '';const text={normal:'Choose any number from 1 to 6.',wild:'Any number for patterns. Scores as 6.',twin:'Counts twice for patterns and value.',gold:'Gain 3 coins whenever it scores.',spark:'Add 1 to the multiplier when it scores.'}[type];const price=dwReforgePrice(G,i);return '<div class="stock-card"><div><strong>'+(type==='normal'?'Number face':type[0].toUpperCase()+type.slice(1)+' face')+'</strong><p>'+text+'</p></div>'+actionButton('reforge',fmt(price)+' coins','','data-index="'+i+'" '+(G.coins<price?'disabled':''))+'</div>';}).join('');
+  const levels=DW_DATA.patterns.map(p=>{const price=dwLevelPrice(G,p.id);return '<button class="level-button" data-act="level" data-id="'+p.id+'" '+(G.coins<price?'disabled':'')+'><div>'+esc(p.name)+'<br><small>x'+(p.mult+(G.levels[p.id]||0))+' → x'+(p.mult+(G.levels[p.id]||0)+1)+'</small></div><span>'+price+' c</span></button>';}).join('');
+  const held=G.charms.map((id,i)=>{const c=tableItem('charms',id);return '<div class="stock-card"><div><strong>'+esc(c.name)+'</strong><p>'+esc(c.text)+'</p></div>'+actionButton('sell-charm','Sell · '+Math.floor(c.price/2)+' c','','data-index="'+i+'"')+'</div>';}).join('');
+  const price=dwRestockPrice(G);
+  sheet('shop',G.round===3?'Floor cleared':'Round cleared','<div class="shop-top"><p>Visit the forge before you carry on.</p><span class="coins">'+fmt(G.coins)+' c</span></div><div class="sheet-actions">'+actionButton('next',G.round===3?'Next floor':'Next round','primary')+actionButton('restock','Restock · '+price+' c','',''+(G.coins<price?'disabled':''))+'</div><h3>Charms <small>'+G.charms.length+' / 5 held</small></h3>'+charms+'<h3>Reforge a face</h3>'+reforges+'<h3>Level a pattern</h3><p>Each level adds 1 to its multiplier.</p><div class="levels-grid">'+levels+'</div>'+(held?'<h3>Your charms</h3>'+held:'')+'<p class="subtle" style="margin-top:16px">Unspent coins earn interest at the end of each round.</p>');
+}
+function faceText(face){return (face.type==='wild'?'Wild':face.n)+(face.type==='normal'||face.type==='wild'?'':' · '+face.type);}
+function showReforge(index){
+  reforgeIndex=index;const type=G.shop.reforges[index];
+  sheet('reforge','Shape your luck','<p>Replace one face on one die with a '+esc(type==='normal'?'number':type)+' face. Other faces on that die stay as they are.</p><label for="reforge-die">Die</label><select id="reforge-die">'+G.dice.map((d,i)=>'<option value="'+i+'">Die '+(i+1)+'</option>').join('')+'</select><div id="face-preview" class="faces"></div><label for="reforge-face">Face to replace</label><select id="reforge-face"></select><label for="reforge-number">New number</label><select id="reforge-number" '+(type==='wild'?'disabled':'')+'>'+[1,2,3,4,5,6].map(n=>'<option value="'+n+'" '+(n===6?'selected':'')+'>'+n+'</option>').join('')+'</select><div class="sheet-actions">'+actionButton('cancel-reforge','Back')+actionButton('apply-reforge','Reforge · '+dwReforgePrice(G,index)+' coins','primary')+'</div>');reforgePreview(true);
+}
+function reforgePreview(reset){const die=G.dice[+$('reforge-die').value];if(reset)$('reforge-face').innerHTML=die.faces.map((f,i)=>'<option value="'+i+'">Face '+(i+1)+': '+esc(faceText(f))+'</option>').join('');$('face-preview').innerHTML=die.faces.map((f,i)=>'<span class="'+(i===+$('reforge-face').value?'selected':'')+'">'+esc(f.type==='wild'?'*':f.n)+(f.type==='normal'?'':f.type==='twin'?'x2':f.type==='gold'?'+3':f.type==='spark'?'+1':'')+'</span>').join('');}
+function dailyLine(){return 'Dicewright daily '+G.dailyDate+' · floor '+G.floor+' · best throw '+fmt(G.bestThrow);}
+function showResult(){
+  checkpoint();sheet('result',G.status==='won'?'A masterwork.':'The forge goes quiet.','<span class="eyebrow">'+(G.status==='won'?'Eight floors cleared':'Reached floor '+G.floor)+'</span><p>Your best throw</p><div class="result-score">'+fmt(G.bestThrow)+'</div><p>'+esc(tableItem('starters',G.starterId).name)+' set'+(G.step?' · Hotter heats '+G.step:'')+' · '+fmt(SV.wins)+' wins</p>'+(G.dailyDate?'<p id="daily-result" class="result-line">'+esc(dailyLine())+'</p>'+actionButton('copy-result','Copy daily result','wide')+'<textarea id="result-copy" aria-label="Daily result to copy" readonly hidden></textarea>':'')+'<div class="sheet-actions">'+actionButton('again','Back to the forge','primary')+'</div>');
+}
+function showSettings(){
+  paused=true;save(true);sheet('settings','Settings','<button data-act="sound" class="wide">Sound: '+(SV.sound?'on':'off')+'</button><div class="divider"></div>'+actionButton('copy','Copy backup code','wide')+'<div id="backup-area" hidden><label for="backup-code">Your backup code</label><textarea id="backup-code" readonly></textarea><p>Select and copy this code if automatic copying is unavailable.</p></div><label for="load-code">Load backup code</label><textarea id="load-code" placeholder="Paste a Dicewright backup code" spellcheck="false" autocapitalize="off"></textarea><div class="sheet-actions">'+actionButton('load','Load backup code')+'</div><p class="subtle" style="margin-top:14px">Loading a backup replaces your current Dicewright progress.</p><p class="storage-note">'+(storageOK?'Your saves stay on this device. Keep a backup when moving devices.':'Saving is unavailable here. Copy a backup before closing the game.')+'</p><div class="divider"></div>'+actionButton('reset','Start over','danger wide')+'<div class="sheet-actions">'+actionButton('close','Back','primary')+'</div>');
+}
+async function copyText(text){try{await navigator.clipboard.writeText(text);return true;}catch(e){return false;}}
+async function copyBackup(){save(true);const code=dwEncodeBackup(SV);$('backup-area').hidden=false;$('backup-code').value=code;const ok=await copyText(code);if(!ok){$('backup-code').focus();$('backup-code').select();}toast(ok?'Backup code copied.':'Select and copy your backup code below.');}
+function loadBackup(){
+  let restored;try{restored=dwDecodeBackup($('load-code').value);}catch(e){}
+  if(!restored){toast('That backup code could not be loaded.');return;}
+  dwStopDrawing();rolling=false;SV=restored;G=SV.run;save(true);closeSheet();
+  if(G){$('home-screen').hidden=true;$('game-screen').hidden=false;updateUI();dwCanvasSize();if(G.status==='shop')showShop();else if(G.status==='won'||G.status==='lost')showResult();else showPause();}else goHome();toast('Backup loaded.');
+}
+async function handleAction(button){
+  if(!SV||button.disabled)return;audio();const act=button.dataset.act,index=+button.dataset.index;
+  if(act==='welcome'){try{localStorage.setItem(TUTORIAL_KEY,'1');}catch(e){}SV.seen=true;save(true);closeSheet();return;}
+  if(act==='settings'){if(rolling)return;showSettings();return;}
+  if(act==='home'||act==='pause'){if(rolling)return;if(G&&!$('game-screen').hidden)showPause();else goHome();return;}
+  if(act==='start'||act==='daily'){startRun(act==='daily');return;}
+  if(act==='confirm-new'){startRun(pendingDaily,true);return;}if(act==='cancel-new'){continueRun();return;}
+  if(act==='continue'){continueRun();return;}if(act==='begin-floor'){G.uiFloor=G.floor;closeSheet();checkpoint();return;}
+  if(act==='roll'){doRoll();return;}if(act==='keep'){if(G.status==='rolled'&&!rolling){G.keepMask=(G.keepMask||0)^(1<<index);tone(440,.04,.025);checkpoint();}return;}
+  if(act==='score'){doScore(button.dataset.pattern);return;}
+  if(act==='next'){const floor=G.floor;if(dwNext(G)){closeSheet();checkpoint();if(G.floor!==floor)showFloor();}return;}
+  if(act==='buy-charm'){if(dwBuyCharm(G,index)){checkpoint();showShop();tone(740,.08,.04);}return;}
+  if(act==='sell-charm'){if(dwSellCharm(G,index)){checkpoint();showShop();}return;}
+  if(act==='level'){if(dwLevelPattern(G,button.dataset.id)){checkpoint();showShop();tone(620,.08,.04);}return;}
+  if(act==='restock'){if(dwRestock(G)){checkpoint();showShop();}return;}
+  if(act==='reforge'){showReforge(index);return;}if(act==='cancel-reforge'){showShop();return;}
+  if(act==='apply-reforge'){if(dwBuyReforge(G,reforgeIndex,+$('reforge-die').value,+$('reforge-face').value,+$('reforge-number').value)){checkpoint();showShop();tone(880,.12,.06);}return;}
+  if(act==='resume'){closeSheet();updateUI();return;}if(act==='return-home'||act==='again'){goHome();return;}
+  if(act==='sound'){SV.sound=!SV.sound;save(true);button.textContent='Sound: '+(SV.sound?'on':'off');return;}
+  if(act==='copy'){await copyBackup();return;}if(act==='load'){loadBackup();return;}
+  if(act==='close'){closeSheet();if(G&&!$('game-screen').hidden){if(G.status==='shop')showShop();else if(G.status==='won'||G.status==='lost')showResult();else if(G.uiFloor!==G.floor)showFloor();else updateUI();}return;}
+  if(act==='reset'){sheet('reset','Start over?','<p>This removes your Dicewright run, wins and unlocked sets. Copy a backup first if you want to keep them.</p><div class="sheet-actions">'+actionButton('cancel-reset','Keep my progress')+actionButton('confirm-reset','Start over','danger')+'</div>');return;}
+  if(act==='cancel-reset'){showSettings();return;}
+  if(act==='confirm-reset'){dwStopDrawing();rolling=false;G=null;SV=dwNewSave();selectedStarter='plain';selectedStep=0;save(true);goHome();return;}
+  if(act==='copy-result'){const text=dailyLine(),ok=await copyText(text);if(!ok){$('result-copy').hidden=false;$('result-copy').value=text;$('result-copy').focus();$('result-copy').select();}toast(ok?'Daily result copied.':'Select and copy your daily result.');}
+}
+document.addEventListener('click',e=>{const b=e.target.closest('button[data-act]');if(b)handleAction(b);});
+document.addEventListener('change',e=>{
+  if(e.target.id==='starter'){selectedStarter=e.target.value;updateHome();}
+  if(e.target.id==='heat-step')selectedStep=+e.target.value;
+  if(e.target.id==='reforge-die')reforgePreview(true);if(e.target.id==='reforge-face')reforgePreview(false);
+});
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Tab'||!modalKind)return;const items=[...$('sheet').querySelectorAll('button:not(:disabled),select:not(:disabled),textarea:not([hidden])')].filter(el=>el.getClientRects().length);if(!items.length)return;
+  if(e.shiftKey&&(document.activeElement===items[0]||document.activeElement===$('sheet'))){e.preventDefault();items[items.length-1].focus();}else if(!e.shiftKey&&document.activeElement===items[items.length-1]){e.preventDefault();items[0].focus();}
+});
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){dwStopDrawing();rolling=false;save(true);if(G&&!modalKind&&!$('game-screen').hidden)showPause();if(AC&&AC.state==='running')AC.suspend().catch(()=>{});}
+  else{updateUI();dwCanvasSize();}
+});
+window.addEventListener('pagehide',()=>save(true));
+(async function boot(){
+  SV=await loadSave();G=SV.run;dwCanvasInit();updateHome();
+  let seen=SV.seen;try{seen=seen||localStorage.getItem(TUTORIAL_KEY)==='1';}catch(e){}
+  if(!seen)showWelcome();save(true);
+})();
+</script>
+</body>
+</html>

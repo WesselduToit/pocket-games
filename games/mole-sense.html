@@ -1,0 +1,810 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#263e30">
+  <title>Mole Sense</title>
+  <style>:root{color-scheme:light;--ink:#253e30;--muted:#68735e;--paper:#faf6e9;--green:#315640;--line:#dedfca;--gold:#c49440;--pink:#bd6c65;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-synthesis:none}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:#e8ecda;color:var(--ink);overscroll-behavior:none;min-height:100dvh;background-image:radial-gradient(ellipse at 15% 10%,#f7f7e8 0,transparent 50%)}
+button,textarea{font:inherit}
+button{min-height:44px;border:0;border-radius:12px;padding:10px 16px;color:var(--ink);cursor:pointer;font-weight:650;touch-action:manipulation}
+button:focus-visible,canvas:focus-visible,textarea:focus-visible{outline:3px solid #ce9e42;outline-offset:3px}
+button:active{transform:translateY(1px)}
+button:disabled{cursor:default;opacity:.55}
+[hidden]{display:none!important}
+h1,h2,h3,p{margin:0}h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:500}h1{font-size:49px;letter-spacing:-2px;line-height:1.12}h2{font-size:27px}h3{font-size:22px}
+small{color:var(--muted)}
+#app{max-width:440px;margin:0 auto;min-height:100dvh;padding:max(14px,env(safe-area-inset-top)) 16px max(12px,env(safe-area-inset-bottom))}
+.home{text-align:center}.home-heading{padding-top:8px}.eyebrow{text-transform:uppercase;letter-spacing:1.8px;font-size:9px;font-weight:750;color:var(--muted)}.home-heading p{font-size:13px;margin-top:9px;color:var(--muted)}
+#portrait{display:block;width:100%;height:145px;margin:0 auto;max-width:360px}.home-stats{display:flex;justify-content:center;gap:0;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:20px}.home-stats div{width:33.33%;font-size:10px;letter-spacing:.3px;color:var(--muted)}.home-stats b{display:block;font-family:Georgia,serif;color:var(--ink);font-size:24px;font-weight:500;margin-bottom:2px}.home-stats div+div{border-left:1px solid var(--line)}
+.section-title{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;text-align:left}.section-title h2{font-size:22px}.section-title span{font-size:11px;color:var(--muted)}.moles{display:flex;gap:7px}.mole-card{padding:5px 0 7px;border:1px solid #d4d9c4;background:#f2f1e4;flex:1;min-width:0;position:relative;border-radius:14px}.mole-card.selected{background:#dce7cd;border:2px solid #52724b;padding:4px 0 6px}.mole-card.locked{background:#e4e6d8;color:#7b8273}.mole-card canvas{display:block;width:100%;height:44px}.mole-card span{display:block;font-size:9px;white-space:nowrap}.mole-card .lock{position:absolute;right:4px;top:2px;font-size:11px}.mole-description{min-height:43px;font-size:12px;line-height:1.45;margin:11px 2px 12px;color:var(--muted)}.home-actions{display:grid;gap:9px}.primary{background:var(--green);color:#fffbea;box-shadow:0 3px 0 #243e30}.secondary{background:#f7f5e8;border:1px solid #d2d8bf}.home-actions .primary{min-height:48px}.home-actions .secondary{background:transparent}.home footer{display:flex;justify-content:center;gap:24px;padding-top:9px}.text-button{background:transparent;font-size:12px;color:var(--muted);padding:8px}.icon-button{background:#e0e6d2;border:1px solid #cdd6bf;font-size:17px;min-width:42px;padding:4px}
+.game-heading{display:flex;justify-content:space-between;align-items:center;height:42px;margin-bottom:8px}.game-heading strong{display:block;font-family:Georgia,serif;font-size:23px;font-weight:500;margin-top:1px}.game-heading .icon-button{min-height:40px}.vitals{display:flex;align-items:center;gap:13px;margin-bottom:12px;height:46px}.level{display:flex;align-items:center;gap:3px;white-space:nowrap;font-size:11px}.level b{display:block;font-size:21px;line-height:1;font-family:Georgia,serif;font-weight:500}.level canvas{width:38px;height:38px}.bars{flex:1}.bar-line{display:flex;justify-content:space-between;font-size:10px;font-weight:600;margin-bottom:3px;line-height:1}.bar{height:7px;background:#d6dcca;border-radius:5px;overflow:hidden}.bar i{display:block;height:100%;transition:width .15s;background:#a86359;border-radius:5px}.xp-line{font-size:9px;margin-top:5px;color:var(--muted)}.experience{height:4px}.experience i{background:var(--gold)}.board-wrap{display:flex;justify-content:center;align-items:center}#board{display:block;touch-action:none;border-radius:8px;box-shadow:0 5px 0 #b9c6a7,0 10px 24px #40512a18}.garden-note{text-align:center;font-size:11px;line-height:1.3;min-height:31px;padding:10px 0 4px;color:#5b6e50}.game-actions{display:flex;align-items:center;justify-content:space-between;gap:8px}.game-actions button{font-size:12px;min-width:86px;min-height:40px;padding:8px 12px}.game-actions #mark[aria-pressed=true]{background:#315640;color:#fffbea;border-color:#315640}.garden-count{text-align:center;line-height:1.15}.garden-count strong{display:block;font-family:Georgia,serif;font-size:20px;font-weight:500}.garden-count span{font-size:9px;color:var(--muted)}
+.run-counts{display:flex;gap:10px;margin-left:auto;margin-right:10px}.game-heading .eyebrow{letter-spacing:.7px;font-size:8px}.garden-count b{display:block;font-family:Georgia,serif;font-size:18px;font-weight:500}.burrow-option{display:block;text-align:left;width:100%;margin-top:8px;padding:11px 13px;background:#e8eddb;border:1px solid #cad6b8}.burrow-option strong,.burrow-option span{display:block}.burrow-option strong{font-size:14px}.burrow-option span{font-size:11px;font-weight:400;line-height:1.45;color:#607054;margin-top:3px}
+.overlay{position:fixed;inset:0;background:#16251cc2;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}.sheet{background:var(--paper);border-radius:23px;padding:26px 23px 22px;width:100%;max-width:372px;max-height:calc(100dvh - 32px);overflow:auto;box-shadow:0 15px 80px #0b211655}.sheet h2{margin-bottom:13px;line-height:1.1}.sheet p{font-size:13px;line-height:1.55;color:var(--muted);margin-bottom:15px}.sheet ul{padding-left:19px;margin:15px 0 21px;font-size:13px;line-height:1.5;color:#53624e}.sheet li+li{margin-top:9px}.sheet button.wide{width:100%;margin-top:9px}.sheet .eyebrow{display:block;margin-bottom:9px}.sheet .rule{border-top:1px solid var(--line);margin:17px 0}.setting-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;gap:8px}.setting-row button{min-width:74px}.sheet label{font-size:12px;display:block;margin:14px 0 6px}.sheet textarea{width:100%;min-height:92px;border:1px solid #c6cdb5;border-radius:10px;padding:10px;resize:vertical;background:#fffdf5;color:var(--ink);font-size:12px}.danger{background:#f2dfd7;color:#904f48;border:1px solid #dfbfb2}.perk-option{display:block;text-align:left;width:100%;margin-top:10px;padding:15px 16px;background:#e8eddb;border:1px solid #cad6b8}.perk-option strong{display:block;font-family:Georgia,serif;font-size:20px;font-weight:500;margin-bottom:5px}.perk-option span{display:block;color:#607054;font-size:12px;font-weight:400;line-height:1.45}.result-art{display:block;width:100%;height:105px;margin:-5px 0 7px}.result-counts{display:flex;gap:0;margin:17px 0;text-align:center}.result-counts div{flex:1;border-right:1px solid var(--line);font-size:10px;color:var(--muted)}.result-counts div:last-child{border:0}.result-counts b{display:block;font-family:Georgia,serif;font-size:27px;color:var(--ink);font-weight:500;margin-bottom:3px}.clean{display:block;text-align:center;background:#e1e9ce;border-radius:9px;padding:10px;font-size:13px;color:#486e37;margin:10px 0 15px}.daily-result{padding:12px;background:#e8eddb;border-radius:10px;font-size:12px;line-height:1.8;overflow-wrap:anywhere;margin:14px 0}.guide-row{display:flex;align-items:center;gap:12px;margin:10px 0;font-size:12px;color:var(--muted)}.guide-row canvas{width:36px;height:36px;flex-shrink:0}.guide-row strong{display:block;color:var(--ink);font-size:13px}.toast{position:fixed;bottom:max(24px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:20;background:#263e30;color:#fffbea;border:1px solid #60784f;border-radius:12px;padding:12px 18px;font-size:12px;max-width:90vw;box-shadow:0 6px 30px #15251e40;text-align:center}
+@media(max-height:610px){#app{padding-top:8px;padding-bottom:7px}.home-heading{padding-top:0}h1{font-size:42px}#portrait{height:105px}.home-stats{margin-bottom:14px;padding:8px 0}.home-stats b{font-size:21px}.mole-description{margin:8px 0 10px;min-height:35px}.home footer{padding-top:3px}.home-actions{gap:7px}.game-heading{height:37px;margin-bottom:6px}.game-heading strong{font-size:21px}.vitals{height:42px;margin-bottom:9px}.garden-note{padding-top:9px;min-height:30px}.sheet{padding:22px 21px 19px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+  <main id="app">
+    <section id="home" class="home" aria-label="Mole Sense home">
+      <header class="home-heading"><span class="eyebrow">A little underground adventure</span><h1>Mole Sense</h1><p>Trust the numbers. Follow your nose.</p></header>
+      <canvas id="portrait" width="320" height="154" aria-label="Your mole in the garden"></canvas>
+      <div id="home-stats" class="home-stats"></div>
+      <div class="section-title"><h2>Choose your mole</h2><span id="chosen-name"></span></div>
+      <div id="moles" class="moles" role="group" aria-label="Choose your mole"></div>
+      <p id="mole-description" class="mole-description"></p>
+      <div class="home-actions"><button id="resume" class="primary" hidden>Continue run</button><button id="new-run" class="primary">New run</button><button id="daily" class="secondary">Play today's daily</button></div>
+      <footer><button id="home-help" class="text-button">How to play</button><button id="home-settings" class="text-button">Settings</button></footer>
+    </section>
+    <section id="game" class="game" hidden aria-label="Garden">
+      <header class="game-heading"><div><span class="eyebrow" id="run-type">Garden trail</span><strong id="garden-title">Garden 1 / 5</strong></div><div class="run-counts"><div class="garden-count"><b id="eaten">0</b><span id="eaten-label">critters eaten</span></div><div class="garden-count"><b id="pantry">0</b><span>pantry</span></div></div><button id="pause" class="icon-button" aria-label="Pause game">Ⅱ</button></header>
+      <div class="vitals"><div class="level"><canvas id="little-mole" width="38" height="38" aria-hidden="true"></canvas><span>Level <b id="level">1</b></span></div><div class="bars"><div class="bar-line"><span id="hp-label">Health</span><span id="hp-value"></span></div><div class="bar health"><i id="hp-bar"></i></div><div class="bar-line xp-line"><span id="xp-label">Experience</span><span id="xp-value"></span></div><div class="bar experience"><i id="xp-bar"></i></div></div></div>
+      <div id="board-wrap" class="board-wrap"><canvas id="board" tabindex="0" role="grid" aria-label="Garden grid. Tap a tile to dig. Long press to mark.">Tap a covered tile to dig. Long press to mark.</canvas></div>
+      <div id="garden-note" class="garden-note" aria-live="polite">Eat to fill your pantry. Find the tunnel when you need to leave.</div>
+      <div class="game-actions"><button id="mark" class="secondary" aria-pressed="false">Mark: off</button><button id="legend" class="secondary" aria-label="Critter guide">Guide</button></div>
+    </section>
+  </main>
+  <div id="overlay" class="overlay" hidden><section id="sheet" class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title"></section></div>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <script>var MS_DATA = {
+  version: 2,
+  // TUNE: pantry prices, the increase per heal bought, and the clear score.
+  pantryHealCost: 8,
+  pantryHealRise: 4,
+  pantryMaxHpCost: 32,
+  pantryRerollCost: 10,
+  gardenScore: 25,
+  // TUNE: the bite, level healing, thresholds and five garden populations.
+  biteDamage: 3,
+  levelHeal: 2,
+  xpThresholds: [4, 16, 40, 60, 80],
+  gardens: [
+    {width:9,height:12,counts:[14,8,3,1,0],berries:4},
+    {width:9,height:12,counts:[9,7,7,7,6],berries:4},
+    {width:9,height:12,counts:[8,7,7,8,7],berries:4},
+    {width:9,height:12,counts:[7,7,8,8,8],berries:4},
+    {width:9,height:12,counts:[7,7,8,9,9],berries:4}
+  ],
+  berryHeal: 3,
+  cleanHeal: 4,
+  cleanXp: 3,
+  baseHp: 14,
+  markLabels: ['', '1', '2', '3', '4', '5', '?'],
+  critters: [null,
+    {name:'Grub',emoji:'\uD83D\uDC1B',color:'#a8bc68'},
+    {name:'Beetle',emoji:'\uD83E\uDEB2',color:'#4b8679'},
+    {name:'Frog',emoji:'\uD83D\uDC38',color:'#64a755'},
+    {name:'Rat',emoji:'\uD83D\uDC00',color:'#a991ae'},
+    {name:'Snake',emoji:'\uD83D\uDC0D',color:'#d29e48'}
+  ]
+};
+
+var MS_MOLES = [
+  {id:'common',name:'Common mole',color:'#866653',description:'A curious gardener. 14 hp.',hp:14,startLevel:1,xpScale:1,offers:3,startPerks:[],unlock:{wins:0,reached:0}},
+  {id:'burly',name:'Burly',color:'#626e7c',description:'18 hp, but needs 30% more xp to level up.',hp:18,startLevel:1,xpScale:1.3,offers:3,startPerks:[],unlock:{wins:0,reached:2}},
+  {id:'star',name:'Star-nose',color:'#bc7d70',description:'Starts with sniff: one grub is shown per garden.',hp:14,startLevel:1,xpScale:1,offers:3,startPerks:['sniff'],unlock:{wins:0,reached:3}},
+  {id:'sleepy',name:'Sleepy',color:'#8e89b1',description:'Starts at level 2; picks from two perks.',hp:14,startLevel:2,xpScale:1,offers:2,startPerks:[],unlock:{wins:1,reached:0}},
+  {id:'velvet',name:'Velvet',color:'#ad6b92',description:'A berry lover. Starts with second stomach.',hp:14,startLevel:1,xpScale:1,offers:3,startPerks:['second-stomach'],unlock:{wins:2,reached:0}}
+];
+
+var MS_PERKS = [
+  {id:'thick-fur',name:'Thick fur',description:'Gain 4 max hp and heal 4 hp.'},
+  {id:'sniff',name:'Sniff',description:'Each garden starts with one grub shown.'},
+  {id:'lamp-root',name:'Lamp root',description:'Your first dig opens a 5 by 5 patch.'},
+  {id:'second-stomach',name:'Second stomach',description:'Berries heal twice as much.'},
+  {id:'tunnel-sense',name:'Tunnel sense',description:'See which row holds the exit tunnel.'},
+  {id:'steady-paws',name:'Steady paws',description:'The first bite each garden does no damage.'},
+  {id:'hearty-roots',name:'Hearty roots',description:'Gain 2 max hp. Berries heal 1 more hp.'},
+  {id:'quick-study',name:'Quick study',description:'Need 20% less xp for each level.'},
+  {id:'soft-soil',name:'Soft soil',description:'Two extra soil tiles open each garden.'},
+  {id:'grub-feast',name:'Grub feast',description:'Every grub gives 1 extra xp.'},
+  {id:'beetle-feast',name:'Beetle feast',description:'Every beetle gives 1 extra xp.'},
+  {id:'field-kit',name:'Field kit',description:'Heal 6 hp now and gain 1 max hp.'},
+  {id:'deep-breath',name:'Deep breath',description:'Heal 3 hp when entering a garden.'},
+  {id:'dew-drop',name:'Dew drop',description:'Level-ups heal 1 extra hp.'},
+  {id:'careful-bite',name:'Careful bite',description:'Every bite deals 1 less damage.'}
+];
+
+// Rules and save format: deliberately usable by plain Node as well as the UI.
+function msMole(id) { return MS_MOLES.find(function(m) { return m.id === id; }) || MS_MOLES[0]; }
+function msHas(run, id) { return run.perks.indexOf(id) !== -1; }
+function msRandom(run) {
+  var n = run.rngState += 0x6D2B79F5;
+  n = Math.imul(n ^ n >>> 15, n | 1);
+  n ^= n + Math.imul(n ^ n >>> 7, n | 61);
+  run.rngState >>>= 0;
+  return ((n ^ n >>> 14) >>> 0) / 4294967296;
+}
+function msShuffle(run, list) {
+  for (var i = list.length - 1; i > 0; i--) {
+    var j = Math.floor(msRandom(run) * (i + 1)), t = list[i]; list[i] = list[j]; list[j] = t;
+  }
+  return list;
+}
+function msNeighbours(g, index) {
+  var list = [], x = index % g.width, y = Math.floor(index / g.width);
+  for (var dy = -1; dy <= 1; dy++) for (var dx = -1; dx <= 1; dx++) {
+    if ((dx || dy) && x + dx >= 0 && x + dx < g.width && y + dy >= 0 && y + dy < g.height) list.push((y + dy) * g.width + x + dx);
+  }
+  return list;
+}
+function msClues(g) {
+  g.tiles.forEach(function(t, i) {
+    t.n = msNeighbours(g, i).reduce(function(sum, j) { var c = g.tiles[j]; return sum + (c.kind === 'critter' ? c.level : 0); }, 0);
+  });
+}
+function msShowSniff(run) {
+  if (!msHas(run, 'sniff')) return;
+  var candidates = [];
+  run.garden.tiles.forEach(function(t, i) { if (t.kind === 'critter' && t.level === 1) candidates.push(i); });
+  if (candidates.length) run.garden.tiles[candidates[Math.floor(msRandom(run) * candidates.length)]].shown = true;
+}
+function msMakeGarden(run) {
+  var spec = MS_DATA.gardens[run.gardenIndex], tiles = [], order = [], i, l;
+  for (i = 0; i < spec.width * spec.height; i++) { tiles.push({kind:'soil',level:0,n:0,open:false,mark:0,shown:false}); order.push(i); }
+  msShuffle(run, order);
+  var g = {width:spec.width,height:spec.height,tiles:tiles,firstDig:false,eaten:0,cleared:0,totalCritters:0,exit:-1,exitRow:null,firstBite:false};
+  for (l = 1; l <= 5; l++) for (i = 0; i < spec.counts[l - 1]; i++) {
+    var t = tiles[order.pop()]; t.kind = 'critter'; t.level = l; g.totalCritters++;
+  }
+  for (i = 0; i < spec.berries; i++) tiles[order.pop()].kind = 'berry';
+  g.exit = order.pop(); tiles[g.exit].kind = 'exit';
+  run.garden = g;
+  msClues(g); msShowSniff(run);
+  if (msHas(run, 'tunnel-sense')) g.exitRow = Math.floor(g.exit / g.width);
+  return g;
+}
+function msNewRun(moleId, seed, dailyDate) {
+  var mole = msMole(moleId), s = Number(seed) >>> 0;
+  var run = {version:MS_DATA.version,moleId:mole.id,seed:s,rngState:s,dailyDate:dailyDate || null,gardenIndex:0,level:mole.startLevel,xp:0,hp:mole.hp,maxHp:mole.hp,pantry:0,pantryEarned:0,healBuys:0,perkRerolls:0,perkPicks:0,perks:mole.startPerks.slice(),status:'playing',garden:null,totals:{critters:0,tiles:0,clean:0},completed:[],pendingPerks:[],lastEvent:null,resultRecorded:false};
+  msMakeGarden(run); return run;
+}
+function msXpNeeded(run) {
+  var base = MS_DATA.xpThresholds[Math.min(run.level - 1, MS_DATA.xpThresholds.length - 1)];
+  return Math.max(1, Math.ceil(base * msMole(run.moleId).xpScale * (msHas(run, 'quick-study') ? 0.8 : 1)));
+}
+function msGainXp(run, amount) {
+  var levels = 0; run.xp += amount;
+  while (run.xp >= msXpNeeded(run)) {
+    run.xp -= msXpNeeded(run); run.level++; levels++;
+    run.hp = Math.min(run.maxHp, run.hp + MS_DATA.levelHeal + (msHas(run, 'dew-drop') ? 1 : 0));
+  }
+  return levels;
+}
+function msSafePatch(run, index) {
+  var g = run.garden, side = msHas(run, 'lamp-root') ? 5 : 3;
+  var x = Math.max(0, Math.min(g.width - side, index % g.width - Math.floor(side / 2)));
+  var y = Math.max(0, Math.min(g.height - side, Math.floor(index / g.width) - Math.floor(side / 2)));
+  var safe = [], outside = [], moving = [], i;
+  for (var yy = y; yy < y + side; yy++) for (var xx = x; xx < x + side; xx++) safe.push(yy * g.width + xx);
+  for (i = 0; i < g.tiles.length; i++) if (safe.indexOf(i) === -1 && g.tiles[i].kind === 'soil') outside.push(i);
+  msShuffle(run, outside);
+  safe.forEach(function(j) {
+    var t = g.tiles[j];
+    if (t.kind !== 'soil') { moving.push(t); g.tiles[j] = {kind:'soil',level:0,n:0,open:false,mark:t.mark,shown:false}; }
+  });
+  moving.forEach(function(t) {
+    var dest = outside.pop(), mark = g.tiles[dest].mark; t.mark = mark; g.tiles[dest] = t;
+    if (t.kind === 'exit') g.exit = dest;
+  });
+  if (msHas(run, 'tunnel-sense')) g.exitRow = Math.floor(g.exit / g.width);
+  msClues(g); return safe;
+}
+function msOpenSoil(run, indices, opened) {
+  var g = run.garden, queue = indices.slice();
+  for (var q = 0; q < queue.length; q++) {
+    var i = queue[q], t = g.tiles[i];
+    if (t.open || t.kind === 'critter') continue;
+    t.open = true; t.mark = 0; g.cleared++; opened.push(i);
+    if (t.kind === 'berry') run.hp = Math.min(run.maxHp, run.hp + msBerryHeal(run));
+    if (t.kind === 'soil' && !t.n) msNeighbours(g, i).forEach(function(j) { if (!g.tiles[j].open) queue.push(j); });
+  }
+}
+function msBerryHeal(run) {
+  return (MS_DATA.berryHeal + (msHas(run, 'hearty-roots') ? 1 : 0)) * (msHas(run, 'second-stomach') ? 2 : 1);
+}
+function msMark(run, index) {
+  var t = run.garden && run.garden.tiles[index];
+  if (run.status !== 'playing' || !t || t.open) return false;
+  t.mark = (t.mark + 1) % 7; return true;
+}
+function msDig(run, index) {
+  var g = run.garden, t = g && g.tiles[index];
+  if (run.status !== 'playing' || !t) return null;
+  if (t.open) { if (t.kind === 'exit') return msLeave(run); return null; }
+  var event = {type:'soil',damage:0,eaten:0,levels:0,opened:[]};
+  if (!g.firstDig) {
+    var patch = msSafePatch(run, index); g.firstDig = true;
+    msOpenSoil(run, patch, event.opened);
+    if (msHas(run, 'soft-soil')) {
+      var extra = []; g.tiles.forEach(function(c, i) { if (!c.open && c.kind === 'soil') extra.push(i); });
+      msShuffle(run, extra); msOpenSoil(run, extra.slice(0, 2), event.opened);
+    }
+    event.text = 'A safe patch! The numbers add up nearby critter levels.';
+    run.lastEvent = event; return event;
+  }
+  t = g.tiles[index]; event.type = t.kind;
+  if (t.kind === 'soil') msOpenSoil(run, [index], event.opened);
+  else {
+    t.open = true; t.mark = 0; g.cleared++; event.opened.push(index);
+    if (t.kind === 'critter') {
+      if (t.level > run.level) {
+        event.damage = Math.max(0, t.level * MS_DATA.biteDamage - (msHas(run, 'careful-bite') ? 1 : 0));
+        if (msHas(run, 'steady-paws') && !g.firstBite) event.damage = 0;
+        g.firstBite = true; run.hp = Math.max(0, run.hp - event.damage);
+      }
+      g.eaten++; event.eaten = t.level; run.pantry += t.level; run.pantryEarned += t.level;
+      // A fatal bite cannot be undone by the healing from its xp.
+      var fatal = run.hp <= 0;
+      event.levels = msGainXp(run, t.level + (t.level === 1 && msHas(run, 'grub-feast') ? 1 : 0) + (t.level === 2 && msHas(run, 'beetle-feast') ? 1 : 0));
+      if (fatal) { run.hp = 0; run.status = 'lost'; }
+    } else if (t.kind === 'berry') {
+      var heal = msBerryHeal(run);
+      run.hp = Math.min(run.maxHp, run.hp + heal); event.heal = heal;
+    }
+  }
+  if (event.type === 'critter') event.text = MS_DATA.critters[t.level].name + ' eaten. ' + (event.damage ? 'Bit for ' + event.damage + ' hp.' : 'No bite!') + (event.levels ? ' Level up!' : '');
+  else if (event.type === 'berry') event.text = 'Sweet berries! Heal ' + event.heal + ' hp.';
+  else if (event.type === 'exit') event.text = 'Tunnel found. Tap it again to leave.';
+  else event.text = event.opened.length + (event.opened.length === 1 ? ' tile cleared.' : ' tiles cleared.') + ' Each number adds up nearby critter levels.';
+  if (run.status === 'lost') event.text = 'That bite was too much. Your garden journey ends here.';
+  run.lastEvent = event; return event;
+}
+function msLeave(run) {
+  var g = run.garden;
+  if (run.status !== 'playing' || !g.tiles[g.exit].open) return null;
+  var clean = g.eaten === g.totalCritters;
+  var result = {garden:run.gardenIndex + 1,critters:g.eaten,tiles:g.cleared,clean:clean};
+  run.completed.push(result); run.totals.critters += g.eaten; run.totals.tiles += g.cleared;
+  if (clean) {
+    run.totals.clean++; run.hp = Math.min(run.maxHp, run.hp + MS_DATA.cleanHeal); msGainXp(run, MS_DATA.cleanXp);
+  }
+  run.status = run.gardenIndex === MS_DATA.gardens.length - 1 ? 'won' : 'gardenEnd';
+  run.perkPicks = run.status === 'gardenEnd' ? (clean ? 2 : 1) : 0;
+  run.lastEvent = {type:'leave',clean:clean,damage:0,opened:[],text:clean ? 'Clean garden! Heal ' + MS_DATA.cleanHeal + ' hp and gain ' + MS_DATA.cleanXp + ' xp.' : 'Through the tunnel. A fresh garden awaits.'}; return run.lastEvent;
+}
+function msPerkOffers(run) {
+  if (run.status === 'perk') return run.pendingPerks.slice();
+  if (run.status !== 'gardenEnd') return [];
+  var pool = MS_PERKS.filter(function(p) { return !msHas(run, p.id); }).map(function(p) { return p.id; });
+  run.pendingPerks = msShuffle(run, pool).slice(0, msMole(run.moleId).offers);
+  run.status = 'perk'; return run.pendingPerks.slice();
+}
+function msPickPerk(run, id) {
+  if (run.status !== 'perk' || run.pendingPerks.indexOf(id) === -1) return false;
+  run.perks.push(id);
+  if (id === 'thick-fur') { run.maxHp += 4; run.hp = Math.min(run.maxHp, run.hp + 4); }
+  if (id === 'hearty-roots') { run.maxHp += 2; run.hp = Math.min(run.maxHp, run.hp + 2); }
+  if (id === 'field-kit') { run.maxHp++; run.hp = Math.min(run.maxHp, run.hp + 6); }
+  run.perkPicks--; run.pendingPerks = [];
+  if (run.perkPicks > 0) { run.status = 'gardenEnd'; msPerkOffers(run); }
+  else run.status = 'burrow';
+  return true;
+}
+function msBurrowCost(run, kind) {
+  if (kind === 'heal') return MS_DATA.pantryHealCost + run.healBuys * MS_DATA.pantryHealRise;
+  if (kind === 'max-hp') return MS_DATA.pantryMaxHpCost;
+  if (kind === 'reroll') return MS_DATA.pantryRerollCost;
+  return null;
+}
+function msBuyBurrow(run, kind) {
+  var cost = msBurrowCost(run, kind);
+  if (run.status !== 'burrow' || cost === null || run.pantry < cost || (kind === 'heal' && run.hp >= run.maxHp)) return false;
+  run.pantry -= cost;
+  if (kind === 'heal') { run.hp = Math.min(run.maxHp, run.hp + 4); run.healBuys++; }
+  if (kind === 'max-hp') run.maxHp += 2;
+  if (kind === 'reroll') run.perkRerolls++;
+  return true;
+}
+function msRerollPerks(run) {
+  if (run.status !== 'perk' || run.perkRerolls < 1) return false;
+  var previous = run.pendingPerks.slice(), pool = MS_PERKS.filter(function(p) { return !msHas(run, p.id); }).map(function(p) { return p.id; });
+  if (pool.length <= previous.length) return false;
+  run.pendingPerks = msShuffle(run, pool).slice(0, msMole(run.moleId).offers);
+  if (run.pendingPerks.every(function(id) { return previous.indexOf(id) !== -1; })) {
+    run.pendingPerks[0] = pool.find(function(id) { return previous.indexOf(id) === -1; });
+  }
+  run.perkRerolls--; return true;
+}
+function msNextGarden(run) {
+  if (run.status !== 'burrow') return false;
+  run.gardenIndex++; run.pendingPerks = []; run.status = 'playing';
+  // Each garden is a fresh number puzzle; health and earned perks carry on.
+  run.level = msMole(run.moleId).startLevel; run.xp = 0;
+  if (msHas(run, 'deep-breath')) run.hp = Math.min(run.maxHp, run.hp + 3);
+  msMakeGarden(run); return true;
+}
+function msRunScore(run) { return run.pantryEarned + run.completed.length * MS_DATA.gardenScore; }
+function msDailySeed(date) {
+  var hash = 2166136261, value = 'mole-sense:' + date;
+  for (var i = 0; i < value.length; i++) { hash ^= value.charCodeAt(i); hash = Math.imul(hash, 16777619); }
+  return hash >>> 0;
+}
+function msDailyResult(run) {
+  var reached = run.gardenIndex + 1, cells = '';
+  for (var i = 0; i < 5; i++) cells += i < reached ? '\uD83D\uDFE9' : '\uD83D\uDFE5';
+  return 'Mole Sense daily ' + run.dailyDate + ' \u00b7 ' + reached + '/5 \u00b7 ' + msRunScore(run) + ' \u00b7 ' + cells;
+}
+function msNewSave() {
+  return {version:MS_DATA.version,updatedAt:0,settings:{sound:true},stats:{runs:0,wins:0,bestGarden:0,critters:0,bestScore:0},selectedMole:'common',run:null};
+}
+function msUnlocked(save, moleId) {
+  var unlock = msMole(moleId).unlock;
+  return save.stats.wins >= unlock.wins && save.stats.bestGarden >= unlock.reached;
+}
+function msRecord(save, run) {
+  if (!run || run.resultRecorded || (run.status !== 'won' && run.status !== 'lost')) return false;
+  save.stats.runs++; if (run.status === 'won') save.stats.wins++;
+  save.stats.bestGarden = Math.max(save.stats.bestGarden, run.gardenIndex + 1);
+  save.stats.bestScore = Math.max(save.stats.bestScore, msRunScore(run));
+  save.stats.critters += run.totals.critters + (run.status === 'lost' ? run.garden.eaten : 0);
+  run.resultRecorded = true; return true;
+}
+function msValidRun(run) {
+  if (!run || run.version !== MS_DATA.version || !MS_MOLES.some(function(m) { return m.id === run.moleId; })) return false;
+  if (['playing','gardenEnd','perk','burrow','won','lost'].indexOf(run.status) < 0 || !Number.isInteger(run.gardenIndex) || run.gardenIndex < 0 || run.gardenIndex >= 5) return false;
+  if (['pantry','pantryEarned','healBuys','perkRerolls','perkPicks'].some(function(key) { return !Number.isSafeInteger(run[key]) || run[key] < 0; }) || run.pantry > run.pantryEarned || run.perkPicks > 2) return false;
+  if ((run.status === 'perk' || run.status === 'gardenEnd') ? run.perkPicks < 1 : run.perkPicks !== 0) return false;
+  if (!Array.isArray(run.perks) || run.perks.some(function(id) { return !MS_PERKS.some(function(p) { return p.id === id; }); })) return false;
+  if (!Array.isArray(run.completed) || !Array.isArray(run.pendingPerks) || !run.totals) return false;
+  if (run.pendingPerks.some(function(id) { return !MS_PERKS.some(function(p) { return p.id === id; }); })) return false;
+  if (new Set(run.perks).size !== run.perks.length || new Set(run.pendingPerks).size !== run.pendingPerks.length) return false;
+  if ((run.status === 'perk' || run.status === 'gardenEnd' || run.status === 'burrow') && run.gardenIndex === 4) return false;
+  if (run.status === 'perk' && (!run.pendingPerks.length || run.pendingPerks.length > msMole(run.moleId).offers || run.pendingPerks.some(function(id) { return msHas(run, id); }))) return false;
+  if (run.status !== 'perk' && run.pendingPerks.length) return false;
+  if (run.dailyDate !== null && (typeof run.dailyDate !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(run.dailyDate))) return false;
+  if (['critters','tiles','clean'].some(function(key) { return !Number.isInteger(run.totals[key]) || run.totals[key] < 0; })) return false;
+  if (run.completed.some(function(g) { return !g || !Number.isInteger(g.garden) || g.garden < 1 || g.garden > 5 || !Number.isInteger(g.critters) || g.critters < 0 || !Number.isInteger(g.tiles) || g.tiles < 0 || typeof g.clean !== 'boolean'; })) return false;
+  if (!Number.isFinite(run.hp) || !Number.isFinite(run.maxHp) || run.hp < 0 || run.hp > run.maxHp || run.maxHp < 1 || !Number.isInteger(run.level) || run.level < 1 || !Number.isFinite(run.xp) || run.xp < 0) return false;
+  if (!Number.isFinite(run.seed) || !Number.isFinite(run.rngState)) return false;
+  var g = run.garden, spec = MS_DATA.gardens[run.gardenIndex];
+  if (!g || g.width !== spec.width || g.height !== spec.height || !Array.isArray(g.tiles) || g.tiles.length !== g.width * g.height || !Number.isInteger(g.exit) || !g.tiles[g.exit] || g.tiles[g.exit].kind !== 'exit') return false;
+  if (typeof g.firstDig !== 'boolean' || typeof g.firstBite !== 'boolean' || !Number.isInteger(g.totalCritters) || g.totalCritters < 0 || g.totalCritters > g.tiles.length || !Number.isInteger(g.eaten) || g.eaten < 0 || g.eaten > g.totalCritters || !Number.isInteger(g.cleared) || g.cleared < 0 || g.cleared > g.tiles.length) return false;
+  return g.tiles.every(function(t) { return t && ['soil','critter','berry','exit'].indexOf(t.kind) >= 0 && Number.isInteger(t.level) && t.level >= 0 && t.level <= 5 && Number.isInteger(t.n) && t.n >= 0 && t.n <= 40 && Number.isInteger(t.mark) && t.mark >= 0 && t.mark <= 6 && typeof t.open === 'boolean' && typeof t.shown === 'boolean'; });
+}
+function migrate(raw) {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw new Error('This is not a Mole Sense save.');
+  if (!raw.stats || typeof raw.stats !== 'object' || Array.isArray(raw.stats)) throw new Error('This is not a Mole Sense save.');
+  if (raw.version !== undefined && raw.version !== 0 && raw.version !== 1 && raw.version !== MS_DATA.version) throw new Error('This save needs a newer Mole Sense.');
+  var save = msNewSave(), stats = raw.stats || {};
+  ['runs','wins','bestGarden','critters','bestScore'].forEach(function(key) { if (Number.isFinite(stats[key])) save.stats[key] = Math.max(0, Math.floor(stats[key])); });
+  save.updatedAt = Number.isFinite(raw.updatedAt) ? Math.max(0, raw.updatedAt) : 0;
+  if (raw.settings && typeof raw.settings.sound === 'boolean') save.settings.sound = raw.settings.sound;
+  if (MS_MOLES.some(function(m) { return m.id === raw.selectedMole; }) && msUnlocked(save, raw.selectedMole)) save.selectedMole = raw.selectedMole;
+  if (raw.run != null) {
+    var run = JSON.parse(JSON.stringify(raw.run));
+    if (raw.version !== MS_DATA.version && run.version === 1) {
+      run.version = MS_DATA.version; run.pantry = 0; run.pantryEarned = 0; run.healBuys = 0; run.perkRerolls = 0;
+      var last = Array.isArray(run.completed) && run.completed[run.completed.length - 1];
+      run.perkPicks = run.status === 'gardenEnd' || run.status === 'perk' ? (last && last.clean ? 2 : 1) : 0;
+    }
+    if (!msValidRun(run)) throw new Error('The saved garden is damaged.');
+    save.run = run;
+  }
+  return save;
+}
+function msEncodeBackup(save) {
+  var json = JSON.stringify(migrate(save));
+  var encoded = typeof Buffer !== 'undefined' ? Buffer.from(json, 'utf8').toString('base64') : btoa(unescape(encodeURIComponent(json)));
+  return 'MS1.' + encoded;
+}
+function msDecodeBackup(code) {
+  code = String(code).trim();
+  if (!/^MS1\.[A-Za-z0-9+/]+={0,2}$/.test(code)) throw new Error('That backup code is not valid.');
+  try {
+    var encoded = code.slice(4), json = typeof Buffer !== 'undefined' ? Buffer.from(encoded, 'base64').toString('utf8') : decodeURIComponent(escape(atob(encoded)));
+    return migrate(JSON.parse(json));
+  } catch (error) { throw new Error('That backup code could not be loaded.'); }
+}
+
+/* Canvas art and the garden. The covered ground never inspects hidden contents. */
+const MS_FONT='"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+const MS_VIEW={cell:32,width:288,height:384,focus:-1};
+const MS_CRITTERS=['','🐛','🪲','🐸','🐀','🐍'];
+const MS_CRITTER_NAMES=['','Grub','Beetle','Frog','Rat','Snake'];
+const MS_LEVEL_COLORS=['','#588043','#718c47','#bd9750','#a76c53','#9b5960'];
+let _tofu=null;
+const _okCache={};
+function glyphBits(ch){
+  const c=document.createElement('canvas'); c.width=c.height=24;
+  const g=c.getContext('2d',{willReadFrequently:true});
+  g.font='18px '+MS_FONT; g.textBaseline='middle'; g.textAlign='center'; g.fillText(ch,12,13);
+  const d=g.getImageData(0,0,24,24).data; let s='',n=0;
+  for(let i=3;i<d.length;i+=4) if(d[i]>40){ n++; s+=i+':'+(d[i-3]>>4)+(d[i-2]>>4)+(d[i-1]>>4)+','; }
+  return {s,n};
+}
+function emojiOK(ch){
+  if(ch in _okCache) return _okCache[ch];
+  let ok=true;
+  try{ if(!_tofu) _tofu=glyphBits('\u{10FFFE}'); const b=glyphBits(ch); ok=b.n>8&&b.s!==_tofu.s; }catch(e){ok=false;}
+  return _okCache[ch]=ok;
+}
+function msCanvasSize(canvas,w,h){
+  const d=Math.min(window.devicePixelRatio||1,3);
+  if(canvas.width!==Math.round(w*d)||canvas.height!==Math.round(h*d)){canvas.width=Math.round(w*d);canvas.height=Math.round(h*d);}
+  canvas.style.width=w+'px';canvas.style.height=h+'px';
+  const ctx=canvas.getContext('2d');ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,w,h);return ctx;
+}
+function msEllipse(g,x,y,rx,ry,color){g.fillStyle=color;g.beginPath();g.ellipse(x,y,rx,ry,0,0,Math.PI*2);g.fill();}
+function msMoleArt(g,id,x,y,size){
+  const spec=MS_MOLES.find(m=>m.id===id)||MS_MOLES[0], c=spec.color||'#765e4d';
+  g.save();g.translate(x,y);g.scale(size/100,size/100);
+  msEllipse(g,0,26,42,7,'#253e3022');
+  if(id==='velvet'){
+    g.fillStyle='#84944e';g.beginPath();g.ellipse(-26,-25,8,19,-.7,0,Math.PI*2);g.fill();
+    g.strokeStyle='#647e45';g.lineWidth=2;g.beginPath();g.moveTo(-16,-8);g.lineTo(-31,-35);g.stroke();
+  }
+  msEllipse(g,-6,0,id==='burly'?39:35,id==='burly'?33:29,c);
+  msEllipse(g,-14,-8,22,16,'#ffffff0c');
+  msEllipse(g,-30,17,10,6,'#c99b87');msEllipse(g,24,17,10,6,'#c99b87');
+  g.strokeStyle='#f6e9d2';g.lineWidth=2.3;g.lineCap='round';
+  for(let i=0;i<3;i++){g.beginPath();g.moveTo(-34+i*4,19);g.lineTo(-36+i*4,25);g.moveTo(21+i*4,19);g.lineTo(23+i*4,25);g.stroke();}
+  msEllipse(g,24,1,20,15,'#c3988a');
+  msEllipse(g,40,2,8,6,'#deaaa0');msEllipse(g,41,0,2,1.5,'#f5cfc0');
+  msEllipse(g,-20,-21,7,7,c);msEllipse(g,-20,-21,3.5,3.5,'#bd9384');
+  if(id==='star'){
+    g.strokeStyle='#dfa99c';g.lineWidth=3.3;
+    for(let i=0;i<9;i++){const a=i/9*Math.PI*2;g.beginPath();g.moveTo(42+Math.cos(a)*5,2+Math.sin(a)*4);g.lineTo(42+Math.cos(a)*12,2+Math.sin(a)*10);g.stroke();}
+  }
+  if(id==='sleepy'){
+    g.strokeStyle='#253329';g.lineWidth=2.2;g.beginPath();g.arc(13,-7,4,0,Math.PI);g.stroke();
+    g.fillStyle='#536c5a';g.font='italic 13px Georgia';g.fillText('z',33,-23);g.font='italic 9px Georgia';g.fillText('z',43,-34);
+  }else{
+    msEllipse(g,13,-7,3,3.4,'#202b24');msEllipse(g,14,-8,1,1,'#fff6dd');
+  }
+  if(id==='burly'){g.strokeStyle='#d0a484';g.lineWidth=3;g.beginPath();g.moveTo(5,-15);g.lineTo(15,-17);g.stroke();}
+  g.strokeStyle='#725b50';g.lineWidth=1;g.beginPath();g.moveTo(30,8);g.lineTo(45,11);g.moveTo(29,11);g.lineTo(42,16);g.stroke();
+  g.restore();
+}
+function msPlant(g,x,y,scale){
+  g.save();g.translate(x,y);g.scale(scale,scale);g.strokeStyle='#6d8953';g.lineWidth=2;g.beginPath();g.moveTo(0,0);g.quadraticCurveTo(3,-10,0,-26);g.stroke();
+  g.fillStyle='#77975d';g.beginPath();g.ellipse(-5,-16,4,9,-.8,0,Math.PI*2);g.fill();g.beginPath();g.ellipse(6,-10,4,9,.8,0,Math.PI*2);g.fill();g.restore();
+}
+function msDrawPortrait(canvas,id,small){
+  const w=small?Math.max(40,canvas.parentElement.clientWidth-2):Math.min(360,canvas.parentElement.clientWidth),h=small?44:(window.innerHeight<611?105:145);
+  const g=msCanvasSize(canvas,w,h);
+  if(small){msMoleArt(g,id,w/2-3,22,50);return;}
+  const y=h*.78;msEllipse(g,w/2,y+6,w*.38,13,'#d5dcc2');
+  for(let i=0;i<5;i++)msPlant(g,w*.2+i*w*.15,y+2,(i%2?.7:.9));
+  msEllipse(g,w/2,y+3,58,13,'#6d624b');msEllipse(g,w/2,y+3,46,9,'#423f32');
+  msMoleArt(g,id,w/2-5,y-31,112);
+  msEllipse(g,w*.2,y+9,4,2,'#b5bfa1');msEllipse(g,w*.78,y+8,6,3,'#b5bfa1');
+}
+function msDrawLittleMole(canvas,id){const g=msCanvasSize(canvas,38,38);msMoleArt(g,id,18,20,38);}
+function msCritterArt(g,level,x,y,size){
+  const emoji=MS_CRITTERS[level];
+  if(emoji&&emojiOK(emoji)){g.font=size+'px '+MS_FONT;g.textAlign='center';g.textBaseline='middle';g.fillText(emoji,x,y+1);return;}
+  g.save();g.translate(x,y);g.scale(size/24,size/24);g.lineWidth=1.5;g.lineCap='round';
+  if(level===1){
+    for(let i=0;i<4;i++)msEllipse(g,-7+i*4,Math.sin(i)*2,4,4.5,i===3?'#658d45':'#9cae65');
+    msEllipse(g,7,-1,1,1,'#27372b');
+  }else if(level===2){
+    g.strokeStyle='#506040';for(let i=0;i<3;i++){g.beginPath();g.moveTo(-6,-5+i*5);g.lineTo(-10,-7+i*6);g.moveTo(6,-5+i*5);g.lineTo(10,-7+i*6);g.stroke();}
+    msEllipse(g,0,1,6,8,'#7f8245');msEllipse(g,0,-6,4,3,'#364832');g.strokeStyle='#d2c986';g.beginPath();g.moveTo(0,-4);g.lineTo(0,8);g.stroke();
+  }else if(level===3){
+    msEllipse(g,-6,7,5,3,'#71924d');msEllipse(g,6,7,5,3,'#71924d');msEllipse(g,0,1,8,7,'#82a35d');
+    msEllipse(g,-5,-5,3,3,'#82a35d');msEllipse(g,5,-5,3,3,'#82a35d');msEllipse(g,-5,-5,1,1,'#27372b');msEllipse(g,5,-5,1,1,'#27372b');
+  }else if(level===4){
+    g.strokeStyle='#be9590';g.beginPath();g.moveTo(-6,4);g.quadraticCurveTo(-14,8,-10,-4);g.stroke();msEllipse(g,0,2,8,5,'#887568');msEllipse(g,6,-1,5,4,'#9c8875');msEllipse(g,3,-5,3,3,'#c29c8b');msEllipse(g,9,-2,1,1,'#27372b');
+  }else{
+    g.strokeStyle='#8d9860';g.lineWidth=5;g.beginPath();g.moveTo(-9,7);g.bezierCurveTo(12,10,-9,-9,7,-5);g.stroke();msEllipse(g,7,-5,5,3,'#97a369');msEllipse(g,9,-6,1,1,'#27372b');
+  }
+  g.restore();
+}
+function msBerryArt(g,x,y,s){
+  if(emojiOK('🫐')){g.font=s+'px '+MS_FONT;g.textAlign='center';g.textBaseline='middle';g.fillText('🫐',x,y+1);return;}
+  msEllipse(g,x-s*.12,y+s*.08,s*.22,s*.22,'#697b9b');msEllipse(g,x+s*.14,y+s*.04,s*.22,s*.22,'#596987');
+  g.fillStyle='#728b4d';g.beginPath();g.ellipse(x,y-s*.18,s*.09,s*.2,-.7,0,Math.PI*2);g.fill();
+}
+function msExitArt(g,x,y,s){
+  msEllipse(g,x,y+s*.12,s*.39,s*.29,'#8a8667');msEllipse(g,x,y+s*.12,s*.29,s*.22,'#344733');
+  g.strokeStyle='#ead6a1';g.lineWidth=1.8;g.beginPath();g.moveTo(x-s*.1,y+s*.12);g.lineTo(x+s*.1,y+s*.12);g.lineTo(x+s*.02,y+s*.03);g.moveTo(x+s*.1,y+s*.12);g.lineTo(x+s*.02,y+s*.21);g.stroke();
+  g.fillStyle='#e7d69f';g.beginPath();g.ellipse(x,y-s*.16,s*.12,s*.06,0,0,Math.PI*2);g.fill();
+}
+function msDrawBoard(canvas,run){
+  if(!run||!run.garden)return;
+  const garden=run.garden, available=Math.max(384,window.innerHeight-169-(window.visualViewport?Math.max(0,window.innerHeight-window.visualViewport.height):0));
+  const c=Math.max(32,Math.min(42,Math.floor((Math.min(440,window.innerWidth)-32)/garden.width),Math.floor(available/garden.height)));
+  const w=c*garden.width,h=c*garden.height,g=msCanvasSize(canvas,w,h);MS_VIEW.cell=c;MS_VIEW.width=w;MS_VIEW.height=h;
+  g.fillStyle='#9daf89';g.fillRect(0,0,w,h);
+  for(let i=0;i<garden.tiles.length;i++){
+    const tile=garden.tiles[i],col=i%garden.width,row=Math.floor(i/garden.width),x=col*c,y=row*c,cx=x+c/2,cy=y+c/2;
+    g.fillStyle=tile.open?((col+row)%2?'#f0e8d4':'#f6efdd'):((col+row)%2?'#a4b78e':'#adbf97');
+    if(!tile.open&&tile.shown)g.fillStyle='#d6d6a7';
+    g.fillRect(x+1,y+1,c-2,c-2);
+    if(tile.open){
+      if(tile.kind==='soil'&&tile.n){
+        g.fillStyle=tile.n<5?'#486545':tile.n<10?'#6b7350':tile.n<17?'#95683e':'#a15551';
+        g.font='650 '+Math.round(c*.46)+'px system-ui,sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText(tile.n,cx,cy+1);
+      }else if(tile.kind==='critter'){
+        g.globalAlpha=.62;msCritterArt(g,tile.level,cx,cy,c*.61);g.globalAlpha=1;
+      }else if(tile.kind==='berry'){
+        g.globalAlpha=.58;msBerryArt(g,cx,cy,c*.63);g.globalAlpha=1;
+      }else if(tile.kind==='exit')msExitArt(g,cx,cy,c*.86);
+    }else if(tile.mark){
+      g.fillStyle='#416344';msEllipse(g,cx,cy,c*.31,c*.31,'#56754c');g.fillStyle='#fff6d6';g.font='600 '+Math.round(c*.44)+'px system-ui,sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText(tile.mark===6?'?':tile.mark,cx,cy+.5);
+    }else if(tile.shown&&tile.kind==='critter'){
+      msCritterArt(g,tile.level,cx,cy,c*.67);
+    }else if((i*7)%19===0){
+      g.strokeStyle='#718e5e66';g.lineWidth=1.4;g.beginPath();g.moveTo(cx,cy+3);g.lineTo(cx,cy-3);g.moveTo(cx,cy);g.lineTo(cx-3,cy-2);g.moveTo(cx,cy-1);g.lineTo(cx+3,cy-4);g.stroke();
+    }
+    if((tile.open||tile.shown)&&tile.kind==='critter'){
+      msEllipse(g,x+c-6,y+c-6,5.5,5.5,MS_LEVEL_COLORS[tile.level]);g.fillStyle='#fffbe9';g.font='bold 8px system-ui,sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText(tile.level,x+c-6,y+c-5.5);
+    }
+    if(garden.exitRow===row&&!tile.open){g.fillStyle='#efd595';g.fillRect(x+1,y+1,c-2,2);}
+    if(i===MS_VIEW.focus){g.strokeStyle='#fff4bd';g.lineWidth=2;g.strokeRect(x+3,y+3,c-6,c-6);}
+  }
+}
+
+/* Screens, touch controls, generated sound, and two independent save copies. */
+const SAVE_KEY='mole-sense.save.v1',TUTORIAL_KEY='mole-sense.t';
+let SV=null,idb=null,lsOK=true,storageOK=true,saveT=null;
+let msScreen='home',msSheet='',msPaused=false,msMarkMode=false,msAudio=null,msToastTimer=null,msPreviousFocus=null;
+let msPress=null,msPressTimer=null;
+const $=id=>document.getElementById(id);
+function msEsc(value){return String(value===undefined?'':value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function msPlural(count,word){return word+(count===1?'':'s');}
+
+function parseSave(str){try{const o=typeof str==='string'?JSON.parse(str):str;return o&&typeof o==='object'&&!Array.isArray(o)?o:null;}catch(e){return null;}}
+function idbOpen(){
+  return new Promise(resolve=>{
+    let done=false;const finish=()=>{if(!done){done=true;resolve();}};
+    try{
+      const request=indexedDB.open('mole-sense',1);
+      request.onupgradeneeded=()=>{if(!request.result.objectStoreNames.contains('kv'))request.result.createObjectStore('kv');};
+      request.onsuccess=()=>{if(done){request.result.close();return;}idb=request.result;finish();};
+      request.onerror=finish;request.onblocked=finish;
+    }catch(e){finish();}
+    setTimeout(finish,1500);
+  });
+}
+function idbGet(){
+  return new Promise(resolve=>{
+    if(!idb)return resolve(null);
+    let done=false;const finish=value=>{if(!done){done=true;resolve(value);}};
+    try{const request=idb.transaction('kv').objectStore('kv').get('save');request.onsuccess=()=>finish(request.result||null);request.onerror=()=>finish(null);}catch(e){finish(null);}
+    setTimeout(()=>finish(null),1500);
+  });
+}
+async function loadSave(){
+  let a=null,b=null;
+  try{a=parseSave(localStorage.getItem(SAVE_KEY));}catch(e){lsOK=false;}
+  await idbOpen();b=parseSave(await idbGet());
+  try{a=a?migrate(a):null;}catch(e){a=null;}
+  try{b=b?migrate(b):null;}catch(e){b=null;}
+  const picked=a&&b?((+b.updatedAt||0)>(+a.updatedAt||0)?b:a):(a||b);
+  storageOK=lsOK||!!idb;return picked;
+}
+function writeSave(){
+  if(!SV)return;
+  clearTimeout(saveT);saveT=null;SV.updatedAt=Math.max(Date.now(),(+SV.updatedAt||0)+1);
+  const str=JSON.stringify(SV);
+  try{localStorage.setItem(SAVE_KEY,str);lsOK=true;}catch(e){lsOK=false;}
+  if(idb){try{const tx=idb.transaction('kv','readwrite');tx.objectStore('kv').put(str,'save');tx.onerror=()=>{if(!lsOK){storageOK=false;msToast('Saving is unavailable. Copy a backup in Settings.');}};}catch(e){}}
+  storageOK=lsOK||!!idb;
+}
+function save(now){if(now){writeSave();return;}if(!saveT)saveT=setTimeout(writeSave,150);}
+function exportCode(){return msEncodeBackup(SV);}
+function importCode(code){
+  try{const decoded=msDecodeBackup(code);if(!decoded||typeof decoded!=='object')return false;SV=migrate(decoded);writeSave();return true;}catch(e){return false;}
+}
+function msSound(kind){
+  if(!SV||!SV.settings.sound)return;
+  try{
+    if(!msAudio){const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;msAudio=new Audio();}
+    if(msAudio.state==='suspended')msAudio.resume();
+    if(kind==='unlock')return;
+    const t=msAudio.currentTime,o=msAudio.createOscillator(),g=msAudio.createGain();
+    const f=kind==='hurt'?145:kind==='level'?640:kind==='mark'?330:kind==='berry'?490:kind==='exit'?780:235;
+    o.type=kind==='hurt'?'triangle':'sine';o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(kind==='hurt'?75:f*1.4,t+.1);
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.09,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+.14);
+    o.connect(g);g.connect(msAudio.destination);o.start(t);o.stop(t+.16);
+  }catch(e){}
+}
+function msToast(message){clearTimeout(msToastTimer);$('toast').textContent=message;$('toast').hidden=false;msToastTimer=setTimeout(()=>{$('toast').hidden=true;},3100);}
+function msSheetOpen(name,html){
+  if(!$('overlay').hidden&&msSheet===name)return;
+  if($('overlay').hidden)msPreviousFocus=document.activeElement;
+  msSheet=name;$('sheet').innerHTML=html;$('overlay').hidden=false;
+  const focus=$('sheet').querySelector('button,textarea');if(focus)focus.focus({preventScroll:true});
+}
+function msSheetClose(){
+  msSheet='';$('overlay').hidden=true;$('sheet').innerHTML='';
+  if(msPreviousFocus&&msPreviousFocus.isConnected)msPreviousFocus.focus({preventScroll:true});
+}
+function msBind(id,action){const element=$(id);if(element)element.onclick=action;}
+function msSelectedMole(){return MS_MOLES.find(m=>m.id===SV.selectedMole)||MS_MOLES[0];}
+function msUnlockText(mole){
+  const u=mole.unlock||{},bits=[];
+  if(u.wins)bits.push(u.wins+' win'+(u.wins===1?'':'s'));
+  if(u.reached)bits.push('reach garden '+u.reached);
+  return bits.length?'Unlock: '+bits.join(' and ')+'.':'Ready to dig.';
+}
+function msHome(){
+  msSheetClose();msScreen='home';msPaused=false;$('home').hidden=false;$('game').hidden=true;
+  const s=SV.stats;
+  $('home-stats').innerHTML='<div><b>'+s.wins+'</b>'+msPlural(s.wins,'run')+' won</div><div><b>'+s.bestGarden+' / 5</b>best garden</div><div><b>'+s.critters+'</b>'+msPlural(s.critters,'critter')+' eaten</div>';
+  $('chosen-name').textContent=msSelectedMole().name;$('mole-description').textContent=msSelectedMole().description;
+  $('moles').innerHTML=MS_MOLES.map(m=>{
+    const ready=msUnlocked(SV,m.id),selected=m.id===SV.selectedMole;
+    return '<button class="mole-card'+(selected?' selected':'')+(ready?'':' locked')+'" data-mole="'+m.id+'" aria-pressed="'+selected+'" aria-label="'+msEsc(m.name+(ready?'':'. Locked. '+msUnlockText(m)))+'"><canvas aria-hidden="true"></canvas><span>'+msEsc(m.id==='common'?'Common':m.name)+'</span>'+(ready?'':'<span class="lock" aria-hidden="true">×</span>')+'</button>';
+  }).join('');
+  $('moles').querySelectorAll('button').forEach(button=>{
+    msDrawPortrait(button.querySelector('canvas'),button.dataset.mole,true);
+    button.onclick=()=>{
+      const mole=MS_MOLES.find(m=>m.id===button.dataset.mole);
+      if(!msUnlocked(SV,mole.id)){$('mole-description').textContent=mole.name+': '+mole.description+' '+msUnlockText(mole);return;}
+      SV.selectedMole=mole.id;save();msHome();
+    };
+  });
+  msDrawPortrait($('portrait'),SV.selectedMole,false);
+  const unfinished=SV.run&&SV.run.status!=='won'&&SV.run.status!=='lost';
+  $('resume').hidden=!unfinished;$('new-run').textContent=unfinished?'Start a new run':'New run';
+  $('new-run').className=unfinished?'secondary':'primary';
+  $('daily').textContent="Play today's daily";
+}
+function msStart(daily){
+  const go=()=>{
+    msSheetClose();msMarkMode=false;MS_VIEW.focus=-1;
+    const date=daily?new Date().toISOString().slice(0,10):null;
+    const seed=daily?msDailySeed(date):((Date.now()^Math.floor(Math.random()*4294967296))>>>0);
+    SV.run=msNewRun(daily?'common':SV.selectedMole,seed,date);$('garden-note').textContent='Your first dig is safe. Eat to fill your pantry.';writeSave();msGame();
+  };
+  if(SV.run&&SV.run.status!=='won'&&SV.run.status!=='lost'){
+    msSheetOpen('abandon','<span class="eyebrow">A fresh trail</span><h2 id="sheet-title">Leave this run?</h2><p>Your current garden trail will end. '+(daily?'The daily uses Common mole and the same date seed for everyone.':'Your unlocked moles stay with you.')+'</p><button id="start-confirm" class="primary wide">Start '+(daily?'daily':'new run')+'</button><button id="start-cancel" class="secondary wide">Keep my run</button>');
+    msBind('start-confirm',go);msBind('start-cancel',msSheetClose);
+  }else go();
+}
+function msGame(){msScreen='game';msPaused=false;msSheetClose();$('home').hidden=true;$('game').hidden=false;msRefresh();msStateSheet();}
+function msRefresh(){
+  const r=SV.run;if(!r)return;
+  $('run-type').textContent=r.dailyDate?'Daily · '+r.dailyDate:'Garden trail';
+  $('garden-title').textContent='Garden '+(r.gardenIndex+1)+' / 5';$('level').textContent=r.level;
+  $('hp-value').textContent=r.hp+' / '+r.maxHp;$('hp-bar').style.width=Math.max(0,r.hp/r.maxHp*100)+'%';
+  const needed=msXpNeeded(r);$('xp-value').textContent=needed?r.xp+' / '+needed:'Fully grown';$('xp-bar').style.width=needed?Math.min(100,r.xp/needed*100)+'%':'100%';
+  $('eaten').textContent=r.garden.eaten;$('eaten-label').textContent=msPlural(r.garden.eaten,'critter')+' eaten';$('pantry').textContent=r.pantry;$('mark').textContent='Mark: '+(msMarkMode?'on':'off');$('mark').setAttribute('aria-pressed',String(msMarkMode));
+  msDrawLittleMole($('little-mole'),r.moleId);msDrawBoard($('board'),r);
+  $('board').setAttribute('aria-rowcount',r.garden.height);$('board').setAttribute('aria-colcount',r.garden.width);
+}
+function msEventNote(event,before,tile){
+  const r=SV.run;if(event&&typeof event.message==='string')return event.message;if(event&&typeof event.text==='string')return event.text;
+  if(r.status==='lost')return 'A bite too far. Your trail ends here.';
+  if(r.level>before.level)return 'Level '+r.level+'! A little stronger, a little healthier.';
+  if(r.hp<before.hp)return 'A tough critter. Lost '+(before.hp-r.hp)+' health.';
+  if(tile.kind==='exit'&&tile.open)return 'Tunnel found. Tap it again to leave.';
+  if(tile.kind==='berry'&&tile.open)return 'Berries found. Health restored.';
+  if(tile.kind==='critter'&&tile.open)return MS_CRITTER_NAMES[tile.level]+' eaten. +'+tile.level+' experience and pantry.';
+  return 'Numbers add up the critter levels in all 8 neighbours.';
+}
+function msTileAction(index,mark){
+  const r=SV.run;if(!r||r.status!=='playing'||msPaused||msSheet||index<0||index>=r.garden.tiles.length)return;
+  const tile=r.garden.tiles[index];
+  if(mark){if(tile.open)return;msMark(r,index);msSound('mark');save();msRefresh();return;}
+  const before={level:r.level,hp:r.hp},event=msDig(r,index);
+  if(!event)return;
+  $('garden-note').textContent=msEventNote(event,before,tile);
+  msSound(event.damage>0?'hurt':r.level>before.level?'level':event.type==='berry'?'berry':event.type==='exit'||event.type==='leave'?'exit':'dig');
+  if(r.status==='won'||r.status==='lost')msRecord(SV,r);
+  writeSave();msRefresh();msStateSheet();
+}
+function msStateSheet(){
+  const r=SV.run;if(!r)return;
+  if(r.status==='gardenEnd')msGardenEnd();else if(r.status==='perk')msPerkSheet();else if(r.status==='burrow')msBurrowSheet();else if(r.status==='won'||r.status==='lost')msRunEnd();
+}
+function msSummaryArt(){const c=$('result-art');if(!c)return;const g=msCanvasSize(c,c.parentElement.clientWidth-46,105);msMoleArt(g,SV.run.moleId,(c.parentElement.clientWidth-46)/2-4,59,105);}
+function msGardenEnd(){
+  const r=SV.run,last=r.completed[r.completed.length-1]||{critters:r.garden.eaten,tiles:r.garden.cleared,clean:r.garden.eaten===r.garden.totalCritters};
+  msSheetOpen('garden-end','<span class="eyebrow">Back above ground</span><h2 id="sheet-title">Garden '+(r.gardenIndex+1)+' complete</h2><canvas id="result-art" class="result-art" aria-hidden="true"></canvas><div class="result-counts"><div><b>'+last.critters+'</b>'+msPlural(last.critters,'critter')+' eaten</div><div><b>'+last.tiles+'</b>'+msPlural(last.tiles,'tile')+' cleared</div><div><b>'+r.pantry+'</b>pantry</div></div>'+(last.clean?'<strong class="clean">Clean garden! +'+MS_DATA.cleanHeal+' health, +'+MS_DATA.cleanXp+' experience and 2 perk picks.</strong>':'')+'<p>Choose '+(last.clean?'two perks':'a perk')+', then spend pantry in your burrow. Health, perks and pantry carry on; level and experience start fresh.</p><button id="continue-garden" class="primary wide">Choose '+(last.clean?'two perks':'a perk')+'</button><button id="summary-home" class="text-button wide">Save and go home</button>');
+  msSummaryArt();msBind('continue-garden',()=>{msPerkOffers(r);writeSave();msSheetClose();msPerkSheet();});msBind('summary-home',()=>{writeSave();msHome();});
+}
+function msPerkSheet(){
+  const r=SV.run;if(!r.pendingPerks.length)msPerkOffers(r);
+  msSheetOpen('perk','<span class="eyebrow">Something to grow on</span><h2 id="sheet-title">Pick your perk</h2><p>'+r.perkPicks+' '+msPlural(r.perkPicks,'pick')+' left. Grow stronger for the gardens ahead.</p>'+r.pendingPerks.map(id=>{const p=MS_PERKS.find(perk=>perk.id===id);return p?'<button class="perk-option" data-perk="'+id+'"><strong>'+msEsc(p.name)+'</strong><span>'+msEsc(p.description)+'</span></button>':'';}).join('')+(r.perkRerolls?'<button id="reroll-perks" class="secondary wide">Reroll perks ('+r.perkRerolls+' left)</button>':''));
+  $('sheet').querySelectorAll('[data-perk]').forEach(button=>{button.onclick=()=>{if(!msPickPerk(r,button.dataset.perk))return;msSheetClose();writeSave();msRefresh();msStateSheet();};});
+  msBind('reroll-perks',()=>{if(!msRerollPerks(r))return;msSheetClose();writeSave();msPerkSheet();});
+}
+function msBurrowSheet(){
+  const r=SV.run,heal=msBurrowCost(r,'heal'),maxHp=msBurrowCost(r,'max-hp'),reroll=msBurrowCost(r,'reroll');
+  msSheetOpen('burrow','<span class="eyebrow">A well-earned rest</span><h2 id="sheet-title">Your burrow</h2><div class="result-counts"><div><b>'+r.hp+' / '+r.maxHp+'</b>health</div><div><b>'+r.pantry+'</b>pantry</div></div><p>Spend what you ate, or save it for later gardens.</p><button id="buy-heal" data-buy="heal" class="burrow-option"'+(r.pantry<heal||r.hp===r.maxHp?' disabled':'')+'><strong>Heal 4 health</strong><span>'+heal+' pantry · costs more each time</span></button><button id="buy-max-hp" data-buy="max-hp" class="burrow-option"'+(r.pantry<maxHp?' disabled':'')+'><strong>Gain 2 max health</strong><span>'+maxHp+' pantry · adds capacity, no healing</span></button><button id="buy-reroll" data-buy="reroll" class="burrow-option"'+(r.pantry<reroll?' disabled':'')+'><strong>Bank a perk reroll</strong><span>'+reroll+' pantry · '+r.perkRerolls+' '+msPlural(r.perkRerolls,'reroll')+' saved</span></button><button id="next-garden" class="primary wide">Enter garden '+(r.gardenIndex+2)+'</button><button id="burrow-home" class="text-button wide">Save and go home</button>');
+  $('sheet').querySelectorAll('[data-buy]').forEach(button=>{button.onclick=()=>{if(!msBuyBurrow(r,button.dataset.buy))return;msSheetClose();writeSave();msRefresh();msBurrowSheet();};});
+  msBind('next-garden',()=>{if(!msNextGarden(r))return;msSheetClose();$('garden-note').textContent='A fresh garden. Eat to fill your pantry.';MS_VIEW.focus=-1;writeSave();msRefresh();});
+  msBind('burrow-home',()=>{writeSave();msHome();});
+}
+function msDailyDisplay(line){return String(line).replace(/🟩/g,emojiOK('🟩')?'🟩':'[✓]').replace(/🟥/g,emojiOK('🟥')?'🟥':'[×]');}
+function msRunEnd(){
+  const r=SV.run;msRecord(SV,r);writeSave();
+  const won=r.status==='won',line=r.dailyDate?msDailyResult(r):'',last=r.completed[r.completed.length-1];
+  const clean=won&&last&&last.clean,critters=r.totals.critters+(won?0:r.garden.eaten),tiles=r.totals.tiles+(won?0:r.garden.cleared);
+  msSheetOpen('run-end','<span class="eyebrow">'+(r.dailyDate?'Daily trail · '+msEsc(r.dailyDate):'The end of this trail')+'</span><h2 id="sheet-title">'+(won?'A master of the garden':'Rest those little paws')+'</h2><canvas id="result-art" class="result-art" aria-hidden="true"></canvas><p>'+(won?'Five gardens, one very well-fed mole. You found your way through.':'Every number told a story. There is another trail to try when you are ready.')+'</p><div class="result-counts"><div><b>'+msRunScore(r)+'</b>score</div><div><b>'+SV.stats.bestScore+'</b>best score</div></div><div class="result-counts"><div><b>'+(r.gardenIndex+1)+' / 5</b>'+msPlural(r.gardenIndex+1,'garden')+' reached</div><div><b>'+critters+'</b>'+msPlural(critters,'critter')+' eaten</div><div><b>'+tiles+'</b>'+msPlural(tiles,'tile')+' cleared</div></div>'+(clean?'<strong class="clean">Clean garden! +'+MS_DATA.cleanHeal+' health, +'+MS_DATA.cleanXp+' experience.</strong>':'')+(line?'<div class="daily-result">'+msEsc(msDailyDisplay(line))+'</div><button id="copy-result" class="secondary wide">Copy daily result</button>':'')+'<button id="end-home" class="primary wide">Back to the garden</button>');
+  msSummaryArt();msBind('end-home',msHome);msBind('copy-result',()=>msCopy(line,'Daily result copied.'));
+}
+function msPause(){
+  if(!SV.run||SV.run.status!=='playing')return;msPaused=true;writeSave();
+  msSheetOpen('pause','<span class="eyebrow">Take a breath</span><h2 id="sheet-title">Your garden can wait</h2><p>Progress is saved. There is no hurry underground.</p><button id="resume-game" class="primary wide">Keep digging</button><button id="settings" class="secondary wide">Settings</button><button id="pause-help" class="secondary wide">How to play</button><button id="home-button" class="text-button wide">Save and go home</button>');
+  msBind('resume-game',()=>{msPaused=false;msSheetClose();});msBind('settings',msSettings);msBind('pause-help',()=>msHelp(false));msBind('home-button',()=>{writeSave();msHome();});
+}
+function msReturn(){msSheetClose();if(msScreen==='game'){if(SV.run.status==='playing')msPause();else msStateSheet();}else msHome();}
+function msHelp(welcome){
+  msSheetOpen('help','<span class="eyebrow">Welcome underground</span><h2 id="sheet-title">A nose for numbers</h2><ul><li>Tap to dig. Your first dig opens a safe patch.</li><li>A number adds up critter levels in its 8 neighbours, including critters already eaten. Empty ground opens more ground.</li><li>Eat critters at your level safely. Bigger ones bite. Each adds its level to experience and pantry. Berries heal '+MS_DATA.berryHeal+' health.</li><li>Long press a covered tile, or turn on Mark, to cycle 1–5, ?, and clear. Marks never block digging.</li><li>Find the tunnel and tap it again to leave. A clean garden earns two perk picks. Then buy healing, max health or future perk rerolls in your burrow.</li><li>Health, perks and pantry carry on; level and experience start fresh. Score is pantry earned plus '+MS_DATA.gardenScore+' per garden cleared. Finish all five to win.</li></ul><button id="welcome-go" class="primary wide">'+(welcome?"Let's go":'Got it')+'</button>');
+  msBind('welcome-go',()=>{try{localStorage.setItem(TUTORIAL_KEY,'1');}catch(e){}if(welcome)msSheetClose();else msReturn();});
+}
+function msGuide(){
+  msSheetOpen('guide','<span class="eyebrow">Know your neighbours</span><h2 id="sheet-title">The garden guide</h2><p>Clues add up critter levels, including critters already eaten. A grub and a frog beside a tile add up to 4. Each critter adds its level to your pantry.</p>'+MS_CRITTER_NAMES.slice(1).map((name,i)=>'<div class="guide-row"><canvas data-critter="'+(i+1)+'" aria-hidden="true"></canvas><div><strong>'+name+' · level '+(i+1)+'</strong>Safe at mole level '+(i+1)+' or higher.</div></div>').join('')+'<p style="margin-top:16px">Blue berries heal you. Tap an open tunnel to leave for perks and your burrow. Eating every critter earns two perk picks.</p><button id="guide-close" class="primary wide">Back to digging</button>');
+  $('sheet').querySelectorAll('[data-critter]').forEach(c=>{const g=msCanvasSize(c,36,36);msCritterArt(g,+c.dataset.critter,18,18,28);});msBind('guide-close',msGuideClose);
+}
+function msGuideClose(){msSheetClose();if(msPaused)msPause();}
+async function msCopy(text,success){
+  try{if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(text);msToast(success);return true;}}catch(e){}
+  const area=document.createElement('textarea');area.value=text;area.style.position='fixed';area.style.left='-9999px';document.body.appendChild(area);area.select();let copied=false;
+  try{copied=document.execCommand('copy');}catch(e){}area.remove();
+  if(copied){msToast(success);return true;}
+  if($('backup-code')){$('backup-code').value=text;$('backup-code').focus();$('backup-code').select();msToast('Select and copy the code below.');}
+  else{msSheetOpen('copy','<h2 id="sheet-title">Copy your result</h2><p>Select the text below and copy it.</p><textarea id="copy-text" readonly></textarea><button id="copy-close" class="primary wide">Done</button>');$('copy-text').value=text;$('copy-text').focus();$('copy-text').select();msBind('copy-close',()=>{msSheetClose();msStateSheet();});}
+  return false;
+}
+function msSettings(){
+  msSheetClose();msSheetOpen('settings','<span class="eyebrow">Make yourself at home</span><h2 id="sheet-title">Settings</h2><div class="setting-row"><span>Garden sounds</span><button id="sound-toggle" class="secondary" aria-pressed="'+SV.settings.sound+'">'+(SV.settings.sound?'On':'Off')+'</button></div><div class="rule"></div><p>Your progress stays on this device. Copy a backup to keep it somewhere safe.</p><button id="copy-backup" class="secondary wide">Copy backup code</button><label for="backup-code">Paste a backup code to restore</label><textarea id="backup-code" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="Your Mole Sense backup code"></textarea><button id="load-backup" class="secondary wide">Load backup code</button><div class="rule"></div><button id="reset" class="danger wide">Start over</button><button id="settings-close" class="primary wide">Done</button>'+(storageOK?'':'<p style="margin-top:12px">Saving is unavailable. Please copy a backup before closing.</p>'));
+  msBind('sound-toggle',()=>{SV.settings.sound=!SV.settings.sound;$('sound-toggle').textContent=SV.settings.sound?'On':'Off';$('sound-toggle').setAttribute('aria-pressed',String(SV.settings.sound));writeSave();if(SV.settings.sound)msSound('berry');});
+  msBind('copy-backup',()=>{writeSave();msCopy(exportCode(),'Backup code copied.');});
+  msBind('load-backup',()=>{
+    const code=$('backup-code').value.trim();if(!code){msToast('Paste a backup code first.');return;}
+    try{if(!msDecodeBackup(code))throw Error();}catch(e){msToast('That backup code could not be read.');return;}
+    msSheetOpen('restore','<h2 id="sheet-title">Restore this backup?</h2><p>This replaces the progress on this device with your backup.</p><button id="confirm-restore" class="primary wide">Restore backup</button><button id="cancel-restore" class="secondary wide">Keep current progress</button>');
+    msBind('confirm-restore',()=>{if(importCode(code)){msMarkMode=false;msHome();msToast('Backup restored.');}else{msSettings();msToast('That backup code could not be read.');}});msBind('cancel-restore',msSettings);
+  });
+  msBind('reset',()=>{
+    msSheetOpen('reset','<h2 id="sheet-title">Start from fresh soil?</h2><p>This removes your run, records and unlocked moles from this device. Copy a backup first if you want to keep them.</p><button id="confirm-reset" class="danger wide">Erase my progress</button><button id="cancel-reset" class="primary wide">Keep my progress</button>');
+    msBind('confirm-reset',()=>{SV=msNewSave();msMarkMode=false;writeSave();msHome();msToast('A fresh garden is ready.');});msBind('cancel-reset',msSettings);
+  });msBind('settings-close',msReturn);
+}
+function msPointerIndex(event){
+  const box=$('board').getBoundingClientRect(),r=SV.run;if(!r)return -1;
+  const x=(event.clientX-box.left)*MS_VIEW.width/box.width,y=(event.clientY-box.top)*MS_VIEW.height/box.height;
+  return x<0||y<0||x>=MS_VIEW.width||y>=MS_VIEW.height?-1:Math.floor(y/MS_VIEW.cell)*r.garden.width+Math.floor(x/MS_VIEW.cell);
+}
+function msCancelPress(){clearTimeout(msPressTimer);msPressTimer=null;msPress=null;}
+function msControls(){
+  msBind('new-run',()=>msStart(false));msBind('daily',()=>msStart(true));msBind('resume',()=>msGame());
+  msBind('home-settings',msSettings);msBind('home-help',()=>msHelp(false));msBind('pause',msPause);msBind('legend',msGuide);
+  msBind('mark',()=>{msMarkMode=!msMarkMode;msSound('mark');msRefresh();$('garden-note').textContent=msMarkMode?'Tap to cycle 1–5, ?, then clear. Turn Mark off to dig.':'Tap to dig. Long press to add a mark.';});
+  document.addEventListener('pointerdown',()=>msSound('unlock'),{capture:true,passive:true});
+  const canvas=$('board');
+  canvas.addEventListener('contextmenu',event=>event.preventDefault());
+  canvas.addEventListener('pointerdown',event=>{
+    if(event.button!==0&&event.button!==2)return;event.preventDefault();msCancelPress();
+    const index=msPointerIndex(event);if(index<0)return;canvas.setPointerCapture(event.pointerId);
+    msPress={index,x:event.clientX,y:event.clientY,id:event.pointerId,held:false};
+    if(event.button===2){msPress.held=true;msTileAction(index,true);return;}
+    msPressTimer=setTimeout(()=>{if(msPress){msPress.held=true;msTileAction(msPress.index,true);}},420);
+  });
+  canvas.addEventListener('pointermove',event=>{if(msPress&&(Math.abs(event.clientX-msPress.x)>12||Math.abs(event.clientY-msPress.y)>12))msCancelPress();});
+  canvas.addEventListener('pointerup',event=>{if(!msPress||event.pointerId!==msPress.id)return;const press=msPress;msCancelPress();if(!press.held&&msPointerIndex(event)===press.index)msTileAction(press.index,msMarkMode);});
+  canvas.addEventListener('pointercancel',msCancelPress);canvas.addEventListener('lostpointercapture',msCancelPress);
+  canvas.addEventListener('keydown',event=>{
+    const r=SV.run;if(!r||msSheet)return;const max=r.garden.tiles.length-1,w=r.garden.width;
+    let i=Math.max(0,MS_VIEW.focus);
+    if(event.key==='ArrowLeft')i=Math.max(0,i-1);else if(event.key==='ArrowRight')i=Math.min(max,i+1);else if(event.key==='ArrowUp')i=Math.max(0,i-w);else if(event.key==='ArrowDown')i=Math.min(max,i+w);else if(event.key==='Enter'||event.key===' '){event.preventDefault();msTileAction(i,msMarkMode);return;}else if(event.key.toLowerCase()==='m'){event.preventDefault();msTileAction(i,true);return;}else return;
+    event.preventDefault();MS_VIEW.focus=i;msRefresh();canvas.setAttribute('aria-label','Garden grid, row '+(Math.floor(i/w)+1)+', column '+(i%w+1)+'. Enter to dig, M to mark.');
+  });
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape'){if(msSheet==='pause'){msPaused=false;msSheetClose();}else if(msSheet==='guide')msGuideClose();else if(msSheet==='settings'||msSheet==='help')msReturn();else if(!msSheet&&msScreen==='game')msPause();}
+    if(event.key==='Tab'&&msSheet){const nodes=$('sheet').querySelectorAll('button:not(:disabled),textarea'),first=nodes[0],last=nodes[nodes.length-1];if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}}
+  });
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){msCancelPress();writeSave();if(msScreen==='game'&&SV.run&&SV.run.status==='playing'){msPaused=true;if(!msSheet)msPause();}if(msAudio&&msAudio.state==='running')msAudio.suspend().catch(()=>{});}});
+  window.addEventListener('pagehide',()=>writeSave());
+  window.addEventListener('resize',()=>{if(msScreen==='game')msRefresh();else msDrawPortrait($('portrait'),SV.selectedMole,false);});
+}
+async function boot(){
+  SV=await loadSave()||msNewSave();msControls();msHome();
+  let seen=false;try{seen=localStorage.getItem(TUTORIAL_KEY)==='1';}catch(e){}
+  if(!seen)msHelp(true);
+  if(!storageOK)msToast('Saving is unavailable. Copy a backup in Settings.');
+}
+boot();
+
+</script>
+</body>
+</html>

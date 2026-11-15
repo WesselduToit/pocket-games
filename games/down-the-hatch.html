@@ -155,7 +155,7 @@ textarea{width:100%;background:#fff;color:var(--ink);border:3px solid var(--ink)
 'use strict';
 /* ===================== DATA ===================== */
 const TAU=Math.PI*2;
-const ART={crumbs:96,coins:12,ambient:24,fall:140,pulses:8,tier:['#f4d589','#a6d778','#e9a1b7','#92cde0','#baade5','#e5b675','#c1ccd6'],power:{magnet:'#64baff',bolt:'#ffe263',x2:'#ff85c4'}};
+const ART={decor:0.34,pale:215,crumbs:96,coins:12,ambient:24,fall:140,pulses:8,tier:['#f4d589','#a6d778','#e9a1b7','#92cde0','#baade5','#e5b675','#c1ccd6'],power:{magnet:'#64baff',bolt:'#ffe263',x2:'#ff85c4'}};
 /* Seven item tiers, each 1.6x wider than the last. The hole grows by sqrt(1.6) per size, so every size opens new things. */
 const TIER_D=[12,19.2,30.7,49.2,78.6,125.8,201.3];
 const TIER_N=[500,320,190,86,38,13,3];
@@ -710,14 +710,15 @@ function prepareDecor(G){
   const W=G.w.W, scale=0.5, cv=document.createElement('canvas'); cv.width=cv.height=Math.ceil(W*scale);
   const g=cv.getContext('2d'), R=mulberry32((G.map.seed^Math.imul(G.rank||1,0x9e3779b1)^0xdec0)>>>0), marks=G.map.decor;
   g.scale(scale,scale);
-  const dark=shadeHex(G.map.ground.c[0],-0.65), light=shadeHex(G.map.ground.c[0],0.8), cell=(W-120)/12, town=G.map.id==='town';
+  const c0=G.map.ground.c[0], n0=parseInt(c0.slice(1),16), pale=((n0>>16)+(n0>>8&255)+(n0&255))/3>ART.pale;   // on a pale floor, white marks vanish: tint them darker instead
+  const dark=shadeHex(c0,-0.65), light=shadeHex(c0,pale?-0.3:0.8), cell=(W-120)/12, town=G.map.id==='town';
   const count=town?Math.floor((W-240)/480+1)*12:144;
   for (let i=0;i<count;i++){
     const k=marks[i%3]; let x=60+(i%12+0.15+R()*0.7)*cell, y=60+(Math.floor(i/12)+0.15+R()*0.7)*cell, a=R()*TAU;
     if (town){ y=Math.floor(i/12)*480+240; a=R()<0.5?0:Math.PI; }
     else if (/Lines|Stripes|Crossing|Dashes|Slats|Shade|Grates|Covers|Ticks|Highlights|Shine|Furrows|Tracks/.test(k)) a=Math.floor(R()*4)*Math.PI/2;
     g.save(); g.translate(x,y); g.rotate(a); const s=0.65+R()*0.65; g.scale(s,s);
-    g.globalAlpha=0.18; g.fillStyle=g.strokeStyle=G.map.id==='space'?light:dark; g.lineWidth=2.6; g.lineCap='round'; g.lineJoin='round';
+    g.globalAlpha=ART.decor; g.fillStyle=g.strokeStyle=G.map.id==='space'?light:dark; g.lineWidth=2.6; g.lineCap='round'; g.lineJoin='round';
     decorMark(g,k,R,light); g.restore();
   }
   return V.decor={cv,scale,W};

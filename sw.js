@@ -1,4 +1,4 @@
-const CACHE_NAME = "pg-8af42dc619453f8f9f74377d0320c084931ff29a3ecaa89e33df6f1f7f5f0fde";
+const CACHE_NAME = "pg-58afcec80e0a79823b75b9181ad65d5effb034e04b7d11d772160c21bedecebd";
 const FILES = [
   "./games/down-the-hatch.html",
   "./games/roadbound.html",
